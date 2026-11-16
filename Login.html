@@ -2277,7 +2277,7 @@
             background-image: url(&quot;assets/img/metrics-homepage/rectangle@2x.png&quot;);
           "
         >
-          <a href="Home.html"
+          <a href="index.html"
             ><img
               src="assets/img/adx-matrix-logo-new.png"
               alt="Metrics by ADX — Home"
@@ -2518,8 +2518,8 @@
       });
       // Only completed local previews are valid destinations for the simulated login.
       const destinations = new Map([
-        ["Home.html", "Home.html"],
-        ["/", "Home.html"],
+        ["index.html", "index.html"],
+        ["/", "index.html"],
         ["Contact.html", "Contact.html"],
         ["/contact", "Contact.html"],
         ["/dashboard", "Dashboard/MeasurementReport.html"],
@@ -2534,7 +2534,7 @@
           "Demo preview. A successful login opens " +
           (destination === "Contact.html"
             ? "Contact."
-            : destination === "Home.html"
+            : destination === "index.html"
               ? "Home."
               : "Measurement Report.");
       form.addEventListener("submit", async (event) => {
@@ -2572,7 +2572,7 @@
               "Demo login successful. Opening " +
               (destination === "Contact.html"
                 ? "Contact…"
-                : destination === "Home.html"
+                : destination === "index.html"
                   ? "Home…"
                   : "Measurement Report…");
             document.getElementById("form-status").textContent = status;
