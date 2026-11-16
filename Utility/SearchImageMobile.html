@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Show Placement Images — Metrics</title>
+    <style>
+      @font-face {
+        font-family: Core;
+        src: url("../assets/fonts/Core/coresansc-45regular-webfont.woff2");
+      }
+      @font-face {
+        font-family: Core;
+        src: url("../assets/fonts/Core/coresansc-65bold-webfont.woff2");
+        font-weight: 700;
+      }
+      @font-face {
+        font-family: Adxfont;
+        src: url("../assets/fonts/icons/Adxfont.woff");
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font:
+          14px Core,
+          Arial,
+          sans-serif;
+        color: #262626;
+        background: #fff;
+      }
+      header {
+        display: flex;
+        width: 90%;
+        height: 10vh;
+        margin: auto;
+        align-items: center;
+      }
+      .back {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #ff2d55;
+        text-decoration: none;
+      }
+      .back img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+      .wrapper {
+        width: 90%;
+        margin: auto;
+        padding-bottom: 32px;
+      }
+      h1 {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .search {
+        margin-top: 24px;
+        border: 1px solid #d5d5da;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        height: 40px;
+        padding-left: 16px;
+      }
+      .search input {
+        font: inherit;
+        border: 0;
+        background: transparent;
+        min-width: 0;
+        flex: 1;
+        outline: none;
+      }
+      .search:focus-within {
+        outline: 2px solid #32c5ff;
+      }
+      .search button {
+        padding: 0 16px;
+        font-size: 20px;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+        border: 0;
+        background: none;
+        color: inherit;
+      }
+      .icon {
+        font-family: Adxfont;
+        font-style: normal;
+      }
+      .adx-ic_search:before {
+        content: "\e943";
+      }
+      .adx-ic_close:before {
+        content: "\e915";
+      }
+      #result {
+        margin-top: 24px;
+      }
+      .result-heading {
+        padding-bottom: 16px;
+        font-weight: bold;
+        font-size: 11px;
+        letter-spacing: 0.5px;
+      }
+      .record + .record {
+        border-top: 1px solid #e5e5ea;
+        padding-top: 48px;
+        margin-top: 48px;
+      }
+      .record-header p {
+        padding-bottom: 4px;
+      }
+      .edit {
+        float: right;
+        text-decoration: none;
+        color: #262626;
+        border: 1px solid #d5d5da;
+        padding: 8px 24px;
+        border-radius: 4px;
+      }
+      .images {
+        margin-top: 24px;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .image-card {
+        position: relative;
+        margin: 0 16px 16px 0;
+      }
+      .image-card p {
+        font-size: 11px;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+      .image-card img {
+        width: 163px;
+        height: 100px;
+        box-shadow: 0 8px 16px #0003;
+        border: 4px solid white;
+      }
+      .view {
+        position: absolute;
+        top: 38px;
+        left: 38px;
+        width: 84px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        visibility: hidden;
+        opacity: 0;
+        color: white;
+        font-size: 11px;
+        text-decoration: none;
+        border-radius: 12px;
+        background: #262626cc;
+        box-shadow: inset 0 1px 4px #0005;
+      }
+      .image-card:hover .view,
+      .image-card:focus-within .view {
+        visibility: visible;
+        opacity: 1;
+      }
+      .not-found {
+        border-radius: 8px;
+        background: #e020203d;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 16px;
+      }
+      .not-found p {
+        color: #8a0707;
+        font-size: 9px;
+        display: flex;
+        gap: 6px;
+      }
+      .not-found button {
+        font-size: 24px;
+        color: #999;
+        padding-left: 8px;
+      }
+      #loading {
+        padding: 24px;
+        color: #ff2d55;
+        text-align: center;
+      }
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid #32c5ff;
+        outline-offset: 2px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      @media (hover: none) {
+        .view {
+          visibility: visible;
+          opacity: 1;
+        }
+      }
+      @media (max-width: 420px) {
+        .not-found p {
+          display: block;
+        }
+        .image-card {
+          margin-right: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a class="back" href="../SovMap/SovMap.html"
+        ><img
+          src="../assets/img/icons/metrics-ic-arrow-left.png"
+          alt=""
+        />Back</a
+      >
+    </header>
+    <main class="wrapper">
+      <h1>Show Placement Images</h1>
+      <form class="search" id="search-form">
+        <input
+          id="code"
+          placeholder="Search by code"
+          aria-label="Search by code"
+          autocomplete="off"
+        /><button type="submit" aria-label="Search">
+          <i class="icon adx-ic_search" aria-hidden="true"></i>
+        </button>
+      </form>
+      <div id="result" aria-live="polite">
+        <p id="loading" hidden>Loading...</p>
+        <div id="found" hidden>
+          <p class="result-heading">Showing Result</p>
+          <div id="records"></div>
+        </div>
+        <div class="not-found" id="not-found" hidden>
+          <p>
+            <strong>Placement Not Found!</strong
+            ><span>Tips : please try another billboard code</span>
+          </p>
+          <button id="dismiss" aria-label="Dismiss message">
+            <i class="icon adx-ic_close" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </main>
+    <script>
+      "use strict";
+      const $ = (id) => document.getElementById(id),
+        photo = "../assets/img/map-controls/sample-billboard.jpg";
+      const placements = [
+        {
+          id: 1,
+          code: "JKT024",
+          alias: "JKT024",
+          side: "A",
+          type: "Billboard",
+          images: [photo, photo],
+        },
+        {
+          id: 1,
+          code: "JKT024",
+          alias: "JKT024",
+          side: "B",
+          type: "Billboard",
+          images: [photo],
+        },
+        {
+          id: 2,
+          code: "JKT108",
+          alias: "JKT108",
+          side: "A",
+          type: "Videotron",
+          images: [photo],
+        },
+        {
+          id: 3,
+          code: "BKS016",
+          alias: "BKS016",
+          side: "A",
+          type: "Billboard",
+          images: [],
+        },
+      ];
+      let searchVersion = 0;
+      function render(data) {
+        $("records").replaceChildren(
+          ...data.map((item) => {
+            const article = document.createElement("article");
+            article.className = "record";
+            const header = document.createElement("div");
+            header.className = "record-header";
+            const edit = document.createElement("a");
+            edit.className = "edit";
+            edit.textContent = "Edit";
+            edit.href =
+              "../SovMap/EditPlacement/PlacementDetail.html?id=" +
+              item.id +
+              "&side=" +
+              encodeURIComponent(item.side);
+            edit.target = "_blank";
+            edit.rel = "noopener";
+            header.append(edit);
+            for (const text of [
+              "Placement : " + item.code + item.side,
+              "Media Type : " + item.type,
+            ]) {
+              const p = document.createElement("p");
+              p.textContent = text;
+              header.append(p);
+            }
+            const images = document.createElement("div");
+            images.className = "images";
+            item.images.forEach((src, index) => {
+              const card = document.createElement("div");
+              card.className = "image-card";
+              card.tabIndex = 0;
+              const label = document.createElement("p");
+              label.textContent = "Content " + (index + 1);
+              const img = document.createElement("img");
+              img.src = src;
+              img.alt = item.code + item.side + " content " + (index + 1);
+              const a = document.createElement("a");
+              a.className = "view";
+              a.textContent = "View Images";
+              a.href = src;
+              a.target = "_blank";
+              a.rel = "noopener";
+              card.append(label, img, a);
+              images.append(card);
+            });
+            article.append(header, images);
+            return article;
+          }),
+        );
+      }
+      $("search-form").onsubmit = (e) => {
+        e.preventDefault();
+        const version = ++searchVersion,
+          code = $("code").value.trim().toUpperCase();
+        $("found").hidden = $("not-found").hidden = true;
+        $("loading").hidden = false;
+        $("result").setAttribute("aria-busy", "true");
+        setTimeout(() => {
+          if (version !== searchVersion) return;
+          const data = placements.filter(
+            (p) => !code || p.code.includes(code) || p.alias.includes(code),
+          );
+          render(data);
+          $("loading").hidden = true;
+          $("found").hidden = !data.length;
+          $("not-found").hidden = !!data.length;
+          $("result").setAttribute("aria-busy", "false");
+        }, 250);
+      };
+      $("dismiss").onclick = () => ($("not-found").hidden = true);
+    </script>
+  </body>
+</html>

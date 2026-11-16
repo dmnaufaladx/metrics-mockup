@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Edit Placement — Advertising Content</title>
+    <style>
+      @font-face {
+        font-family: Core;
+        src: url("../../assets/fonts/Core/coresansc-45regular-webfont.woff2");
+      }
+      @font-face {
+        font-family: Core;
+        src: url("../../assets/fonts/Core/coresansc-65bold-webfont.woff2");
+        font-weight: 700;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        color: #262626;
+        background: white;
+        font:
+          14px Core,
+          Arial,
+          sans-serif;
+      }
+      main {
+        max-width: 584px;
+        margin: auto;
+        padding: 51px 0 77px;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0;
+      }
+      button,
+      input,
+      textarea {
+        font: inherit;
+        color: inherit;
+      }
+      button {
+        cursor: pointer;
+        background: white;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        padding: 12px 16px;
+      }
+      button:disabled {
+        cursor: not-allowed;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible {
+        outline: 2px solid #32c5ff;
+        outline-offset: 2px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .tabs {
+        display: flex;
+        gap: 32px;
+        padding-top: 24px;
+        border-bottom: 1px solid #e5e5ea;
+      }
+      .tabs button {
+        border: 0;
+        border-radius: 0;
+        padding: 0 0 21px;
+        background: none;
+        color: #999;
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 0.81px;
+      }
+      .tabs .active {
+        border-bottom: 2px solid #ff2d55;
+        color: #262626;
+      }
+      .content {
+        margin-top: 48px;
+        border-bottom: 1px solid #e5e5ea;
+      }
+      .section-heading {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+      .number {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        text-align: center;
+        border-radius: 50%;
+        background: linear-gradient(to left, #7ae2bd, #07b48d);
+        color: white;
+        box-shadow: 0 4px 8px #0003;
+      }
+      .section-heading h2 {
+        font-size: 13px;
+        letter-spacing: 1px;
+        margin: 0;
+      }
+      .brand-row {
+        display: flex;
+        margin-bottom: 24px;
+      }
+      .brand-wrap {
+        flex: 1;
+        position: relative;
+        min-width: 0;
+      }
+      .brand-trigger {
+        height: 48px;
+        width: 100%;
+        padding: 5px 16px;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand-trigger small {
+        display: block;
+        color: #999;
+        font-size: 12px;
+      }
+      .brand-trigger:disabled {
+        border-color: #f2f2f5;
+        background: #f2f2f5;
+        color: #999;
+      }
+      .chevron {
+        width: 8px;
+        height: 8px;
+        border-right: 1.5px solid;
+        border-bottom: 1.5px solid;
+        transform: rotate(45deg);
+        margin-right: 4px;
+      }
+      .brand-trigger[aria-expanded="true"] .chevron {
+        transform: rotate(225deg);
+      }
+      .add-brand {
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        font-size: 28px;
+      }
+      .add-brand:disabled {
+        background: #e5e5ea;
+        color: #878787;
+      }
+      .dropdown {
+        position: absolute;
+        top: 56px;
+        width: 100%;
+        z-index: 3;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        background: white;
+        box-shadow: 0 0 4px #0003;
+        padding: 24px;
+      }
+      .search {
+        width: 100%;
+        background: #fafafa;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        padding: 14px;
+        margin-bottom: 24px;
+      }
+      .options {
+        max-height: 200px;
+        overflow: auto;
+      }
+      .options button {
+        display: block;
+        width: 100%;
+        border: 0;
+        text-align: left;
+        padding: 8px 16px;
+      }
+      .options button:hover {
+        background: #f5f5fa;
+      }
+      .message {
+        display: block;
+        position: relative;
+        margin-bottom: 24px;
+      }
+      .message span {
+        position: absolute;
+        left: 16px;
+        top: 8px;
+        color: #999;
+        font-size: 12px;
+      }
+      .message textarea {
+        width: 100%;
+        height: 130px;
+        resize: none;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        padding: 26px 16px 12px;
+      }
+      .message textarea:disabled {
+        background: #e5e5ea;
+      }
+      .images {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 40px;
+      }
+      .image-box {
+        height: 85px;
+        padding: 8px;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        min-width: 0;
+      }
+      .image-box img {
+        width: 65px;
+        height: 65px;
+        object-fit: cover;
+        margin-left: auto;
+      }
+      .filename {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+        font-size: 13px;
+      }
+      .remove {
+        border: 0;
+        padding: 0;
+        font-size: 22px;
+      }
+      .upload-copy {
+        font-size: 12px;
+        flex: 1;
+      }
+      .upload-copy small {
+        display: block;
+        color: #999;
+        font-size: 10px;
+      }
+      .open {
+        padding: 6px 10px;
+      }
+      .empty-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 36px;
+      }
+      .empty-label input {
+        width: 22px;
+        height: 22px;
+        margin: 0;
+        accent-color: #ff2d55;
+      }
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 48px;
+      }
+      .actions button {
+        font-weight: 700;
+        font-size: 13px;
+        padding: 16px;
+        border-radius: 8px;
+      }
+      .primary {
+        background: #ff2d55;
+        color: white;
+        border-color: #ff2d55;
+      }
+      #add-more {
+        width: 100%;
+        border: 0;
+        border-bottom: 1px solid #e5e5ea;
+        color: #ff2d55;
+        font-weight: 700;
+      }
+      dialog {
+        border: 0;
+        border-radius: 8px;
+        padding: 24px;
+        width: min(420px, calc(100% - 32px));
+        box-shadow: 0 8px 30px #0003;
+      }
+      dialog::backdrop {
+        background: #0005;
+      }
+      dialog h2 {
+        font-size: 20px;
+        margin: 0 0 20px;
+      }
+      dialog input {
+        width: 100%;
+        padding: 14px;
+        border: 1px solid #e5e5ea;
+        margin: 8px 0 20px;
+      }
+      .dialog-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+      #notice {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: calc(100% - 32px);
+        background: #262626;
+        color: white;
+        border-radius: 6px;
+        padding: 12px 20px;
+        z-index: 6;
+      }
+      @media (max-width: 620px) {
+        main {
+          padding: 30px 16px;
+        }
+        .images {
+          grid-template-columns: 1fr;
+        }
+        .tabs {
+          gap: 24px;
+        }
+        .tabs button {
+          font-size: 12px;
+        }
+        .dropdown {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Edit Placement</h1>
+      <nav class="tabs" aria-label="Placement sections">
+        <button class="active" aria-current="page">ADVERTISING CONTENT</button>
+        <a href="PlacementDetail.html">
+          <button id="detail-tab">PLACEMENT DETAIL</button>
+        </a>
+      </nav>
+      <div id="contents"></div>
+      <button id="add-more" hidden>Add More Content +</button>
+    </main>
+    <dialog id="brand-dialog">
+      <form id="brand-form">
+        <h2>New Brand</h2>
+        <label
+          >Brand Name<input id="new-brand" required maxlength="100"
+        /></label>
+        <div class="dialog-actions">
+          <button type="button" data-close="brand-dialog">Cancel</button
+          ><button class="primary">Save</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="delete-dialog">
+      <h2>Delete Content</h2>
+      <p>Delete this content?</p>
+      <div class="dialog-actions">
+        <button data-close="delete-dialog">Cancel</button
+        ><button class="primary" id="confirm-delete">Delete Content</button>
+      </div>
+    </dialog>
+    <p id="notice" role="status" hidden></p>
+    <script>
+      "use strict";
+      const $ = (id) => document.getElementById(id),
+        params = new URLSearchParams(location.search),
+        id = Number(params.get("id") || 1),
+        side = params.get("side") || "A";
+      const brands = [
+        "---",
+        "#CLOSETHEDOOR CORBUZIER",
+        "-",
+        "01 - Anies Imin",
+        "02 - Prabowo Gibran",
+        "03 - Ganjar Mahfud",
+        "KIA",
+        "LinkAja",
+        "Kopi Kenangan",
+        "Toyota",
+        "Telkomsel",
+        "Bank Jago",
+      ];
+      const defaults = [
+        "LinkAja",
+        "Kopi Kenangan",
+        "Toyota",
+        "Telkomsel",
+        "Bank Jago",
+      ];
+      let records = [
+          {
+            brand: params.has("id")
+              ? side === "B"
+                ? "KIA"
+                : defaults[id - 1] || "KIA"
+              : "KIA",
+            message:
+              params.has("id") && side === "B"
+                ? "Movement that inspires"
+                : "World class design",
+            thumbnail: "../../assets/img/monitoring/img-3.jpg",
+            image: "../../assets/img/monitoring/img-4.jpg",
+            empty: false,
+            editing: false,
+          },
+        ],
+        brandTarget = 0,
+        deleteTarget = 0;
+      if (id === 3 && side === "B")
+        records = [
+          {
+            brand: "---",
+            message: "-",
+            thumbnail: "",
+            image: "",
+            empty: true,
+            editing: true,
+          },
+        ];
+      function notify(text) {
+        $("notice").textContent = text;
+        $("notice").hidden = false;
+        clearTimeout(notify.timer);
+        notify.timer = setTimeout(() => ($("notice").hidden = true), 3000);
+      }
+      function render() {
+        $("contents").replaceChildren(
+          ...records.map((item, index) => {
+            const section = document.createElement("section");
+            section.className = "content";
+            section.innerHTML = `<div class="section-heading"><span class="number">${index + 1}</span><h2>CONTENT</h2></div><div class="brand-row"><div class="brand-wrap"><button class="brand-trigger" aria-expanded="false"><span><small>Brand</small><span class="brand-value"></span></span><i class="chevron" aria-hidden="true"></i></button><div class="dropdown" hidden><input class="search" type="search" placeholder="⌕  Search" aria-label="Search Brand"><div class="options"></div></div></div><button class="add-brand" aria-label="Add brand">+</button></div><label class="message"><span>Message</span><textarea aria-label="Message"></textarea></label><div class="images"></div><label class="empty-label"><input type="checkbox">Don\`t have advertising</label><div class="actions"><button class="delete">Delete Content</button><button class="primary save"></button></div>`;
+            const trigger = section.querySelector(".brand-trigger"),
+              dropdown = section.querySelector(".dropdown"),
+              search = section.querySelector(".search");
+            section.querySelector(".brand-value").textContent = item.brand;
+            trigger.disabled = !item.editing;
+            const options = () => {
+              const choices = brands.filter((b) =>
+                b.toLowerCase().includes(search.value.toLowerCase()),
+              );
+              section.querySelector(".options").replaceChildren(
+                ...choices.map((name) => {
+                  const b = document.createElement("button");
+                  b.textContent = name;
+                  b.onclick = () => {
+                    item.brand = name;
+                    item.empty = name === "---";
+                    if (item.empty) item.message = "-";
+                    render();
+                  };
+                  return b;
+                }),
+              );
+              if (!choices.length)
+                section.querySelector(".options").textContent =
+                  "No brands found.";
+            };
+            options();
+            trigger.onclick = () => {
+              dropdown.hidden = !dropdown.hidden;
+              trigger.setAttribute("aria-expanded", String(!dropdown.hidden));
+              if (!dropdown.hidden) search.focus();
+            };
+            search.oninput = options;
+            const add = section.querySelector(".add-brand");
+            add.disabled = !item.editing;
+            add.onclick = () => {
+              brandTarget = index;
+              $("new-brand").value = "";
+              $("brand-dialog").showModal();
+            };
+            const message = section.querySelector("textarea");
+            message.value = item.message;
+            message.disabled = !item.editing;
+            message.oninput = () => (item.message = message.value);
+            ["thumbnail", "image"].forEach((key) => {
+              const box = document.createElement("div");
+              box.className = "image-box";
+              if (item[key]) {
+                if (item.editing) {
+                  const remove = document.createElement("button");
+                  remove.className = "remove";
+                  remove.textContent = "×";
+                  remove.setAttribute("aria-label", "Remove " + key);
+                  remove.onclick = () => {
+                    item[key] = "";
+                    render();
+                  };
+                  box.append(remove);
+                }
+                const name = document.createElement("span");
+                name.className = "filename";
+                name.textContent =
+                  item[key + "Name"] || item[key].split("/").pop();
+                const img = document.createElement("img");
+                img.src = item[key];
+                img.alt =
+                  key === "thumbnail" ? "Thumbnail image" : "Full size image";
+                box.append(name, img);
+              } else {
+                const copy = document.createElement("div");
+                copy.className = "upload-copy";
+                copy.innerHTML =
+                  (key === "thumbnail"
+                    ? "Thumbnail Images"
+                    : "Full size images") +
+                  "<small>File jpg or png, max 50kb</small>";
+                const input = document.createElement("input");
+                input.type = "file";
+                input.accept = "image/jpeg,image/png";
+                input.hidden = true;
+                const open = document.createElement("button");
+                open.className = "open";
+                open.textContent = "Open";
+                open.disabled = !item.editing;
+                open.onclick = () => input.click();
+                input.onchange = () => {
+                  const f = input.files[0];
+                  if (!f) return;
+                  if (
+                    !["image/jpeg", "image/png"].includes(f.type) ||
+                    f.size > 50 * 1024
+                  ) {
+                    notify("Choose a JPG or PNG file up to 50kb.");
+                    return;
+                  }
+                  const reader = new FileReader();
+                  reader.onload = () => {
+                    item[key] = reader.result;
+                    item[key + "Name"] = f.name;
+                    render();
+                  };
+                  reader.readAsDataURL(f);
+                };
+                box.append(copy, input, open);
+              }
+              section.querySelector(".images").append(box);
+            });
+            const empty = section.querySelector("[type=checkbox]");
+            empty.checked = item.empty;
+            empty.disabled = !item.editing || item.brand !== "---";
+            empty.onchange = () => (item.empty = empty.checked);
+            section.querySelector(".delete").onclick = () => {
+              deleteTarget = index;
+              $("delete-dialog").showModal();
+            };
+            const save = section.querySelector(".save");
+            save.textContent = item.editing ? "Save Content" : "Edit Content";
+            save.onclick = () => {
+              if (!item.editing) {
+                item.editing = true;
+                render();
+                return;
+              }
+              if (!item.message.trim()) {
+                notify("Message can not be empty.");
+                message.focus();
+                return;
+              }
+              save.disabled = true;
+              save.textContent = "Saving...";
+              setTimeout(() => {
+                item.editing = false;
+                render();
+                notify("Save content successfully");
+              }, 300);
+            };
+            return section;
+          }),
+        );
+        $("add-more").hidden = id !== 2 && records.length > 0;
+      }
+      $("brand-form").onsubmit = (e) => {
+        e.preventDefault();
+        const name = $("new-brand").value.trim();
+        if (!name) {
+          $("new-brand").setCustomValidity("Enter a brand name.");
+          $("new-brand").reportValidity();
+          return;
+        }
+        if (!brands.includes(name)) brands.push(name);
+        records[brandTarget].brand = name;
+        records[brandTarget].empty = false;
+        $("brand-dialog").close();
+        render();
+      };
+      $("new-brand").oninput = () => $("new-brand").setCustomValidity("");
+      $("confirm-delete").onclick = () => {
+        records.splice(deleteTarget, 1);
+        $("delete-dialog").close();
+        render();
+        notify("Content deleted");
+      };
+      document
+        .querySelectorAll("[data-close]")
+        .forEach((b) => (b.onclick = () => $(b.dataset.close).close()));
+      $("add-more").onclick = () => {
+        records.push({
+          brand: "---",
+          message: "",
+          thumbnail: "",
+          image: "",
+          empty: false,
+          editing: true,
+        });
+        render();
+      };
+      $("detail-tab").onclick = () =>
+        notify("Placement Detail is not available in this preview yet.");
+      document.addEventListener("click", (e) => {
+        document.querySelectorAll(".brand-wrap").forEach((w) => {
+          if (!w.contains(e.target)) {
+            w.querySelector(".dropdown").hidden = true;
+            w.querySelector(".brand-trigger").setAttribute(
+              "aria-expanded",
+              "false",
+            );
+          }
+        });
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape")
+          document.querySelectorAll(".dropdown").forEach((d) => {
+            d.hidden = true;
+            d.parentElement
+              .querySelector(".brand-trigger")
+              .setAttribute("aria-expanded", "false");
+          });
+      });
+      render();
+    </script>
+  </body>
+</html>

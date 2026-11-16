@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Queue Update Photos — Metrics by ADX</title>
+    <style>
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-35light-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-35light-webfont.woff")
+            format("woff");
+        font-weight: 300;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-45regular-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-45regular-webfont.woff")
+            format("woff");
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-65bold-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-65bold-webfont.woff")
+            format("woff");
+        font-weight: 700;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-75extrabold-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-75extrabold-webfont.woff")
+            format("woff");
+        font-weight: 900;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Adxfont";
+        src: url("../assets/fonts/icons/Adxfont.eot?tefm31");
+        src:
+          url("../assets/fonts/icons/Adxfont.eot?tefm31#iefix")
+            format("embedded-opentype"),
+          url("../assets/fonts/icons/Adxfont.ttf?tefm31") format("truetype"),
+          url("../assets/fonts/icons/Adxfont.woff?tefm31") format("woff"),
+          url("../assets/fonts/icons/Adxfont.svg?tefm31#Adxfont") format("svg");
+        font-weight: normal;
+        font-style: normal;
+      }
+      /* Compiled from QueueUpdatePhotos and Pagination source styles. */
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+      }
+
+      header {
+        display: flex;
+        margin: auto;
+        align-items: center;
+        margin: 20px 24px 40px 24px;
+      }
+
+      .main-container {
+        margin: 32px 32px;
+      }
+
+      .text-back {
+        margin: 8px;
+        color: #ff2d55;
+        cursor: pointer;
+      }
+
+      .icon-back {
+        cursor: pointer;
+      }
+
+      .wrapper {
+        width: 90%;
+        margin: auto;
+      }
+      .wrapper__title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .wrapper .table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+      }
+      .wrapper .table thead tr {
+        height: 40px;
+      }
+      .wrapper .table thead th {
+        text-align: left;
+        padding: 16px 24px;
+      }
+      .wrapper .table tbody tr {
+        background-color: #ffffff;
+      }
+      .wrapper .table tbody tr:last-child {
+        border-bottom: none;
+      }
+      .wrapper .table tbody td {
+        padding: 4px 24px;
+        text-align: left;
+      }
+      .wrapper .empty-queue {
+        height: 60vh;
+        font-size: 48px;
+        font-weight: bold;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .wrapper hr {
+        margin: 24px 0;
+        border: 0.5px solid #ff2d55;
+      }
+
+      .menu-pagination {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 16px;
+      }
+      .menu-pagination .pagination {
+        display: flex;
+        align-items: center;
+        margin-right: 8px;
+      }
+      .menu-pagination .pagination li {
+        margin-right: 13px;
+      }
+      .menu-pagination .pagination li:last-child {
+        margin-right: 0;
+      }
+      .menu-pagination .pagination li a.page {
+        font-size: 13px;
+        text-align: center;
+        transition: 0.4s ease all;
+        -moz-transition: 0.4s ease all;
+        -webkit-transition: 0.4s ease all;
+      }
+      .menu-pagination .pagination li a.prev_arrow,
+      .menu-pagination .pagination li a.next_arrow {
+        display: block;
+        padding: 8px;
+        border: 1px solid #d5d5da;
+      }
+      .menu-pagination .pagination li a.prev_arrow i,
+      .menu-pagination .pagination li a.next_arrow i {
+        font-weight: 700;
+      }
+
+      .selected {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background-color: #ff2d55;
+        color: #ffffff;
+        -webkit-border-radius: 50px;
+        -moz-border-radius: 50px;
+        border-radius: 50px;
+      }
+
+      @media (max-width: 1140px) {
+        .menu-pagination .pagination li a.page:hover {
+          color: unset;
+        }
+      }
+      body {
+        font:
+          14px "Core Sans C",
+          system-ui;
+        color: #262626;
+        background: #fff;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .back {
+        display: inline-flex;
+        align-items: center;
+      }
+      .icon-back img {
+        display: block;
+        width: 24px;
+        height: 24px;
+      }
+      .wrapper__title {
+        font-size: 18px;
+      }
+      .table-scroll {
+        overflow-x: auto;
+      }
+      .table {
+        min-width: 640px;
+      }
+      .table td {
+        overflow-wrap: anywhere;
+        max-width: 420px;
+      }
+      .table th {
+        white-space: nowrap;
+      }
+      button {
+        font: inherit;
+        cursor: pointer;
+        border: 0;
+        background: transparent;
+      }
+      button:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      .pagination {
+        list-style: none;
+      }
+      .pagination .page {
+        font-size: 13px;
+      }
+      .pagination .arrow {
+        padding: 8px;
+        border: 1px solid #d5d5da;
+      }
+      .pagination li {
+        flex-shrink: 0;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      :focus-visible {
+        outline: 3px solid #007aff;
+        outline-offset: 3px;
+      }
+      .loading {
+        min-height: 180px;
+        display: grid;
+        place-content: center;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #ffe5ec;
+        border-top-color: #ff2d55;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      .error {
+        color: #b6203e;
+        margin: 16px 0;
+        line-height: 1.6;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @media (max-width: 767px) {
+        .main-container {
+          margin: 24px 16px;
+        }
+        .wrapper {
+          width: 100%;
+        }
+        header {
+          margin: 20px 16px 32px;
+        }
+        .wrapper .empty-queue {
+          font-size: 32px;
+          text-align: center;
+        }
+        .pagination {
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+        .menu-pagination .pagination li {
+          margin-right: 4px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .spinner {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a class="back" href="PlacementList.html"
+        ><span class="icon-back"
+          ><img
+            src="../assets/img/icons/metrics-ic-arrow-left.png"
+            alt="" /></span
+        ><span class="text-back">Back</span></a
+      >
+    </header>
+    <div class="main-container">
+      <main class="wrapper">
+        <h1 class="wrapper__title">Queue Update Photos</h1>
+        <hr />
+        <div
+          id="loading"
+          class="loading"
+          role="status"
+          aria-label="Loading queue"
+        >
+          <div class="spinner" aria-hidden="true"></div>
+        </div>
+        <p id="error" class="error" role="alert" hidden></p>
+        <div id="content" hidden>
+          <div
+            class="table-scroll"
+            id="table-scroll"
+            role="region"
+            aria-label="Photo update queue"
+            tabindex="0"
+          >
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Code</th>
+                  <th scope="col">Updated Date</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Notes</th>
+                </tr>
+              </thead>
+              <tbody id="rows"></tbody>
+            </table>
+          </div>
+          <p id="empty" class="empty-queue" hidden>Your Queue is Empty</p>
+          <nav class="menu-pagination" aria-label="Queue pages">
+            <ul class="pagination" id="pages"></ul>
+          </nav>
+        </div>
+      </main>
+    </div>
+    <script>
+      "use strict";
+      // Migrate legacy preview codes while preserving record IDs and other edits.
+      (() => {
+        const key = "metrics-preview-placement-records-v1";
+        const normalize = (value) =>
+          String(value || "")
+            .toUpperCase()
+            .replace(/^SOV-/, "")
+            .replace(/-/g, "");
+        try {
+          const rows = JSON.parse(sessionStorage.getItem(key) || "null");
+          const aliases = new Map();
+          if (Array.isArray(rows)) {
+            const cities = {
+              Jakarta: "JKT",
+              Tangerang: "TGR",
+              Bekasi: "BKS",
+              Depok: "DPK",
+              Bogor: "BGR",
+              Bandung: "BDG",
+              Surabaya: "SBY",
+              Aceh: "ACH",
+              Ambon: "AMB",
+            };
+            const used = new Set(
+              rows.map((r) => normalize(r["Placement Code"])),
+            );
+            rows.forEach((row) => {
+              const old = row["Placement Code"];
+              if (typeof old !== "string") return;
+              let code = normalize(old);
+              if (/^BULKDEMO/.test(code)) {
+                let number = Number(row.id) || 1;
+                const prefix = cities[row.City] || "JKT";
+                do {
+                  code = prefix + String(number++).padStart(3, "0");
+                } while (used.has(code));
+              }
+              used.add(code);
+              aliases.set(old, code);
+              row["Placement Code"] = code;
+              row["SOV Code"] = code;
+            });
+            sessionStorage.setItem(key, JSON.stringify(rows));
+          }
+          const queueKey = "metrics-preview-photo-queue-v1";
+          const queue = JSON.parse(sessionStorage.getItem(queueKey) || "null");
+          if (Array.isArray(queue)) {
+            queue.forEach((row) => {
+              if (typeof row.code === "string")
+                row.code = aliases.get(row.code) || normalize(row.code);
+            });
+            sessionStorage.setItem(queueKey, JSON.stringify(queue));
+          }
+        } catch {}
+      })();
+
+      const $ = (id) => document.getElementById(id),
+        storageKey = "metrics-preview-photo-queue-v1";
+      let queue = [],
+        page = 1,
+        version = 0;
+      function load() {
+        try {
+          const value = JSON.parse(sessionStorage.getItem(storageKey) || "[]");
+          if (
+            !Array.isArray(value) ||
+            !value.every(
+              (q) =>
+                q && typeof q.code === "string" && typeof q.status === "string",
+            )
+          )
+            throw Error("Invalid queue");
+          queue = value;
+          $("error").hidden = true;
+        } catch {
+          queue = [];
+          $("error").textContent =
+            "The local photo queue could not be read. Return to PlacementList and try again.";
+          $("error").hidden = false;
+        }
+      }
+      function formatDate(value) {
+        const date = new Date(value);
+        return Number.isNaN(date.getTime())
+          ? "-"
+          : new Intl.DateTimeFormat("en-US", {
+              month: "short",
+              day: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+              hour12: false,
+            }).format(date);
+      }
+      async function render() {
+        const current = ++version;
+        $("loading").hidden = false;
+        $("content").hidden = true;
+        await new Promise((r) => setTimeout(r, 200));
+        if (current !== version) return;
+        const max = Math.max(1, Math.ceil(queue.length / 25));
+        page = Math.min(max, Math.max(1, page));
+        $("rows").replaceChildren();
+        for (const row of queue.slice((page - 1) * 25, page * 25)) {
+          const tr = document.createElement("tr");
+          for (const value of [
+            row.code,
+            formatDate(row.updated_date),
+            row.status,
+            row.notes || "-",
+          ]) {
+            const td = document.createElement("td");
+            td.textContent = value;
+            tr.append(td);
+          }
+          $("rows").append(tr);
+        }
+        $("empty").hidden = queue.length !== 0;
+        $("table-scroll").hidden = !queue.length;
+        $("pages").replaceChildren();
+        function button(label, n, disabled = false) {
+          const li = document.createElement("li"),
+            b = document.createElement("button");
+          b.textContent = label;
+          b.className =
+            "page" +
+            (typeof label === "number" && n === page ? " selected" : "") +
+            (typeof label === "string" ? " arrow" : "");
+          b.disabled = disabled;
+          if (typeof label === "number" && n === page)
+            b.setAttribute("aria-current", "page");
+          b.setAttribute(
+            "aria-label",
+            label === "‹"
+              ? "Previous page"
+              : label === "›"
+                ? "Next page"
+                : "Page " + n,
+          );
+          b.onclick = () => {
+            page = n;
+            render();
+          };
+          li.append(b);
+          $("pages").append(li);
+        }
+        button("‹", page - 1, page === 1);
+        const numbers = [
+          ...new Set([
+            1,
+            ...Array.from({ length: 5 }, (_, i) => page - 2 + i),
+            max,
+          ]),
+        ]
+          .filter((n) => n >= 1 && n <= max)
+          .sort((a, b) => a - b);
+        let previous = 0;
+        for (const n of numbers) {
+          if (previous && n > previous + 1) {
+            const li = document.createElement("li");
+            li.textContent = "…";
+            $("pages").append(li);
+          }
+          button(n, n);
+          previous = n;
+        }
+        button("›", page + 1, page === max);
+        $("loading").hidden = true;
+        $("content").hidden = false;
+      }
+      load();
+      render();
+      window.addEventListener("pageshow", (e) => {
+        if (e.persisted) {
+          load();
+          render();
+        }
+      });
+    </script>
+  </body>
+</html>

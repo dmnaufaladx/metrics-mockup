@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KML Converter — Metrics by ADX</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: #262626;
+        background: #f5f5fa;
+        font-family: "Core Sans C", Arial, sans-serif;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        border: 0;
+        cursor: pointer;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible {
+        outline: 3px solid #007aff;
+        outline-offset: 3px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .topbar {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 56px;
+        padding: 0 20px;
+        background: #fff;
+        border-bottom: 1px solid #e5e5ea;
+      }
+      .brand-group,
+      .account {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .logo img {
+        display: block;
+        height: 40px;
+        width: auto;
+      }
+      .account {
+        position: relative;
+        font-size: 14px;
+      }
+      .icon-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: transparent;
+        font-size: 22px;
+      }
+      .account-panel {
+        position: absolute;
+        top: 46px;
+        right: 0;
+        width: 150px;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        background: #fff;
+        box-shadow: 0 3px 12px #0002;
+      }
+      .account-panel a {
+        display: block;
+        padding: 14px 16px;
+      }
+      .account-panel a:hover {
+        background: #f5f5fa;
+      }
+      .mobile-nav {
+        display: none;
+      }
+      .shell {
+        display: flex;
+        min-height: calc(100vh - 56px);
+      }
+      .sidebar {
+        width: 300px;
+        flex-shrink: 0;
+        padding: 8px 0 24px 16px;
+        background-image: linear-gradient(to left, #fc2d2d, #fc2e90 70%);
+      }
+      .sidebar nav > button,
+      .sidebar-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 52px;
+        margin-bottom: 4px;
+        padding: 16px;
+        color: #fff;
+        background: transparent;
+        text-align: left;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .sidebar nav > button img,
+      .sidebar-link img {
+        width: 16px;
+        height: 16px;
+      }
+      .sidebar nav > button:hover,
+      .sidebar-link:hover,
+      .submenu a:hover,
+      .submenu button:hover {
+        background: #e5e5ea55;
+      }
+      .chevron {
+        margin-left: auto;
+        transition: transform 0.2s;
+      }
+      [aria-expanded="true"] .chevron {
+        transform: rotate(180deg);
+      }
+      .submenu {
+        padding: 4px 16px 12px 24px;
+      }
+      .submenu a,
+      .submenu button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        color: #fff;
+        background: transparent;
+        text-align: left;
+        font-size: 14px;
+      }
+      .submenu a.active {
+        background: #e5e5ea55;
+        font-weight: 700;
+      }
+      .content {
+        flex: 1;
+        min-width: 0;
+        padding: 56px 30px;
+      }
+      .main-container {
+        width: min(790px, 100%);
+      }
+      .title {
+        margin: 0;
+        font-size: 32px;
+        line-height: 1.25;
+        letter-spacing: 1px;
+      }
+      .strip {
+        width: 37px;
+        height: 4px;
+        margin-top: 24px;
+        background: #ff2d55;
+      }
+      .description {
+        margin: 24px 0 0;
+        font-size: 14px;
+        line-height: 1.43;
+        letter-spacing: 1px;
+      }
+      .drop-section {
+        display: block;
+        min-height: 154px;
+        margin-top: 48px;
+        padding: 24px;
+        cursor: pointer;
+        background: #fff;
+        box-shadow: 0 8px 16px #00000014;
+      }
+      .drop-section.cursor-over {
+        background: #eef4fa;
+      }
+      .drop-zone {
+        display: flex;
+        align-items: center;
+        height: 106px;
+        padding: 24px;
+        border: 1px dashed #878787;
+        border-radius: 8px;
+      }
+      .cloud {
+        display: grid;
+        width: 56px;
+        height: 56px;
+        place-items: center;
+        padding-right: 16px;
+        border-right: 1px solid #d5d5da;
+      }
+      .cloud img {
+        width: 40px;
+        height: 29px;
+        object-fit: contain;
+      }
+      .upload-copy {
+        margin-left: 16px;
+      }
+      .upload-title {
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.29;
+        letter-spacing: 1px;
+      }
+      .upload-help {
+        margin: 8px 0 0;
+        font-size: 11px;
+        line-height: 1.64;
+        letter-spacing: 0.5px;
+      }
+      .upload-help span {
+        display: block;
+      }
+      .uploaded-files {
+        margin-top: 24px;
+      }
+      .uploaded-files h2 {
+        margin: 0 0 12px;
+        font-size: 13px;
+        letter-spacing: 0.81px;
+      }
+      .file-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        min-height: 54px;
+        margin-bottom: 8px;
+        padding: 16px 24px;
+        background: #fff;
+        box-shadow: 0 8px 16px #00000014;
+        font-size: 14px;
+        letter-spacing: 1px;
+      }
+      .file-number {
+        min-width: 12px;
+      }
+      .file-name {
+        flex: 1;
+        overflow-wrap: anywhere;
+      }
+      .remove {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #eef0f4;
+        color: #555;
+        font-size: 19px;
+        line-height: 1;
+      }
+      .actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 24px;
+      }
+      .primary {
+        min-height: 48px;
+        padding: 14px 20px;
+        border-radius: 4px;
+        background: #ff2d55;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .primary:hover {
+        background: #e9284d;
+      }
+      .empty-message {
+        margin: 18px 0 0;
+        color: #d42548;
+        font-size: 13px;
+      }
+      .progress,
+      .finished {
+        margin-top: 80px;
+        text-align: center;
+      }
+      .spinner {
+        width: 54px;
+        height: 54px;
+        margin: 0 auto 18px;
+        border: 5px solid #e5e5ea;
+        border-top-color: #ff2d55;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+      }
+      .progress p {
+        font-size: 14px;
+      }
+      .success-icon {
+        display: grid;
+        width: 100px;
+        height: 100px;
+        margin: auto;
+        place-items: center;
+        border-radius: 50%;
+        background: #e8f8ec;
+        color: #31b849;
+        font-size: 52px;
+      }
+      .finished h2 {
+        margin: 32px 0 0;
+        font-size: 18px;
+      }
+      .finished p {
+        margin: 8px 0 0;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+      .finished .primary {
+        margin-top: 50px;
+      }
+      .notice {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        max-width: 340px;
+        padding: 14px 18px;
+        border-radius: 5px;
+        background: #262626;
+        color: #fff;
+        box-shadow: 0 6px 20px #0003;
+        font-size: 14px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @media (max-width: 767px) {
+        .topbar {
+          padding: 0 12px;
+        }
+        .mobile-nav {
+          display: block;
+        }
+        .email {
+          display: none;
+        }
+        .logo img {
+          height: 32px;
+        }
+        .shell {
+          display: block;
+        }
+        .sidebar {
+          display: none;
+          width: 100%;
+          padding: 8px 16px;
+        }
+        .sidebar.open {
+          display: block;
+        }
+        .content {
+          padding: 32px 16px;
+        }
+        .title {
+          font-size: 28px;
+        }
+        .drop-section {
+          margin-top: 32px;
+          padding: 14px;
+        }
+        .drop-zone {
+          height: auto;
+          min-height: 126px;
+          padding: 18px;
+        }
+        .actions {
+          justify-content: stretch;
+        }
+        .actions .primary {
+          width: 100%;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .spinner {
+          animation: none;
+        }
+      }
+
+      .adx-ic_chevron_down {
+        font-family: "Adxfont" !important;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+      }
+      .adx-ic_chevron_down::before {
+        content: "\e911";
+      }
+      @font-face {
+        font-family: "Adxfont";
+        src: url("../assets/fonts/icons/Adxfont.woff") format("woff");
+        font-weight: normal;
+        font-style: normal;
+      }
+      .adx-ic_user_circle {
+        font-family: "Adxfont" !important;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 28px;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+      }
+      .adx-ic_user_circle::before {
+        content: "\e94d";
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-group">
+        <button
+          class="icon-button mobile-nav"
+          id="nav-toggle"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+          aria-controls="sidebar"
+        >
+          ☰
+        </button>
+        <a class="logo" href="../Home.html"
+          ><img
+            src="../assets/img/icons/metrics-ico-color.png"
+            alt="Metrics by ADX — Home"
+        /></a>
+      </div>
+      <div class="account">
+        <span class="email">demo@metrics.test</span>
+        <button
+          class="icon-button"
+          id="account-toggle"
+          aria-label="Account"
+          aria-expanded="false"
+          aria-controls="account-panel"
+        >
+          <i class="adx-ic_user_circle" aria-hidden="true"></i>
+        </button>
+        <div class="account-panel" id="account-panel" hidden>
+          <a href="../Login.html">Sign Out</a>
+        </div>
+      </div>
+    </header>
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <nav aria-label="Dashboard">
+          <button
+            id="discovery-toggle"
+            aria-expanded="true"
+            aria-controls="discovery-menu"
+          >
+            <img
+              src="../assets/img/icons/adx-ic-location.png"
+              alt=""
+            />Discovery Map
+            <i class="adx-ic_chevron_down chevron" aria-hidden="true"></i>
+          </button>
+          <div class="submenu" id="discovery-menu">
+            <a href="../SovMap/SovMap.html"> Share of Voice </a>
+            <a href="../BillboardMap/BillboardMap.html">Insight Maps</a>
+            <a class="active" href="KmlConverter.html" aria-current="page"
+              >KML Converter</a
+            >
+          </div>
+          <a class="sidebar-link" href="../Dashboard/Monitoring/ReportList.html"
+            ><img
+              src="../assets/img/icons/adx-ic-monitoring.png"
+              alt=""
+            />Monitoring Report</a
+          >
+          <a class="sidebar-link" href="../Dashboard/MeasurementReport.html"
+            ><img
+              src="../assets/img/icons/adx-ic-measurement.png"
+              alt=""
+            />Measurement Report</a
+          >
+          <a class="sidebar-link" href="../DownloadReport.html"
+            ><img
+              src="../assets/img/icons/adx-ic-monitoring.png"
+              alt=""
+            />Download Daily Report</a
+          >
+        </nav>
+      </aside>
+      <main class="content" id="content" tabindex="-1">
+        <section class="main-container" aria-labelledby="page-title">
+          <header>
+            <h1 class="title" id="page-title">KML Converter</h1>
+            <div class="strip"></div>
+            <p class="description">
+              Convert KML File here, you can drag or click the button bellow
+            </p>
+          </header>
+          <div id="picker-view">
+            <input
+              id="file-input"
+              type="file"
+              accept=".csv,text/csv"
+              multiple
+              hidden
+            />
+            <label class="drop-section" id="drop-section" for="file-input">
+              <span class="drop-zone">
+                <span class="cloud"
+                  ><img src="../assets/img/cloud-upload.png" alt=""
+                /></span>
+                <span class="upload-copy"
+                  ><span class="upload-title"
+                    >Drag &amp; drop or click to Upload File</span
+                  ><span class="upload-help"
+                    ><span>Allowed File is csv and xlsx,</span
+                    ><span
+                      >tips you can drop single or multiple file here</span
+                    ></span
+                  ></span
+                >
+              </span>
+            </label>
+            <p class="empty-message" id="empty-message" role="alert" hidden></p>
+            <section
+              class="uploaded-files"
+              id="uploaded-files"
+              hidden
+              aria-labelledby="uploaded-title"
+            >
+              <h2 id="uploaded-title">FILE UPLOADED</h2>
+              <div id="file-list"></div>
+              <div class="actions">
+                <button class="primary" id="convert-button" type="button">
+                  Convert &amp; Download as KML File
+                </button>
+              </div>
+            </section>
+          </div>
+          <section
+            class="progress"
+            id="progress-view"
+            hidden
+            aria-live="polite"
+          >
+            <div class="spinner"></div>
+            <p>Converting your CSV file…</p>
+          </section>
+          <section
+            class="finished"
+            id="finished-view"
+            hidden
+            aria-live="polite"
+          >
+            <div class="success-icon">✓</div>
+            <h2>Convert Success</h2>
+            <p>
+              Awesome team, your kml file already downloaded!<br />Check your
+              download history to open that file.
+            </p>
+            <button class="primary" id="new-button" type="button">
+              Convert New KML
+            </button>
+          </section>
+        </section>
+      </main>
+    </div>
+    <div class="notice" id="notice" role="status" hidden></div>
+    <script>
+      "use strict";
+      const byId = (id) => document.getElementById(id);
+      const state = { files: [] };
+      const show = (element, visible) => {
+        element.hidden = !visible;
+      };
+      const setView = (name) => {
+        show(byId("picker-view"), name === "picker");
+        show(byId("progress-view"), name === "progress");
+        show(byId("finished-view"), name === "finished");
+      };
+      let noticeTimer;
+      const notify = (message) => {
+        const notice = byId("notice");
+        notice.textContent = message;
+        notice.hidden = false;
+        clearTimeout(noticeTimer);
+        noticeTimer = setTimeout(() => {
+          notice.hidden = true;
+        }, 3600);
+      };
+      const renderFiles = () => {
+        const list = byId("file-list");
+        list.replaceChildren(
+          ...state.files.map((file, index) => {
+            const row = document.createElement("div");
+            row.className = "file-row";
+            const number = document.createElement("span");
+            number.className = "file-number";
+            number.textContent = String(index + 1);
+            const name = document.createElement("span");
+            name.className = "file-name";
+            name.textContent = file.name;
+            const remove = document.createElement("button");
+            remove.className = "remove";
+            remove.type = "button";
+            remove.setAttribute("aria-label", "Remove " + file.name);
+            remove.textContent = "×";
+            remove.onclick = () => {
+              state.files.splice(index, 1);
+              renderFiles();
+            };
+            row.append(number, name, remove);
+            return row;
+          }),
+        );
+        show(byId("uploaded-files"), state.files.length > 0);
+      };
+      const addFiles = (files) => {
+        const invalid = [];
+        [...files].forEach((file) => {
+          if (file.name.toLowerCase().endsWith(".csv")) state.files.push(file);
+          else invalid.push(file.name);
+        });
+        if (invalid.length) notify("Only accept csv file.");
+        renderFiles();
+      };
+      const createDummyKml = () => {
+        const names = state.files.map((file) =>
+          file.name.replace(/\.csv$/i, ""),
+        );
+        const placemarks = names
+          .map(
+            (name, index) =>
+              "<Placemark><name>" +
+              name.replace(/[<>&]/g, "") +
+              "</name><Point><coordinates>106." +
+              (800 + index) +
+              ",-6.2,0</coordinates></Point></Placemark>",
+          )
+          .join("");
+        return (
+          '<?xml version="1.0" encoding="UTF-8"?><kml xmlns="http://www.opengis.net/kml/2.2"><Document>' +
+          placemarks +
+          "</Document></kml>"
+        );
+      };
+      byId("file-input").addEventListener("change", (event) => {
+        addFiles(event.target.files);
+        event.target.value = "";
+      });
+      const dropSection = byId("drop-section");
+      ["dragenter", "dragover"].forEach((eventName) =>
+        dropSection.addEventListener(eventName, (event) => {
+          event.preventDefault();
+          dropSection.classList.add("cursor-over");
+        }),
+      );
+      ["dragleave", "drop"].forEach((eventName) =>
+        dropSection.addEventListener(eventName, (event) => {
+          event.preventDefault();
+          dropSection.classList.remove("cursor-over");
+        }),
+      );
+      dropSection.addEventListener("drop", (event) =>
+        addFiles(event.dataTransfer.files),
+      );
+      byId("convert-button").onclick = () => {
+        if (!state.files.length) {
+          byId("empty-message").textContent = "Pick a csv file first!";
+          byId("empty-message").hidden = false;
+          return;
+        }
+        byId("empty-message").hidden = true;
+        setView("progress");
+        setTimeout(() => {
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(
+            new Blob([createDummyKml()], {
+              type: "application/vnd.google-earth.kml+xml",
+            }),
+          );
+          link.download = "route-data.kml";
+          link.click();
+          URL.revokeObjectURL(link.href);
+          state.files = [];
+          renderFiles();
+          setView("finished");
+        }, 700);
+      };
+      byId("new-button").onclick = () => setView("picker");
+      const toggle = (button, panel) => {
+        const open = button.getAttribute("aria-expanded") !== "true";
+        button.setAttribute("aria-expanded", String(open));
+        panel.hidden = !open;
+      };
+      byId("discovery-toggle").onclick = () =>
+        toggle(byId("discovery-toggle"), byId("discovery-menu"));
+      byId("account-toggle").onclick = () =>
+        toggle(byId("account-toggle"), byId("account-panel"));
+      byId("nav-toggle").onclick = () => {
+        const open =
+          byId("nav-toggle").getAttribute("aria-expanded") !== "true";
+        byId("nav-toggle").setAttribute("aria-expanded", String(open));
+        byId("sidebar").classList.toggle("open", open);
+      };
+      document.querySelectorAll("[data-pending]").forEach((button) => {
+        button.onclick = () =>
+          notify(
+            button.dataset.pending + " is not available in this preview yet.",
+          );
+      });
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".account")) {
+          byId("account-panel").hidden = true;
+          byId("account-toggle").setAttribute("aria-expanded", "false");
+        }
+      });
+    </script>
+  </body>
+</html>

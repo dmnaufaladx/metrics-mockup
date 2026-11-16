@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Monitoring Report — Metrics by ADX</title>
+    <style>
+      @font-face {
+        font-family: "Adxfont";
+        src: url("../../assets/fonts/icons/Adxfont.woff") format("woff");
+        font-weight: normal;
+        font-style: normal;
+      }
+      .adx-ic_user_circle {
+        font-family: "Adxfont" !important;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 28px;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .adx-ic_user_circle::before {
+        content: "\e94d";
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src: url("../../assets/fonts/Core/coresansc-45regular-webfont.woff2")
+          format("woff2");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src: url("../../assets/fonts/Core/coresansc-65bold-webfont.woff2")
+          format("woff2");
+        font-weight: 700;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        color: #262626;
+        background: #f5f5fa;
+        font:
+          14px "Core Sans C",
+          system-ui;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button {
+        border: 0;
+        cursor: pointer;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      select:focus-visible {
+        outline: 3px solid #007aff;
+        outline-offset: 3px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .skip {
+        position: absolute;
+        top: -100px;
+        left: 12px;
+        z-index: 10;
+        padding: 12px;
+        background: white;
+      }
+      .skip:focus {
+        top: 8px;
+      }
+      .topbar {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        background: white;
+        border-bottom: 1px solid #e5e5ea;
+      }
+      .brand-group,
+      .account {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .logo img {
+        height: 40px;
+        width: auto;
+      }
+      .mobile-nav {
+        display: none;
+      }
+      .account {
+        position: relative;
+      }
+      .account button {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: white;
+        font-size: 24px;
+      }
+      .account-panel {
+        position: absolute;
+        z-index: 4;
+        top: 46px;
+        right: 0;
+        width: 160px;
+        background: white;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px #0002;
+      }
+      .account-panel a {
+        display: block;
+        padding: 16px;
+      }
+      .shell {
+        display: flex;
+        min-height: calc(100vh - 56px);
+      }
+      .sidebar {
+        width: 300px;
+        flex-shrink: 0;
+        padding: 8px 0 24px 16px;
+        background-image: linear-gradient(to left, #fc2d2d, #fc2e90 70%);
+      }
+      .sidebar nav > button,
+      .sidebar-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 52px;
+        margin-bottom: 4px;
+        padding: 16px;
+        color: white;
+        background: transparent;
+        text-align: left;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .sidebar nav > button img,
+      .sidebar-link img {
+        width: 16px;
+        height: 16px;
+      }
+      .sidebar button:hover,
+      .sidebar-link:hover,
+      .submenu a:hover {
+        background: #e5e5ea55;
+      }
+      .sidebar .active {
+        background-image: linear-gradient(to left, #32c5ff, #ff1c47 100%);
+      }
+      .chevron {
+        margin-left: auto;
+        transition: transform 0.2s;
+      }
+      .sidebar button[aria-expanded="true"] .chevron {
+        transform: rotate(180deg);
+      }
+      .submenu {
+        padding: 4px 16px 12px 24px;
+      }
+      .submenu a,
+      .submenu button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        color: white;
+        background: transparent;
+        text-align: left;
+        font-size: 14px;
+      }
+      .content {
+        flex: 1;
+        min-width: 0;
+        padding: 40px 30px 136px;
+      }
+      .monitoring-report-list__wrapper {
+        max-width: 1140px;
+        margin: 0 auto;
+      }
+      .report-title h1 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1.25;
+        letter-spacing: 1px;
+      }
+      .report-title hr {
+        width: 37px;
+        height: 4px;
+        margin: 24px 0;
+        border: 1px solid #ff2d55;
+        background: #ff2d55;
+      }
+      .report-description {
+        max-width: 800px;
+        line-height: 1.5;
+        letter-spacing: 1px;
+      }
+      .sort-search-report {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        margin-top: 28px;
+      }
+      .search-box {
+        display: flex;
+        align-items: center;
+        width: 300px;
+        padding: 12px 16px;
+        border: 1px solid #e5e5ea;
+        border-radius: 8px;
+        background: white;
+      }
+      .search-box span {
+        margin-right: 8px;
+        font-size: 20px;
+      }
+      .search-box input {
+        width: 100%;
+        min-width: 0;
+        border: 0;
+        background: transparent;
+      }
+      .sort-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .sort-control select {
+        min-width: 150px;
+        padding: 10px 32px 10px 12px;
+        border: 1px solid #e5e5ea;
+        border-radius: 6px;
+        background: white;
+      }
+      .report-list {
+        margin-top: 48px;
+      }
+      .table-scroll {
+        overflow-x: auto;
+        padding-bottom: 8px;
+      }
+      table {
+        width: 100%;
+        min-width: 760px;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+      }
+      thead tr {
+        height: 40px;
+      }
+      th {
+        padding: 16px 24px;
+        text-align: left;
+        font-size: 12px;
+      }
+      th.campaign,
+      th.placement {
+        width: 32%;
+      }
+      th.brand,
+      th.updated {
+        width: 18%;
+      }
+      tbody tr {
+        height: 94px;
+        background: white;
+        box-shadow: 0 8px 16px #00000014;
+        cursor: pointer;
+      }
+      tbody tr:hover {
+        box-shadow:
+          0 4px 16px #d5d5da,
+          0 -2px 16px #d5d5da;
+        outline: 1px solid #32c5ffa3;
+      }
+      td {
+        padding: 16px 24px;
+        line-height: 1.25;
+        letter-spacing: 1px;
+      }
+      .campaign-name {
+        display: block;
+        margin-bottom: 4px;
+      }
+      .period {
+        font-size: 12px;
+      }
+      .empty {
+        padding: 32px;
+        text-align: center;
+        color: #68686c;
+      }
+      .pagination {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .pagination button {
+        width: 32px;
+        height: 32px;
+        background: transparent;
+        border-radius: 50%;
+      }
+      .pagination button[aria-current] {
+        background: #ff2d55;
+        color: white;
+      }
+      .pagination button:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      .result-count {
+        margin-top: 12px;
+        color: #68686c;
+        font-size: 13px;
+      }
+      dialog {
+        width: min(480px, calc(100% - 32px));
+        padding: 28px;
+        border: 0;
+        border-radius: 8px;
+        color: #262626;
+        box-shadow: 0 8px 32px #0003;
+      }
+      dialog::backdrop {
+        background: #0005;
+      }
+      dialog h2 {
+        margin: 0 36px 20px 0;
+        font-size: 22px;
+      }
+      dialog p {
+        margin: 0;
+        line-height: 1.7;
+        white-space: pre-line;
+      }
+      dialog .close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        border-radius: 4px;
+        background: #f5f5fa;
+      }
+      @media (max-width: 1140px) {
+        .sidebar {
+          width: 250px;
+        }
+        .content {
+          padding: 32px 24px 96px;
+        }
+      }
+      @media (max-width: 767px) {
+        .topbar {
+          padding: 0 12px;
+        }
+        .logo img {
+          height: 32px;
+        }
+        .account .email {
+          display: none;
+        }
+        .mobile-nav {
+          display: block;
+          width: 40px;
+          height: 40px;
+          background: white;
+          font-size: 22px;
+        }
+        .shell {
+          display: block;
+        }
+        .sidebar {
+          display: none;
+          width: 100%;
+          padding: 8px 16px;
+        }
+        .sidebar.open {
+          display: block;
+        }
+        .content {
+          padding: 28px 16px 72px;
+        }
+        .report-title h1 {
+          font-size: 28px;
+        }
+        .sort-search-report {
+          align-items: stretch;
+          flex-direction: column;
+        }
+        .search-box {
+          width: 100%;
+        }
+        .sort-control {
+          justify-content: space-between;
+        }
+        .sort-control select {
+          width: 70%;
+        }
+      }
+
+      .adx-ic_chevron_down {
+        font-family: "Adxfont" !important;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+      }
+      .adx-ic_chevron_down::before {
+        content: "\e911";
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to monitoring report</a>
+    <header class="topbar">
+      <div class="brand-group">
+        <button
+          class="mobile-nav"
+          id="nav-toggle"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+          aria-controls="sidebar"
+        >
+          ☰</button
+        ><a class="logo" href="../../Home.html"
+          ><img
+            src="../../assets/img/icons/metrics-ico-color.png"
+            alt="Metrics by ADX — Home"
+        /></a>
+      </div>
+      <div class="account">
+        <span class="email">demo@metrics.test</span
+        ><button
+          id="account-toggle"
+          aria-label="Account"
+          aria-expanded="false"
+          aria-controls="account-panel"
+        >
+          <i class="adx-ic_user_circle" aria-hidden="true"></i>
+        </button>
+        <div class="account-panel" id="account-panel" hidden>
+          <a href="../../Login.html">Sign Out</a>
+        </div>
+      </div>
+    </header>
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <nav aria-label="Dashboard">
+          <button
+            id="discovery-toggle"
+            aria-expanded="false"
+            aria-controls="discovery-menu"
+          >
+            <img
+              src="../../assets/img/icons/adx-ic-location.png"
+              alt=""
+            />Discovery Map
+            <i class="adx-ic_chevron_down chevron" aria-hidden="true"></i>
+          </button>
+          <div class="submenu" id="discovery-menu" hidden>
+            <a href="../../SovMap/SovMap.html">Share of Voice</a
+            ><a href="../../BillboardMap/BillboardMap.html">Insight Maps</a
+            ><a href="../../Utility/KmlConverter.html">KML Converter</a>
+          </div>
+          <a
+            class="sidebar-link active"
+            href="ReportList.html"
+            aria-current="page"
+            ><img
+              src="../../assets/img/icons/adx-ic-monitoring.png"
+              alt=""
+            />Monitoring Report</a
+          >
+          <a class="sidebar-link" href="../MeasurementReport.html"
+            ><img
+              src="../../assets/img/icons/adx-ic-measurement.png"
+              alt=""
+            />Measurement Report</a
+          >
+          <a class="sidebar-link" href="../../DownloadReport.html"
+            ><img
+              src="../../assets/img/icons/adx-ic-monitoring.png"
+              alt=""
+            />Download Daily Report</a
+          >
+        </nav>
+      </aside>
+      <main class="content monitoring-report-list" id="content" tabindex="-1">
+        <div class="monitoring-report-list__wrapper">
+          <div class="report-title">
+            <h1>Monitoring Report</h1>
+            <hr />
+          </div>
+          <div class="report-description">
+            Just make sure all your campaign has get the 2 weeks report
+            monitoring, and make sure the campaign running properlly.
+          </div>
+          <div class="sort-search-report">
+            <label class="search-box"
+              ><span aria-hidden="true">⌕</span
+              ><input
+                id="search"
+                type="search"
+                placeholder="Search Campaign or Brand"
+                aria-label="Search Campaign or Brand" /></label
+            ><label class="sort-control"
+              >Sort By :
+              <select id="sort">
+                <option value="name">Name</option>
+                <option value="-created" selected>Last Added</option>
+                <option value="created">First Added</option>
+              </select></label
+            >
+          </div>
+          <div class="report-list">
+            <div
+              class="table-scroll"
+              role="region"
+              aria-label="Monitoring campaigns"
+              tabindex="0"
+            >
+              <table>
+                <thead>
+                  <tr>
+                    <th class="campaign">CAMPAIGN</th>
+                    <th class="brand">ADV. BRAND</th>
+                    <th class="updated">LAST UPDATE (DATE)</th>
+                    <th class="placement">LAST UPDATE (PLACEMENT)</th>
+                  </tr>
+                </thead>
+                <tbody id="reports"></tbody>
+              </table>
+            </div>
+          </div>
+          <nav
+            class="pagination"
+            id="pagination"
+            aria-label="Monitoring report pages"
+          ></nav>
+          <p
+            class="result-count"
+            id="result-count"
+            role="status"
+            aria-live="polite"
+          ></p>
+        </div>
+      </main>
+    </div>
+    <dialog id="detail" aria-labelledby="detail-title">
+      <button class="close" aria-label="Close">✕</button>
+      <h2 id="detail-title"></h2>
+      <p id="detail-text"></p>
+    </dialog>
+    <script>
+      "use strict";
+      const campaigns = [
+        {
+          id: 1,
+          name: "LinkAja — Everyday Payments",
+          brand: "LinkAja",
+          start: "2026-01-01",
+          end: "2026-03-31",
+          updated: "2026-03-14",
+          placement: "JKT001",
+        },
+        {
+          id: 2,
+          name: "Gojek — City Mobility",
+          brand: "Gojek",
+          start: "2026-02-01",
+          end: "2026-04-30",
+          updated: "2026-04-18",
+          placement: "BDG021",
+        },
+        {
+          id: 3,
+          name: "Bhinneka — Business Essentials",
+          brand: "Bhinneka",
+          start: "2026-03-01",
+          end: "2026-05-31",
+          updated: "2026-05-16",
+          placement: "SBY011",
+        },
+        {
+          id: 4,
+          name: "Safe Care — Everyday Comfort",
+          brand: "Safe Care",
+          start: "2026-04-01",
+          end: "2026-06-30",
+          updated: "2026-06-10",
+          placement: "JKT024",
+        },
+        {
+          id: 5,
+          name: "LinkAja — Ramadan Campaign",
+          brand: "LinkAja",
+          start: "2026-02-15",
+          end: "2026-03-31",
+          updated: "2026-03-29",
+          placement: "TGR008",
+        },
+        {
+          id: 6,
+          name: "Gojek — Jakarta Commute",
+          brand: "Gojek",
+          start: "2026-05-01",
+          end: "2026-07-31",
+          updated: "2026-07-22",
+          placement: "JKT049",
+        },
+        {
+          id: 7,
+          name: "Bhinneka — Office Solutions",
+          brand: "Bhinneka",
+          start: "2026-06-01",
+          end: "2026-08-31",
+          updated: "2026-08-25",
+          placement: "BKS012",
+        },
+        {
+          id: 8,
+          name: "Safe Care — Healthy Journey",
+          brand: "Safe Care",
+          start: "2026-07-01",
+          end: "2026-09-30",
+          updated: "2026-09-12",
+          placement: "DPS006",
+        },
+        {
+          id: 9,
+          name: "LinkAja — Independence Day",
+          brand: "LinkAja",
+          start: "2026-08-01",
+          end: "2026-08-31",
+          updated: "2026-08-28",
+          placement: "JKT068",
+        },
+        {
+          id: 10,
+          name: "Gojek — Back to Campus",
+          brand: "Gojek",
+          start: "2026-08-15",
+          end: "2026-10-15",
+          updated: "2026-09-09",
+          placement: "YGY004",
+        },
+      ];
+      const byId = (id) => document.getElementById(id);
+      let page = 1;
+      const pageSize = 5;
+      const format = (value) =>
+        new Date(value + "T00:00:00").toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+      const dialog = byId("detail");
+      dialog.querySelector(".close").onclick = () => dialog.close();
+      function showDetail(campaign) {
+        window.location.href =
+          "Summary.html?id=" + encodeURIComponent(campaign.id);
+      }
+      function render() {
+        const query = byId("search").value.trim().toLowerCase();
+        const list = campaigns
+          .filter((campaign) =>
+            (campaign.name + " " + campaign.brand)
+              .toLowerCase()
+              .includes(query),
+          )
+          .sort((a, b) =>
+            byId("sort").value === "name"
+              ? a.name.localeCompare(b.name)
+              : byId("sort").value === "created"
+                ? a.id - b.id
+                : b.id - a.id,
+          );
+        const max = Math.max(1, Math.ceil(list.length / pageSize));
+        page = Math.min(page, max);
+        const rows = list
+          .slice((page - 1) * pageSize, page * pageSize)
+          .map((campaign) => {
+            const row = document.createElement("tr");
+            row.tabIndex = 0;
+            row.setAttribute("role", "button");
+            row.setAttribute("aria-label", "Open " + campaign.name);
+            row.innerHTML =
+              '<td><span class="campaign-name"></span><span class="period"></span></td><td></td><td></td><td></td>';
+            row.querySelector(".campaign-name").textContent = campaign.name;
+            row.querySelector(".period").textContent =
+              format(campaign.start) + " - " + format(campaign.end);
+            const cells = row.querySelectorAll("td");
+            cells[1].textContent = campaign.brand;
+            cells[2].textContent = format(campaign.updated);
+            cells[3].textContent = campaign.placement;
+            row.onclick = () => showDetail(campaign);
+            row.onkeydown = (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                showDetail(campaign);
+              }
+            };
+            return row;
+          });
+        if (!rows.length) {
+          const row = document.createElement("tr"),
+            cell = document.createElement("td");
+          cell.colSpan = 4;
+          cell.className = "empty";
+          cell.textContent =
+            "No campaigns found. Try another campaign or brand.";
+          row.append(cell);
+          rows.push(row);
+        }
+        byId("reports").replaceChildren(...rows);
+        const buttons = [];
+        const add = (label, target, disabled, current) => {
+          const button = document.createElement("button");
+          button.textContent = label;
+          button.disabled = disabled;
+          if (current) button.setAttribute("aria-current", "page");
+          button.onclick = () => {
+            page = target;
+            render();
+            byId("pagination").querySelector("[aria-current]")?.focus();
+          };
+          buttons.push(button);
+        };
+        add("‹", page - 1, page === 1);
+        for (let number = 1; number <= max; number++)
+          add(String(number), number, false, number === page);
+        add("›", page + 1, page === max);
+        byId("pagination").replaceChildren(...buttons);
+        byId("pagination").hidden = !list.length;
+        byId("result-count").textContent = list.length
+          ? "Showing " +
+            ((page - 1) * pageSize + 1) +
+            "–" +
+            Math.min(page * pageSize, list.length) +
+            " of " +
+            list.length +
+            " campaigns"
+          : "0 campaigns";
+      }
+      byId("search").oninput = () => {
+        page = 1;
+        render();
+      };
+      byId("sort").onchange = () => {
+        page = 1;
+        render();
+      };
+      const toggle = (button, panel) => {
+        const open = button.getAttribute("aria-expanded") !== "true";
+        button.setAttribute("aria-expanded", String(open));
+        panel.hidden = !open;
+      };
+      byId("discovery-toggle").onclick = () =>
+        toggle(byId("discovery-toggle"), byId("discovery-menu"));
+      byId("account-toggle").onclick = () =>
+        toggle(byId("account-toggle"), byId("account-panel"));
+      byId("nav-toggle").onclick = () => {
+        const open =
+          byId("nav-toggle").getAttribute("aria-expanded") !== "true";
+        byId("nav-toggle").setAttribute("aria-expanded", String(open));
+        byId("sidebar").classList.toggle("open", open);
+      };
+      document.querySelectorAll("[data-pending]").forEach(
+        (button) =>
+          (button.onclick = () => {
+            byId("detail-title").textContent = button.dataset.pending;
+            byId("detail-text").textContent =
+              "This page is not available in this preview yet.";
+            dialog.showModal();
+          }),
+      );
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".account")) {
+          byId("account-panel").hidden = true;
+          byId("account-toggle").setAttribute("aria-expanded", "false");
+        }
+      });
+      render();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,2128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Metrics by ADX — Contact</title>
+    <style>
+      /* Source: apps/frontend/src/styles/global.scss */
+      *,
+      html,
+      body {
+        font-family: "Core Sans C", system-ui;
+        box-sizing: border-box;
+      }
+
+      html,
+      body,
+      #app {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100% - 168px);
+        padding-top: 24px;
+      }
+      main.container {
+        background: white;
+        padding-top: unset !important;
+        padding-left: unset !important;
+        padding-right: unset !important;
+        width: 100%;
+        max-width: 1920px;
+        margin-bottom: 0px !important;
+        min-height: calc(100vh - 62px) !important;
+      }
+
+      @media (max-width: 767px) {
+        .container {
+          min-width: 300px;
+          margin: 0 auto !important;
+          width: 100%;
+          overflow: hidden;
+        }
+        .btn-regular-white {
+          padding: 8px 8px !important;
+        }
+      }
+      @media (max-width: 1140px) {
+        .container {
+          max-width: 1141px;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          margin: 0 auto !important;
+        }
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin: 0;
+        padding: 0;
+        font-weight: 700;
+      }
+
+      p {
+        margin: 0;
+        padding: 0;
+      }
+
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+      }
+
+      a {
+        text-decoration: none;
+        cursor: pointer;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .bg-red {
+        background-color: #ff2d55;
+      }
+
+      button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+      }
+      button:focus {
+        outline: none !important;
+      }
+
+      .btn-regular-white {
+        display: block;
+        padding: 16px 24px;
+        font-size: 14px;
+        color: white;
+        border: 1px solid #ffffff;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        line-height: normal;
+        letter-spacing: 1px;
+      }
+      .btn-regular-white:hover {
+        background-color: #ff2d55;
+        transition: 0.4s;
+      }
+
+      .btn-primary {
+        padding: 16px;
+        background-color: #ff2d55;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        color: #ffffff;
+      }
+      .btn-primary:disabled {
+        color: white;
+        background-color: #cc2444;
+      }
+
+      .btn-secondary-v2 {
+        padding: 16px;
+        border: solid 1px #e5e5ea;
+        background-color: #ffffff;
+        color: #262626;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+      }
+      .btn-secondary-v2:disabled {
+        color: #e5e5ea;
+        background-color: #ffffff;
+      }
+      .btn-secondary-v2:hover {
+        background-color: #e5e5ea;
+      }
+
+      .btn-secondary {
+        border-radius: 8px;
+        border: solid 1px #ffffff;
+        background-color: #ffffff;
+        padding: 16px 24px;
+        color: #ff2d55;
+        line-height: normal;
+        letter-spacing: 1px;
+        width: max-content;
+      }
+      .btn-secondary:hover {
+        box-shadow: 0 8px 4px 0 rgba(0, 0, 0, 0.16);
+      }
+
+      .btn-v1 {
+        background-color: transparent;
+        cursor: pointer;
+        position: relative;
+        font-size: 15px;
+        border: none;
+        font-weight: 400;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        border-radius: 8px;
+        -webkit-transition: background-color 0.5s ease;
+        -moz-transition: background-color 0.5s ease;
+        -ms-transition: background-color 0.5s ease;
+        -o-transition: background-color 0.5s ease;
+        transition: background-color 0.5s ease;
+      }
+      .btn-v1.not-rounded {
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+      }
+      .btn-v1.btn-large {
+        padding: 12px 24px;
+        font-weight: 700;
+      }
+      .btn-v1.btn-regular {
+        padding: 8px 16px;
+        border-radius: 4px;
+      }
+      .btn-v1.btn-small {
+        padding: 8px;
+        border-radius: 4px;
+      }
+      .btn-v1.btn-block {
+        font-weight: 700;
+        width: 100%;
+        padding: 12px 0;
+      }
+      .btn-v1.primary {
+        background-color: #ff2d55;
+        border: 1px solid #ff2d55;
+        color: white;
+      }
+      .btn-v1.primary.disabled:disabled {
+        color: white;
+        background-color: #cc2444;
+        border: 1px solid #cc2444;
+      }
+      .btn-v1.primary:hover {
+        background-color: #cc2444;
+        border: 1px solid #cc2444;
+      }
+      .btn-v1.secondary {
+        background-color: #ffffff;
+        border: solid 1px #e5e5ea;
+        color: #262626;
+      }
+      .btn-v1.secondary:hover {
+        background-color: #e5e5ea;
+        border: 1px solid #e5e5ea;
+      }
+      .btn-v1.secondary.disabled:disabled {
+        background-color: #e5e5ea;
+        border: 1px solid #e5e5ea;
+      }
+      .btn-v1.danger {
+        background-color: #ff3b30;
+        border: 1px solid #ff3b30;
+        color: #ffffff;
+      }
+      .btn-v1.danger:hover {
+        background-color: #cc2f26;
+        border: 1px solid #cc2f26;
+      }
+      .btn-v1.warning {
+        background-color: #ff9500;
+        border: 1px solid #ff9500;
+        color: #ffffff;
+      }
+      .btn-v1.warning:hover {
+        background-color: #cc7700;
+        border: 1px solid #cc7700;
+      }
+      .btn-v1.success {
+        background-color: #4cd964;
+        border: 1px solid #4cd964;
+        color: #ffffff;
+      }
+      .btn-v1.success:hover {
+        background-color: #47cc5e;
+        border: 1px solid #47cc5e;
+      }
+      .btn-v1.teal {
+        background-color: #5ac8fa;
+        border: 1px solid #5ac8fa;
+        color: #ffffff;
+      }
+      .btn-v1.teal:hover {
+        background-color: #49a3cc;
+        border: 1px solid #49a3cc;
+      }
+      .btn-v1.pink {
+        background-color: #ff2d55;
+        border: 1px solid #ff2d55;
+        color: #ffffff;
+      }
+      .btn-v1.pink:hover {
+        background-color: #ff2d55;
+        border: 1px solid #ff2d55;
+      }
+      .btn-v1.link {
+        color: #ff2d55;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .btn-v1.link:hover {
+        color: #cc2444;
+      }
+      .btn-v1.link:disabled {
+        background-color: transparent !important;
+        border: none;
+        cursor: no-drop;
+      }
+      .btn-v1.link:disabled:hover {
+        color: #96969a;
+        border: none;
+      }
+      .btn-v1:disabled {
+        cursor: no-drop;
+        background-color: #e5e5ea;
+        border: 1px solid #e5e5ea;
+        color: #96969a;
+      }
+      .btn-v1:disabled:hover {
+        background-color: #e5e5ea;
+        border: 1px solid #e5e5ea;
+      }
+      .btn-v1 .ic-right {
+        margin-left: 5px;
+        display: flex;
+      }
+      .btn-v1 .ic-right i {
+        font-size: 6px;
+        color: #ff2d55;
+      }
+      .btn-v1 .ic-left {
+        margin-right: 5px;
+        display: flex;
+      }
+      .btn-v1 .ic-left i {
+        font-size: 6px;
+      }
+
+      input {
+        outline: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        background-color: white;
+        border: none;
+      }
+      input:focus {
+        outline: none !important;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: none;
+      }
+      img.img-circle {
+        border-radius: 50%;
+      }
+      img.img-rounded {
+        border-radius: 8px;
+      }
+
+      .d-block {
+        display: block;
+      }
+
+      .d-inline-block {
+        display: inline-block;
+      }
+
+      .d-flex {
+        display: flex;
+      }
+
+      .d-none {
+        display: none;
+      }
+      /* Source: apps/frontend/src/styles/typography.scss */
+      b,
+      strong,
+      .strong {
+        font-weight: 700;
+      }
+
+      .base-font {
+        font-size: 16px;
+      }
+
+      .midlarge-title {
+        font-size: 32px;
+      }
+
+      .large-font {
+        font-size: 19px;
+      }
+
+      .header-font {
+        font-size: 19px;
+      }
+
+      .subhead {
+        font-size: 15px;
+      }
+
+      .regular-font {
+        font-size: 14px;
+      }
+
+      .small-font {
+        font-size: 13px;
+      }
+
+      .mini-font {
+        font-size: 12px;
+      }
+
+      .micro-font {
+        font-size: 10px;
+      }
+
+      .medium-font {
+        font-size: 14px;
+      }
+
+      .color-white {
+        color: #ffffff;
+      }
+
+      .color-pink {
+        color: #ff2d55;
+      }
+
+      .color-grey {
+        color: #878787;
+      }
+
+      .color-sunrise {
+        color: #ff9500;
+      }
+      /* Source: apps/frontend/src/styles/fonts.scss */
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("assets/fonts/Core/coresansc-35light-webfont.woff2")
+            format("woff2"),
+          url("assets/fonts/Core/coresansc-35light-webfont.woff") format("woff");
+        font-weight: 300;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("assets/fonts/Core/coresansc-45regular-webfont.woff2")
+            format("woff2"),
+          url("assets/fonts/Core/coresansc-45regular-webfont.woff")
+            format("woff");
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("assets/fonts/Core/coresansc-65bold-webfont.woff2")
+            format("woff2"),
+          url("assets/fonts/Core/coresansc-65bold-webfont.woff") format("woff");
+        font-weight: 700;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("assets/fonts/Core/coresansc-75extrabold-webfont.woff2")
+            format("woff2"),
+          url("assets/fonts/Core/coresansc-75extrabold-webfont.woff")
+            format("woff");
+        font-weight: 900;
+        font-style: normal;
+      }
+      /* Source: apps/frontend/src/styles/adx-font_icon.scss */
+      @font-face {
+        font-family: "Adxfont";
+        src: url("assets/fonts/icons/Adxfont.eot?tefm31");
+        src:
+          url("assets/fonts/icons/Adxfont.eot?tefm31#iefix")
+            format("embedded-opentype"),
+          url("assets/fonts/icons/Adxfont.ttf?tefm31") format("truetype"),
+          url("assets/fonts/icons/Adxfont.woff?tefm31") format("woff"),
+          url("assets/fonts/icons/Adxfont.svg?tefm31#Adxfont") format("svg");
+        font-weight: normal;
+        font-style: normal;
+      }
+      [class^="adx-"],
+      [class*=" adx-"] {
+        /* use !important to prevent issues with browser extensions that change fonts */
+        font-family: "Adxfont" !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        /* Better Font Rendering =========== */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .adx-ic_advertiser:before {
+        content: "\e900";
+      }
+
+      .adx-ic_arrow_down:before {
+        content: "\e901";
+      }
+
+      .adx-ic_arrow_drag:before {
+        content: "\e902";
+      }
+
+      .adx-ic_arrow_left:before {
+        content: "\e903";
+      }
+
+      .adx-ic_arrow_right:before {
+        content: "\e904";
+      }
+
+      .adx-ic_arrow_up:before {
+        content: "\e905";
+      }
+
+      .adx-ic_badge:before {
+        content: "\e906";
+      }
+
+      .adx-ic_bell_1:before {
+        content: "\e907";
+      }
+
+      .adx-ic_bell:before {
+        content: "\e908";
+      }
+
+      .adx-ic_billboard:before {
+        content: "\e909";
+      }
+
+      .adx-ic_book:before {
+        content: "\e90a";
+      }
+
+      .adx-ic_briefcase_black:before {
+        content: "\e90b";
+      }
+
+      .adx-ic_briefcase_block:before {
+        content: "\e90c";
+      }
+
+      .adx-ic_briefcase:before {
+        content: "\e90d";
+      }
+
+      .adx-ic_cancel:before {
+        content: "\e90e";
+      }
+
+      .adx-ic_cards:before {
+        content: "\e90f";
+      }
+
+      .adx-ic_check:before {
+        content: "\e910";
+      }
+
+      .adx-ic_chevron_down:before {
+        content: "\e911";
+      }
+
+      .adx-ic_chevron_left:before {
+        content: "\e912";
+      }
+
+      .adx-ic_chevron_right:before {
+        content: "\e913";
+      }
+
+      .adx-ic_chevron_up:before {
+        content: "\e914";
+      }
+
+      .adx-ic_close:before {
+        content: "\e915";
+      }
+
+      .adx-ic_dashboard_1:before {
+        content: "\e916";
+      }
+
+      .adx-ic_dashboard:before {
+        content: "\e917";
+      }
+
+      .adx-ic_desktop:before {
+        content: "\e918";
+      }
+
+      .adx-ic_digital:before {
+        content: "\e919";
+      }
+
+      .adx-ic_download:before {
+        content: "\e91a";
+      }
+
+      .adx-ic_draft:before {
+        content: "\e91b";
+      }
+
+      .adx-ic_edit:before {
+        content: "\e91c";
+      }
+
+      .adx-ic_envelope:before {
+        content: "\e91d";
+      }
+
+      .adx-ic_experience:before {
+        content: "\e91e";
+      }
+
+      .adx-ic_eyes:before {
+        content: "\e91f";
+      }
+
+      .adx-ic_facebook:before {
+        content: "\e920";
+      }
+
+      .adx-ic_fullscreen:before {
+        content: "\e921";
+      }
+
+      .adx-ic_google:before {
+        content: "\e922";
+      }
+
+      .adx-ic_home:before {
+        content: "\e923";
+      }
+
+      .adx-ic_host:before {
+        content: "\e924";
+      }
+
+      .adx-ic_info:before {
+        content: "\e925";
+      }
+
+      .adx-ic_instagram:before {
+        content: "\e926";
+      }
+
+      .adx-ic_list_view:before {
+        content: "\e927";
+      }
+
+      .adx-ic_lock:before {
+        content: "\e928";
+      }
+
+      .adx-ic_love:before {
+        content: "\e929";
+      }
+
+      .adx-ic_media:before {
+        content: "\e92a";
+      }
+
+      .adx-ic_menu_bar .path1:before {
+        content: "\e92b";
+        color: rgb(255, 255, 255);
+      }
+
+      .adx-ic_menu_bar .path2:before {
+        content: "\e92c";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path3:before {
+        content: "\e92d";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path4:before {
+        content: "\e92e";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path5:before {
+        content: "\e92f";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path6:before {
+        content: "\e930";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path7:before {
+        content: "\e931";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path8:before {
+        content: "\e932";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path9:before {
+        content: "\e933";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path10:before {
+        content: "\e934";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path11:before {
+        content: "\e935";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path12:before {
+        content: "\e936";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path13:before {
+        content: "\e937";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_more:before {
+        content: "\e938";
+      }
+
+      .adx-ic_next:before {
+        content: "\e939";
+      }
+
+      .adx-ic_partnerup:before {
+        content: "\e93a";
+      }
+
+      .adx-ic_percent:before {
+        content: "\e93b";
+      }
+
+      .adx-ic_phone:before {
+        content: "\e93c";
+      }
+
+      .adx-ic_play_o .path1:before {
+        content: "\e93d";
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_play_o .path2:before {
+        content: "\e93e";
+        margin-left: -1em;
+        color: rgb(255, 255, 255);
+      }
+
+      .adx-ic_plus:before {
+        content: "\e93f";
+      }
+
+      .adx-ic_rate:before {
+        content: "\e940";
+      }
+
+      .adx-ic_reorder:before {
+        content: "\e941";
+      }
+
+      .adx-ic_saved:before {
+        content: "\e942";
+      }
+
+      .adx-ic_search:before {
+        content: "\e943";
+      }
+
+      .adx-ic_signage:before {
+        content: "\e944";
+      }
+
+      .adx-ic_sms:before {
+        content: "\e945";
+      }
+
+      .adx-ic_splash:before {
+        content: "\e946";
+      }
+
+      .adx-ic_store:before {
+        content: "\e947";
+      }
+
+      .adx-ic_thumbnail_view:before {
+        content: "\e948";
+      }
+
+      .adx-ic_time_load:before {
+        content: "\e949";
+      }
+
+      .adx-ic_time:before {
+        content: "\e94a";
+      }
+
+      .adx-ic_transaction:before {
+        content: "\e94b";
+      }
+
+      .adx-ic_twitter:before {
+        content: "\e94c";
+      }
+
+      .adx-ic_user_circle:before {
+        content: "\e94d";
+      }
+
+      .adx-ic_user_group:before {
+        content: "\e94e";
+      }
+
+      .adx-ic_user:before {
+        content: "\e94f";
+      }
+
+      .adx-ic_volume:before {
+        content: "\e950";
+      }
+
+      .adx-ic_warning:before {
+        content: "\e951";
+      }
+      /* Source: apps/frontend/src/components/Alert/index.scss */
+      .vue-notification-group {
+        z-index: 10001 !important;
+      }
+
+      .alert {
+        cursor: pointer;
+        width: 280px;
+        min-height: 72px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        padding: 16px;
+        position: relative;
+      }
+      .alert:first-child {
+        margin-top: 8px;
+      }
+      .alert i {
+        position: absolute;
+        right: 6px;
+        top: 6px;
+        font-size: 8px;
+      }
+      .alert .title {
+        margin-bottom: 2px;
+      }
+      .alert.primary {
+        background-color: #ffdce3;
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+      }
+      .alert.primary .title,
+      .alert.primary .content-alert {
+        color: #ff2d55;
+      }
+      .alert.secondary {
+        background-color: #ffffff;
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+        border: solid 1px #e5e5ea;
+      }
+      .alert.secondary .title,
+      .alert.secondary .content-alert {
+        color: #262626;
+      }
+      .alert.danger {
+        background-color: #ffc5c2;
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+      }
+      .alert.danger .title,
+      .alert.danger .content-alert {
+        color: #ff3b30;
+      }
+      .alert.success {
+        background-color: #c1ffcb;
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+      }
+      .alert.success .title,
+      .alert.success .content-alert {
+        color: #3aaf4e;
+      }
+      .alert.warning {
+        background-color: #ffe3bb;
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+      }
+      .alert.warning .title,
+      .alert.warning .content-alert {
+        color: #ff9500;
+      }
+      .alert.warn {
+        background-color: #ffc5c2;
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+      }
+      .alert.warn .title,
+      .alert.warn .content-alert {
+        color: #ff3b30;
+      }
+      .alert.teal {
+        background-color: #cff0ff;
+        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.08);
+      }
+      .alert.teal .title,
+      .alert.teal .content-alert {
+        color: #4ebbec;
+      }
+
+      .margin_top_mobile {
+        margin-top: 8px;
+      }
+
+      .style {
+        position: absolute;
+        left: calc(50% - 140px);
+        top: unset !important;
+      }
+      /* Source: apps/frontend/src/components/Loading/Secondary-white/index.scss */
+      .sk-circle {
+        position: relative;
+        margin: 0 auto;
+      }
+      .sk-circle.button {
+        width: 24px;
+        height: 24px;
+        margin: 0;
+      }
+
+      .sk-circle .sk-child {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      .sk-circle .sk-child:before {
+        content: "";
+        display: block;
+        margin: 0 auto;
+        width: 15%;
+        height: 15%;
+        background-color: #ffffff;
+        border-radius: 100%;
+        -webkit-animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
+        animation: sk-circleBounceDelay 1.2s infinite ease-in-out both;
+      }
+
+      .sk-circle .sk-circle2 {
+        -webkit-transform: rotate(30deg);
+        -ms-transform: rotate(30deg);
+        transform: rotate(30deg);
+      }
+
+      .sk-circle .sk-circle3 {
+        -webkit-transform: rotate(60deg);
+        -ms-transform: rotate(60deg);
+        transform: rotate(60deg);
+      }
+
+      .sk-circle .sk-circle4 {
+        -webkit-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        transform: rotate(90deg);
+      }
+
+      .sk-circle .sk-circle5 {
+        -webkit-transform: rotate(120deg);
+        -ms-transform: rotate(120deg);
+        transform: rotate(120deg);
+      }
+
+      .sk-circle .sk-circle6 {
+        -webkit-transform: rotate(150deg);
+        -ms-transform: rotate(150deg);
+        transform: rotate(150deg);
+      }
+
+      .sk-circle .sk-circle7 {
+        -webkit-transform: rotate(180deg);
+        -ms-transform: rotate(180deg);
+        transform: rotate(180deg);
+      }
+
+      .sk-circle .sk-circle8 {
+        -webkit-transform: rotate(210deg);
+        -ms-transform: rotate(210deg);
+        transform: rotate(210deg);
+      }
+
+      .sk-circle .sk-circle9 {
+        -webkit-transform: rotate(240deg);
+        -ms-transform: rotate(240deg);
+        transform: rotate(240deg);
+      }
+
+      .sk-circle .sk-circle10 {
+        -webkit-transform: rotate(270deg);
+        -ms-transform: rotate(270deg);
+        transform: rotate(270deg);
+      }
+
+      .sk-circle .sk-circle11 {
+        -webkit-transform: rotate(300deg);
+        -ms-transform: rotate(300deg);
+        transform: rotate(300deg);
+      }
+
+      .sk-circle .sk-circle12 {
+        -webkit-transform: rotate(330deg);
+        -ms-transform: rotate(330deg);
+        transform: rotate(330deg);
+      }
+
+      .sk-circle .sk-circle2:before {
+        -webkit-animation-delay: -1.1s;
+        animation-delay: -1.1s;
+      }
+
+      .sk-circle .sk-circle3:before {
+        -webkit-animation-delay: -1s;
+        animation-delay: -1s;
+      }
+
+      .sk-circle .sk-circle4:before {
+        -webkit-animation-delay: -0.9s;
+        animation-delay: -0.9s;
+      }
+
+      .sk-circle .sk-circle5:before {
+        -webkit-animation-delay: -0.8s;
+        animation-delay: -0.8s;
+      }
+
+      .sk-circle .sk-circle6:before {
+        -webkit-animation-delay: -0.7s;
+        animation-delay: -0.7s;
+      }
+
+      .sk-circle .sk-circle7:before {
+        -webkit-animation-delay: -0.6s;
+        animation-delay: -0.6s;
+      }
+
+      .sk-circle .sk-circle8:before {
+        -webkit-animation-delay: -0.5s;
+        animation-delay: -0.5s;
+      }
+
+      .sk-circle .sk-circle9:before {
+        -webkit-animation-delay: -0.4s;
+        animation-delay: -0.4s;
+      }
+
+      .sk-circle .sk-circle10:before {
+        -webkit-animation-delay: -0.3s;
+        animation-delay: -0.3s;
+      }
+
+      .sk-circle .sk-circle11:before {
+        -webkit-animation-delay: -0.2s;
+        animation-delay: -0.2s;
+      }
+
+      .sk-circle .sk-circle12:before {
+        -webkit-animation-delay: -0.1s;
+        animation-delay: -0.1s;
+      }
+
+      @-webkit-keyframes sk-circleBounceDelay {
+        0%,
+        80%,
+        100% {
+          -webkit-transform: scale(0);
+          transform: scale(0);
+        }
+        40% {
+          -webkit-transform: scale(1);
+          transform: scale(1);
+        }
+      }
+      @keyframes sk-circleBounceDelay {
+        0%,
+        80%,
+        100% {
+          -webkit-transform: scale(0);
+          transform: scale(0);
+        }
+        40% {
+          -webkit-transform: scale(1);
+          transform: scale(1);
+        }
+      }
+      /* Source: apps/frontend/src/components/Header/index.scss */
+      header {
+        position: absolute;
+        display: flex;
+        width: 100%;
+        height: 140px;
+      }
+      header.transparent {
+        background-color: transparent;
+      }
+      header .header_container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding-left: 166px;
+        padding-right: 166px;
+      }
+      header .header_container__left__logo {
+        display: block;
+        cursor: pointer;
+      }
+      header .header_container__left__logo img {
+        width: auto;
+        height: 48px;
+      }
+      header .header_container__right {
+        display: flex;
+        align-items: center;
+      }
+      header .header_container__right__menu {
+        display: flex;
+      }
+      header .header_container__right__menu a {
+        display: block;
+        padding: 0 16px;
+        cursor: pointer;
+        color: #ffffff;
+      }
+
+      @media (max-width: 1140px) {
+        header .header_container {
+          padding-left: 46px;
+          padding-right: 46px;
+        }
+        header .header_container__right {
+          display: flex;
+          align-items: center;
+        }
+        header .header_container__right__menu {
+          display: flex;
+        }
+        header .header_container__right__menu a {
+          display: block;
+          padding: 0 16px;
+          cursor: pointer;
+          color: #ffffff;
+        }
+        header .header_container__right__contact {
+          display: block;
+          margin-left: 24px;
+          padding: 16px 24px;
+          font-size: 14px;
+          color: white;
+          border: 1px solid #ffffff;
+          border-radius: 8px;
+          -webkit-border-radius: 8px;
+          -moz-border-radius: 8px;
+        }
+      }
+      @media (max-width: 767px) {
+        header {
+          height: 90px;
+        }
+        header .header_container {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+        header .header_container__left__logo {
+          display: block;
+          cursor: pointer;
+        }
+        header .header_container__left__logo img {
+          width: auto;
+          height: 32px;
+        }
+        header .header_container__right {
+          display: flex;
+          align-items: center;
+        }
+        header .header_container__right__menu {
+          display: flex;
+        }
+        header .header_container__right__menu a {
+          display: block;
+          padding: 0 16px;
+          cursor: pointer;
+          color: #ffffff;
+        }
+      }
+      /* Source: apps/frontend/src/components/Footer/index.scss */
+      .footer {
+        display: flex;
+        width: 100%;
+        height: 119px;
+        justify-content: space-between;
+        padding-left: 166px;
+        padding-right: 166px;
+        background: #ff2d55;
+      }
+      .footer__left {
+        display: flex;
+        align-items: center;
+      }
+      .footer__left__copyright {
+        cursor: pointer;
+      }
+      .footer__left__copyright .mobile {
+        display: none;
+      }
+      .footer__right {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+      .footer__right__menu {
+        display: flex;
+        align-items: center;
+      }
+      .footer__right__menu .menu__item {
+        margin-right: 32px;
+        cursor: pointer;
+      }
+      .footer__right__menu .menu__item:last-child {
+        margin-right: 0;
+      }
+
+      @media (max-width: 1140px) {
+        .footer {
+          display: block;
+          width: 100%;
+          height: 119px;
+          align-items: center;
+          padding: 32px 48px;
+          background: #ff2d55;
+        }
+        .footer__left {
+          cursor: pointer;
+          justify-content: center;
+          margin-bottom: 16px;
+        }
+        .footer__left__copyright {
+          cursor: pointer;
+        }
+        .footer__left__copyright .mobile {
+          display: none;
+        }
+        .footer__right {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .footer__right__menu {
+          cursor: pointer;
+          display: flex;
+        }
+      }
+      @media (max-width: 767px) {
+        .footer {
+          padding: 24px 16px;
+        }
+        .footer__left {
+          cursor: pointer;
+          justify-content: center;
+          margin-bottom: 16px;
+        }
+        .footer__left__copyright {
+          cursor: pointer;
+        }
+        .footer__left__copyright .mobile {
+          display: unset;
+        }
+        .footer__left__copyright .mobile .text-2 {
+          text-align: center;
+          margin-top: 4px;
+        }
+        .footer__left__copyright .dekstop {
+          display: none;
+        }
+      }
+      /* Source: apps/frontend/src/views/Contact/index.scss */
+      .contact .main {
+        padding-top: 144px;
+      }
+      .contact__wrapper {
+        margin: 0 auto;
+        max-width: 633px;
+      }
+      .contact__wrapper__header h2 {
+        margin-top: 64px;
+        margin-bottom: 24px;
+        font-size: 32px;
+      }
+      .contact__wrapper__header__underline {
+        width: 37px;
+        height: 4px;
+        background-color: #ff2d55;
+      }
+      .contact__wrapper__description {
+        margin-top: 24px;
+        margin-bottom: 48px;
+      }
+      .contact__wrapper__description p {
+        line-height: 2;
+        letter-spacing: 1.5px;
+        color: #262626;
+      }
+      .contact__wrapper__menu ul {
+        display: flex;
+        margin-bottom: 32px;
+      }
+      .contact__wrapper__menu ul li {
+        padding-bottom: 8px;
+      }
+      .contact__wrapper__menu ul li:first-of-type {
+        margin-right: 32px;
+      }
+      .contact__wrapper__menu ul li.active {
+        border-bottom: 2px solid #ff2d55;
+      }
+      .contact__wrapper__menu ul li.active a {
+        color: #ff2d55;
+      }
+      .contact__wrapper__menu ul li > a {
+        line-height: 24px;
+        letter-spacing: 1px;
+        font-weight: 700;
+        color: #878787;
+      }
+      .contact__wrapper__form {
+        margin-bottom: 184px;
+      }
+
+      .form-contact__row {
+        width: 100%;
+        margin-bottom: 16px;
+      }
+      .form-contact__row.split {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+      }
+      .form-contact__row__form-group {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+      .form-contact__row__form-group label {
+        font-size: 14px;
+        color: #262626;
+        line-height: 18px;
+        margin-bottom: 8px;
+        font-weight: 700;
+        line-height: 1.38;
+        letter-spacing: 1px;
+      }
+      .form-contact__row__form-group .input,
+      .form-contact__row__form-group .message {
+        font-size: 14px;
+        padding: 16px;
+        border: 1px solid #d5d5da;
+        border-radius: 4px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+      }
+      .form-contact__row__form-group .message {
+        resize: none;
+      }
+      .form-contact__row__form-group.space {
+        margin-right: 16px;
+      }
+      .form-contact__action {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        margin-top: 8px;
+      }
+      .form-contact__action .submit-btn {
+        display: flex;
+      }
+
+      .select {
+        position: relative;
+        display: flex;
+        width: 100%;
+        padding: 16px;
+        cursor: pointer;
+        border: 1px solid #d5d5da;
+        border-radius: 4px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+      }
+      .select input {
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .select .menu {
+        position: absolute;
+        width: 100%;
+        left: 0;
+        top: 54px;
+        border: 1px solid #d5d5da;
+      }
+      .select .menu ul {
+        display: block;
+        width: 100%;
+        max-height: 300px;
+        overflow: auto;
+        background-color: #ffffff;
+      }
+      .select .menu ul li a {
+        font-size: 14px;
+        display: block;
+        padding: 16px;
+        cursor: pointer;
+      }
+      .select .menu ul li:hover {
+        background-color: #d5d5da;
+      }
+
+      @media (max-width: 767px) {
+        .contact .main {
+          padding-top: 48px;
+        }
+        .contact__wrapper {
+          padding: 0 16px;
+          width: 100%;
+        }
+        .contact__wrapper__form {
+          margin-bottom: 184px;
+        }
+        .form-contact__row {
+          width: 100%;
+          margin-bottom: 16px;
+        }
+        .form-contact__row.split {
+          display: block;
+          width: 100%;
+          justify-content: space-between;
+        }
+        .form-contact__row__form-group {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+        .form-contact__row__form-group label {
+          font-size: 14px;
+          color: #262626;
+          line-height: 18px;
+          margin-bottom: 8px;
+          font-weight: 700;
+          line-height: 1.38;
+          letter-spacing: 1px;
+        }
+        .form-contact__row__form-group.space {
+          margin-bottom: 16px;
+        }
+        .form-contact__action {
+          display: flex;
+          justify-content: flex-end;
+          width: 100%;
+          margin-top: 8px;
+        }
+        .form-contact__action .submit-btn {
+          width: 100%;
+          justify-content: center;
+        }
+        .form-contact__action .submit-btn .btn-label {
+          margin-right: 8px;
+        }
+      }
+
+      /* Static adaptation: accessible forms and local demo feedback. */
+      html {
+        color: #262626;
+        background: #fff;
+      }
+      body {
+        margin: 0;
+      }
+      button,
+      input,
+      textarea,
+      select {
+        font: inherit;
+      }
+      button,
+      a,
+      input,
+      textarea,
+      select {
+        -webkit-tap-highlight-color: transparent;
+      }
+      a {
+        color: inherit;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible,
+      select:focus-visible {
+        outline: 3px solid #007aff !important;
+        outline-offset: 3px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .skip-link {
+        position: absolute;
+        z-index: 10002;
+        top: 8px;
+        left: 8px;
+        padding: 12px;
+        background: white;
+        transform: translateY(-160%);
+      }
+      .skip-link:focus {
+        transform: none;
+      }
+      .input,
+      .message,
+      select {
+        color: #262626;
+        background: #fff;
+        min-width: 0;
+      }
+      .input::placeholder,
+      .message::placeholder {
+        color: #767676;
+        opacity: 1;
+      }
+      .field-error {
+        color: #b6203e;
+        font-size: 13px;
+        line-height: 1.5;
+        margin-top: 6px;
+      }
+      input[aria-invalid="true"],
+      textarea[aria-invalid="true"] {
+        border-color: #b6203e !important;
+      }
+      .form-demo-note {
+        font-size: 13px;
+        line-height: 1.6;
+        color: #68686c;
+        margin-top: 16px;
+      }
+      .submit-btn {
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-height: 52px;
+        min-width: 120px;
+      }
+      .submit-btn:disabled {
+        cursor: wait;
+      }
+      .sk-circle {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+      }
+      .notification {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 10001;
+        max-width: calc(100% - 32px);
+      }
+      .notification .alert {
+        width: 320px;
+        max-width: 100%;
+        padding-right: 44px;
+        margin: 0;
+        cursor: default;
+      }
+      .notification .title {
+        font-size: 16px;
+      }
+      .notification .content-alert {
+        line-height: 1.5;
+      }
+      .notification .notice-close {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 32px;
+        height: 32px;
+        border-radius: 4px;
+        display: grid;
+        place-items: center;
+      }
+      .notification .notice-close i {
+        position: static;
+        font-size: 12px;
+      }
+      .notification .alert.success .title,
+      .notification .alert.success .content-alert {
+        color: #19662b;
+      }
+      .notification .alert.danger .title,
+      .notification .alert.danger .content-alert {
+        color: #95241e;
+      }
+      @media (max-width: 767px) {
+        input.input,
+        textarea.message,
+        select {
+          font-size: 16px !important;
+        }
+        .notification {
+          top: 8px;
+          right: 16px;
+          left: 16px;
+        }
+        .notification .alert {
+          width: 100%;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition: none !important;
+          animation: none !important;
+        }
+        .sk-child:first-child:before {
+          transform: scale(1);
+        }
+      }
+
+      .contact {
+        position: relative;
+        max-width: 1920px;
+        margin: 0 auto;
+      }
+      .contact .main {
+        display: block;
+        min-height: calc(100vh - 119px);
+      }
+      .contact__wrapper__header h1 {
+        margin-top: 64px;
+        margin-bottom: 24px;
+        font-size: 32px;
+      }
+      .contact__wrapper__menu .active span {
+        color: #ff2d55;
+        line-height: 24px;
+        letter-spacing: 1px;
+        font-weight: 700;
+      }
+      fieldset {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        min-width: 0;
+      }
+      .subject-select {
+        position: relative;
+      }
+      .subject-select select {
+        display: block;
+        width: 100%;
+        padding: 16px 44px 16px 16px;
+        border: 1px solid #d5d5da;
+        border-radius: 4px;
+        appearance: none;
+        font-size: 14px;
+        line-height: 20px;
+        cursor: pointer;
+      }
+      .subject-select i {
+        position: absolute;
+        top: 19px;
+        right: 16px;
+        pointer-events: none;
+      }
+      .form-contact__row__form-group {
+        min-width: 0;
+      }
+      .form-contact__row__form-group .message {
+        font-family: inherit;
+        line-height: 1.5;
+        resize: vertical;
+        min-height: 150px;
+        max-height: 500px;
+      }
+      .message-meta {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        justify-content: space-between;
+      }
+      #message-count {
+        margin: 6px 0 0 auto;
+        flex-shrink: 0;
+        color: #68686c;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      .form-demo-note {
+        text-align: right;
+      }
+      .form-status {
+        color: #19662b;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-top: 12px;
+      }
+      .form-status:empty {
+        display: none;
+      }
+      .header_container__right__contact {
+        white-space: nowrap;
+      }
+      .footer {
+        height: auto;
+        min-height: 119px;
+        gap: 24px;
+      }
+      .footer a,
+      .footer .current-year {
+        color: white;
+      }
+      @media (max-width: 767px) {
+        .form-contact__row__form-group.space {
+          margin-right: 0;
+        }
+        .footer {
+          padding: 24px 16px;
+        }
+        .footer__right__menu .menu__item {
+          margin-right: 20px;
+        }
+        .form-demo-note {
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#contact-form">Skip to contact form</a>
+    <div class="contact">
+      <header class="bg-red">
+        <div class="header_container">
+          <div class="header_container__left">
+            <a class="header_container__left__logo" href="Home.html"
+              ><img
+                src="assets/img/adx-matrix-logo-new.png"
+                alt="Metrics by ADX — Home"
+            /></a>
+          </div>
+          <div class="header_container__right">
+            <a
+              href="Contact.html"
+              aria-current="page"
+              class="header_container__right__contact btn-regular-white base-font strong"
+              >Contact Us</a
+            >
+          </div>
+        </div>
+      </header>
+      <main class="main">
+        <div class="contact__wrapper">
+          <div class="contact__wrapper__header">
+            <h1>Get In Touch</h1>
+            <div class="contact__wrapper__header__underline"></div>
+          </div>
+          <div class="contact__wrapper__description">
+            <p class="base-font">
+              It’s easy to reach us. And it’s free. Two things everyone loves.
+            </p>
+            <p>We’re generally pretty friendly. Except when we are hungry.</p>
+          </div>
+          <div class="contact__wrapper__menu">
+            <ul>
+              <li class="active">
+                <span class="base-font">Direct Message</span>
+              </li>
+            </ul>
+          </div>
+          <div class="contact__wrapper__form">
+            <form
+              id="contact-form"
+              class="form-contact"
+              method="post"
+              action="Contact.html"
+              novalidate
+              aria-label="Direct Message"
+              aria-busy="false"
+            >
+              <fieldset>
+                <div class="form-contact__row">
+                  <div class="form-contact__row__form-group">
+                    <label for="subject">Subject Message</label>
+                    <div class="subject-select">
+                      <select id="subject" name="subject">
+                        <option value="1">Customer Support</option>
+                        <option value="2" selected>
+                          Media And Platform Inquiry
+                        </option></select
+                      ><i class="adx-ic_chevron_down" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-contact__row">
+                  <div class="form-contact__row__form-group">
+                    <label for="name">Your Name</label
+                    ><input
+                      id="name"
+                      name="name"
+                      type="text"
+                      class="input"
+                      data-label="your name"
+                      aria-describedby="name-error"
+                      placeholder="Type your name here"
+                      autocomplete="name"
+                      minlength="2"
+                      maxlength="100"
+                      required
+                    />
+                    <p class="field-error" id="name-error" hidden></p>
+                  </div>
+                </div>
+                <div class="form-contact__row">
+                  <div class="form-contact__row__form-group">
+                    <label for="company">Company Name</label
+                    ><input
+                      id="company"
+                      name="company"
+                      type="text"
+                      class="input"
+                      placeholder="Your company name"
+                      autocomplete="organization"
+                    />
+                  </div>
+                </div>
+                <div class="form-contact__row split">
+                  <div class="form-contact__row__form-group space">
+                    <label for="email">Email Address</label
+                    ><input
+                      id="email"
+                      name="email"
+                      type="email"
+                      class="input"
+                      data-label="email address"
+                      aria-describedby="email-error"
+                      placeholder="Your valid email address"
+                      autocomplete="email"
+                      pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}"
+                      required
+                    />
+                    <p class="field-error" id="email-error" hidden></p>
+                  </div>
+                  <div class="form-contact__row__form-group">
+                    <label for="phone">Phone Number</label
+                    ><input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      class="input"
+                      data-label="phone number"
+                      aria-describedby="phone-error"
+                      placeholder="Your phone number"
+                      autocomplete="tel"
+                      inputmode="numeric"
+                      pattern="[0-9]{7,15}"
+                      required
+                    />
+                    <p class="field-error" id="phone-error" hidden></p>
+                  </div>
+                </div>
+                <div class="form-contact__row">
+                  <div class="form-contact__row__form-group">
+                    <label for="message">Your Message</label
+                    ><textarea
+                      id="message"
+                      name="message"
+                      class="message"
+                      rows="5"
+                      placeholder="Create your message here"
+                      minlength="5"
+                      maxlength="200"
+                      required
+                      data-label="your message"
+                      aria-describedby="message-error message-count"
+                    ></textarea>
+                    <div class="message-meta">
+                      <p class="field-error" id="message-error" hidden></p>
+                      <span id="message-count">0 / 200</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-contact__action">
+                  <button type="submit" class="submit-btn btn-primary">
+                    <span class="btn-label">Send Message</span
+                    ><span class="sk-circle" aria-hidden="true" hidden
+                      ><span class="sk-circle1 sk-child"></span
+                      ><span class="sk-circle2 sk-child"></span
+                      ><span class="sk-circle3 sk-child"></span
+                      ><span class="sk-circle4 sk-child"></span
+                      ><span class="sk-circle5 sk-child"></span
+                      ><span class="sk-circle6 sk-child"></span
+                      ><span class="sk-circle7 sk-child"></span
+                      ><span class="sk-circle8 sk-child"></span
+                      ><span class="sk-circle9 sk-child"></span
+                      ><span class="sk-circle10 sk-child"></span
+                      ><span class="sk-circle11 sk-child"></span
+                      ><span class="sk-circle12 sk-child"></span
+                    ></span>
+                  </button>
+                </div>
+              </fieldset>
+              <!-- <p class="form-demo-note">Demo preview. Messages are not sent.</p> -->
+              <p
+                id="form-status"
+                class="form-status"
+                role="status"
+                aria-live="polite"
+              ></p>
+            </form>
+          </div>
+        </div>
+      </main>
+      <footer class="footer">
+        <div class="footer__left">
+          <a
+            class="footer__left__copyright regular-font"
+            href="https://adxasia.co.id/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Copyright © <span class="current-year">2026</span>. metrics by Adx
+            | Part of ADX Asia</a
+          >
+        </div>
+        <nav class="footer__right" aria-label="Footer">
+          <div class="footer__right__menu">
+            <a href="Home.html" class="menu__item regular-font">Home</a
+            ><a
+              href="Contact.html"
+              aria-current="page"
+              class="menu__item regular-font"
+              >Contact</a
+            ><a href="Login.html" class="menu__item regular-font"
+              >Using Account</a
+            >
+          </div>
+        </nav>
+      </footer>
+    </div>
+    <aside class="notification" aria-label="Notification" hidden>
+      <div class="alert">
+        <div role="status" aria-live="polite" aria-atomic="true">
+          <h2 class="title base-font" id="notice-title"></h2>
+          <p class="content-alert small-font" id="notice-message"></p>
+        </div>
+        <button
+          type="button"
+          class="notice-close"
+          aria-label="Dismiss notification"
+        >
+          <i class="adx-ic_close" aria-hidden="true"></i>
+        </button>
+      </div>
+    </aside>
+    <script>
+      "use strict";
+      // This preview only uses local state: no API requests or credential storage.
+      const form = document.querySelector("form");
+      const submitButton = form.querySelector('[type="submit"]');
+      const submitLabel = submitButton.querySelector(".btn-label");
+      const originalLabel = submitLabel.textContent;
+      const fieldset = form.querySelector("fieldset");
+      const notice = document.querySelector(".notification");
+      const params = new URLSearchParams(location.search);
+      let busy = false;
+      let noticeTimer;
+      const delay = (milliseconds) =>
+        new Promise((resolve) => setTimeout(resolve, milliseconds));
+      function notify(type, title, message) {
+        clearTimeout(noticeTimer);
+        notice.querySelector(".alert").className = "alert " + type;
+        notice.hidden = false;
+        document.getElementById("notice-title").textContent = title;
+        document.getElementById("notice-message").textContent = message;
+        // Errors remain until corrected or dismissed; success also remains in form-status.
+        if (type === "success")
+          noticeTimer = setTimeout(() => {
+            notice.hidden = true;
+          }, 6000);
+      }
+      notice.querySelector(".notice-close").addEventListener("click", () => {
+        notice.hidden = true;
+        clearTimeout(noticeTimer);
+      });
+      function setBusy(value, label) {
+        busy = value;
+        fieldset.disabled = value;
+        submitButton.disabled = value;
+        form.setAttribute("aria-busy", String(value));
+        submitLabel.textContent = value ? label : originalLabel;
+        submitButton.querySelector(".sk-circle").hidden = !value;
+      }
+      function showFieldError(field, message) {
+        const error = document.getElementById(field.id + "-error");
+        field.setAttribute("aria-invalid", String(Boolean(message)));
+        field.setCustomValidity(message);
+        error.textContent = message;
+        error.hidden = !message;
+        return !message;
+      }
+      function validateField(field) {
+        let message = "";
+        const value =
+          field.type === "password" || field.id === "password"
+            ? field.value
+            : field.value.trim();
+        if (field.required && !value)
+          message = "Please enter " + field.dataset.label + ".";
+        else if (value && field.minLength > 0 && value.length < field.minLength)
+          message = "Use at least " + field.minLength + " characters.";
+        else if (field.maxLength > 0 && value.length > field.maxLength)
+          message = "Use no more than " + field.maxLength + " characters.";
+        else if (
+          field.id === "email" &&
+          value &&
+          !/^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,6}$/.test(value)
+        )
+          message = "Please enter a valid email address.";
+        else if (field.id === "phone" && value && !/^[0-9]{7,15}$/.test(value))
+          message = "Use 7–15 digits, without spaces or symbols.";
+        return showFieldError(field, message);
+      }
+      const validatedFields = [...form.querySelectorAll("[data-label]")];
+      validatedFields.forEach((field) => {
+        field.addEventListener("blur", () => validateField(field));
+        field.addEventListener("input", () => {
+          document.getElementById("form-status").textContent = "";
+          if (field.getAttribute("aria-invalid") === "true")
+            validateField(field);
+          else field.setCustomValidity("");
+        });
+      });
+      function validateForm() {
+        const invalid = validatedFields.filter(
+          (field) => !validateField(field),
+        );
+        if (invalid.length) invalid[0].focus();
+        return invalid.length === 0;
+      }
+      function clearValidation() {
+        validatedFields.forEach((field) => {
+          showFieldError(field, "");
+          field.removeAttribute("aria-invalid");
+        });
+      }
+
+      document.querySelectorAll(".current-year").forEach((node) => {
+        node.textContent = new Date().getFullYear();
+      });
+      const message = document.getElementById("message");
+      function updateCount() {
+        document.getElementById("message-count").textContent =
+          message.value.length + " / 200";
+      }
+      message.addEventListener("input", updateCount);
+      // Open Contact.html?demo=error to review one failed submission, then retry.
+      let failNextSubmission = params.get("demo") === "error";
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (busy || !validateForm()) return;
+        const selectedSubject = document.getElementById("subject").value;
+        document.getElementById("form-status").textContent = "";
+        notice.hidden = true;
+        setBusy(true, "Sending…");
+        try {
+          await delay(700);
+          if (failNextSubmission) {
+            failNextSubmission = false;
+            notify(
+              "danger",
+              "Error",
+              "Demo: the message could not be sent. Please try again.",
+            );
+          } else {
+            form.reset();
+            document.getElementById("subject").value = selectedSubject;
+            clearValidation();
+            updateCount();
+            document.getElementById("form-status").textContent =
+              "Demo completed successfully. No message was sent.";
+            notify(
+              "success",
+              "Success",
+              "Message successfully sent! (Demo only — no message was sent.)",
+            );
+          }
+        } finally {
+          setBusy(false);
+          submitButton.focus({ preventScroll: true });
+        }
+      });
+    </script>
+  </body>
+</html>

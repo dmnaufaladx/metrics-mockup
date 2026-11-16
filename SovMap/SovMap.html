@@ -1,0 +1,2270 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Share of Voice — Metrics by ADX</title>
+    <style>
+      @font-face {
+        font-family: Core;
+        src: url("../assets/fonts/Core/coresansc-45regular-webfont.woff2")
+          format("woff2");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: Core;
+        src: url("../assets/fonts/Core/coresansc-65bold-webfont.woff2")
+          format("woff2");
+        font-weight: 700;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        overflow: hidden;
+        color: #262626;
+        font:
+          14px Core,
+          Arial,
+          sans-serif;
+        background: #e9ece5;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        border: 0;
+        cursor: pointer;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      a:focus-visible {
+        outline: 3px solid #007aff;
+        outline-offset: 2px;
+      }
+      .map {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: #e6e8e2;
+      }
+      .map svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .block {
+        fill: #e0e3dc;
+      }
+      .park {
+        fill: #cde0bf;
+      }
+      .river {
+        fill: none;
+        stroke: #b7ddea;
+        stroke-width: 25;
+      }
+      .road {
+        fill: none;
+        stroke: #fff;
+        stroke-width: 13;
+      }
+      .arterial {
+        fill: none;
+        stroke: #f7d592;
+        stroke-width: 8;
+      }
+      .label {
+        fill: #767d76;
+        font:
+          17px Core,
+          Arial;
+        pointer-events: none;
+      }
+      .map-nav {
+        position: fixed;
+        z-index: 3;
+        top: 0;
+        left: 0;
+        width: 280px;
+        height: 100%;
+        display: table;
+      }
+      .panel-holder {
+        display: table-cell;
+        vertical-align: middle;
+      }
+      .panel {
+        margin-left: 8px;
+        max-height: calc(100vh - 28px);
+        overflow: auto;
+        background: #fffffff2;
+        box-shadow: 0 2px 8px #0003;
+      }
+      .panel-top {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 58px;
+        padding: 12px 16px;
+        background: #fff;
+      }
+      .circle {
+        display: grid;
+        width: 25px;
+        height: 25px;
+        place-items: center;
+        border-radius: 50%;
+        background: #eef0f4;
+        font-size: 15px;
+      }
+      .panel-title {
+        flex: 1;
+        font-weight: 700;
+      }
+      .icon {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: #eef0f4;
+        font-size: 16px;
+      }
+      .code-search {
+        padding: 10px;
+        background: #fff;
+        border-top: 1px solid #e5e5ea;
+      }
+      .code-search input,
+      .filter-search input {
+        width: 100%;
+        border: 1px solid #d5d5da;
+        border-radius: 20px;
+        padding: 10px 14px;
+        background: #f5f5fa;
+      }
+      .section {
+        margin-top: 8px;
+        background: #fff;
+      }
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 9px 20px;
+        background: #f7f7fa;
+        border-top: 1px solid #e5e5ea;
+        border-bottom: 1px solid #e5e5ea;
+        text-align: left;
+      }
+      .section-head strong {
+        font-size: 12px;
+      }
+      .selection {
+        margin-left: 8px;
+        color: #666;
+        font-size: 12px;
+      }
+      .filter-search {
+        padding: 8px 10px;
+      }
+      .list {
+        max-height: 132px;
+        overflow: auto;
+      }
+      .choice {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 8px 20px;
+        background: #fff;
+        text-align: left;
+      }
+      .choice:hover,
+      .choice.active {
+        background: #f5f5fa;
+      }
+      .check {
+        display: grid;
+        width: 18px;
+        height: 18px;
+        place-items: center;
+        border: 1px solid #d5d5da;
+        border-radius: 3px;
+        color: #fff;
+        font-size: 12px;
+      }
+      .choice.active .check {
+        border-color: #ff2d55;
+        background: #ff2d55;
+      }
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        padding: 11px 16px;
+        border-top: 1px solid #e5e5ea;
+        background: #f7f7fa;
+      }
+      .actions button {
+        padding: 0;
+        background: transparent;
+        color: #777;
+        font-weight: 700;
+      }
+      .actions .apply {
+        color: #ff2d55;
+      }
+      .more {
+        width: 100%;
+        text-align: left;
+        padding: 9px 20px;
+        min-height: 33px;
+        font-size: 13px;
+        font-weight: bold;
+        border: 0;
+        border-top: 1px solid #e5e5ea;
+        border-bottom: 1px solid #e5e5ea;
+        margin-top: 8px;
+        border-radius: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f7f7fa;
+        color: #111;
+      }
+      .more svg {
+        width: 14px;
+        height: 14px;
+        fill: none;
+        stroke: #111;
+        stroke-width: 2;
+      }
+      .legend {
+        padding: 8px 20px 13px;
+        background: #fff;
+      }
+      .legend div {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 9px;
+      }
+      .legend i {
+        width: 15px;
+        height: 15px;
+        border-radius: 50% 50% 50% 0;
+        transform: rotate(-45deg);
+        border: 3px solid #777;
+      }
+      .legend i.available {
+        border-color: #33c84a;
+      }
+      .legend i.unavailable {
+        border-color: #ff2d55;
+      }
+      .toggle-side {
+        position: fixed;
+        z-index: 4;
+        top: 48%;
+        left: 292px;
+        display: grid;
+        width: 48px;
+        height: 48px;
+        place-items: center;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 2px 5px #0003;
+        font-size: 20px;
+      }
+      .map-nav.closed {
+        display: none;
+      }
+      .map-nav.closed + .toggle-side {
+        left: 10px;
+      }
+      .top-actions {
+        position: fixed;
+        z-index: 3;
+        top: 16px;
+        right: 16px;
+        display: flex;
+        gap: 8px;
+      }
+      .top-actions button,
+      .map-control {
+        display: grid;
+        width: 38px;
+        height: 38px;
+        place-items: center;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 2px 5px #0003;
+        font-size: 17px;
+      }
+      .action-box {
+        position: fixed;
+        z-index: 4;
+        top: 62px;
+        right: 58px;
+        width: 320px;
+        padding: 16px;
+        border: 1px solid #e5e5ea;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 2px 16px #0003;
+      }
+      .action-box h2 {
+        margin: 0 0 6px;
+        font-size: 16px;
+      }
+      .action-row {
+        display: flex;
+        gap: 12px;
+        padding: 13px 0;
+        border-top: 1px solid #e5e5ea;
+        cursor: pointer;
+      }
+      .action-row:first-of-type {
+        border-top: 0;
+      }
+      .action-row b {
+        display: block;
+      }
+      .action-row span {
+        display: block;
+        margin-top: 3px;
+        color: #777;
+        font-size: 11px;
+      }
+      .map-controls {
+        position: fixed;
+        z-index: 3;
+        right: 16px;
+        bottom: 22px;
+        display: grid;
+        gap: 8px;
+      }
+      .map-control {
+        border-radius: 5px;
+      }
+      .marker {
+        cursor: pointer;
+      }
+      .marker circle {
+        fill: #6e6e6e;
+        stroke: #fff;
+        stroke-width: 4;
+      }
+      .marker.available circle {
+        fill: #33c84a;
+      }
+      .marker.unavailable circle {
+        fill: #ff2d55;
+      }
+      .marker text {
+        fill: #fff;
+        font: 700 12px Core;
+        pointer-events: none;
+      }
+      .marker.selected circle {
+        stroke: #007aff;
+        stroke-width: 6;
+      }
+      .info {
+        position: fixed;
+        z-index: 5;
+        width: 310px;
+        max-height: min(560px, calc(100vh - 30px));
+        overflow: auto;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: 0 3px 16px #0004;
+      }
+      .info img {
+        width: 100%;
+        height: 155px;
+        object-fit: cover;
+        background: #dbe1d8;
+      }
+      .info-content {
+        padding: 20px;
+      }
+      .info h2 {
+        margin: 0;
+        font-size: 20px;
+      }
+      .info hr {
+        border: 0;
+        border-top: 1px solid #e5e5ea;
+        margin: 18px 0;
+      }
+      .info dt {
+        margin-top: 14px;
+        color: #888;
+        font-size: 13px;
+      }
+      .info dd {
+        margin: 4px 0 0;
+        font-size: 15px;
+        line-height: 1.4;
+      }
+      .info .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #fff;
+        font-size: 24px;
+      }
+      .info .primary {
+        width: 100%;
+        margin-top: 18px;
+        padding: 13px;
+        border-radius: 5px;
+        background: #ff2d55;
+        color: #fff;
+        font-weight: 700;
+      }
+      .toast {
+        position: fixed;
+        z-index: 7;
+        right: 18px;
+        bottom: 18px;
+        padding: 13px 16px;
+        border-radius: 5px;
+        background: #262626;
+        color: #fff;
+        box-shadow: 0 3px 12px #0003;
+      }
+      @media (max-width: 700px) {
+        .map-nav {
+          width: min(280px, calc(100% - 30px));
+        }
+        .panel {
+          margin-left: 8px;
+        }
+        .toggle-side {
+          left: calc(min(280px, 100% - 30px) + 12px);
+        }
+        .action-box {
+          right: 12px;
+          width: min(320px, calc(100% - 24px));
+        }
+        .info {
+          left: 12px !important;
+          right: 12px;
+          bottom: 16px;
+          width: auto;
+        }
+        .top-actions {
+          right: 12px;
+        }
+      }
+
+      .city-count {
+        margin-left: 14px;
+        min-width: 32px;
+        border: 1px solid #32c5ff;
+        border-radius: 10px;
+        background: #d4f3ff;
+        text-align: center;
+        line-height: 15px;
+      }
+      #city-list .check {
+        margin-left: auto;
+      }
+      /* Production reference: 280px sidebar and 320px placement menu. */
+      .panel {
+        position: relative;
+        background: #ffffffcc;
+        box-shadow: none;
+      }
+      .panel-top {
+        height: 50px;
+        padding: 10px 16px;
+        justify-content: space-between;
+      }
+      .panel-title {
+        text-align: center;
+        color: #111;
+        text-decoration: none;
+        font-size: 16px;
+      }
+      .section-head {
+        padding: 7px 20px;
+        min-height: 32px;
+      }
+      .section-head strong,
+      .selection {
+        font-size: 13px;
+        color: #111;
+      }
+      .section-head[data-expand="city"] > span:last-child {
+        display: none;
+      }
+      .filter-search {
+        position: relative;
+      }
+      .filter-search::after {
+        content: "⌕";
+        position: absolute;
+        right: 24px;
+        top: 12px;
+        font-size: 23px;
+      }
+      .filter-search input {
+        padding-right: 38px;
+      }
+      #city-list {
+        max-height: 150px;
+      }
+      #city-list .choice {
+        height: 40px;
+        border-bottom: 1px solid #e5e5ea;
+      }
+      #city-list .choice.active {
+        font-weight: 700;
+        background: white;
+      }
+      #city-list .check {
+        border: 0;
+        background: none;
+        color: transparent;
+      }
+      #city-list .active .check {
+        color: #ff6683;
+      }
+      .toggle-side {
+        display: none;
+      }
+      .map-nav.closed + .toggle-side {
+        display: grid;
+        top: 20%;
+      }
+      .code-search {
+        position: absolute;
+        top: 6px;
+        left: 10px;
+        right: 40px;
+        padding: 0;
+        z-index: 2;
+        border: 0;
+        border-radius: 20px;
+      }
+      .code-search input {
+        height: 38px;
+        border-color: #32c5ff;
+      }
+      .searching .panel-title,
+      .searching #close-side {
+        visibility: hidden;
+      }
+      #code-toggle {
+        z-index: 3;
+        flex-shrink: 0;
+      }
+      .top-actions button {
+        width: 35px;
+        height: 35px;
+      }
+      .top-actions img {
+        width: 16px;
+        height: 16px;
+      }
+      .action-box {
+        top: 60px;
+        right: 60px;
+        max-height: calc(100dvh - 76px);
+        overflow: auto;
+      }
+      .action-box h2 {
+        font-size: 14px;
+        margin-bottom: 6px;
+      }
+      .action-row {
+        width: 100%;
+        align-items: center;
+        text-align: left;
+        background: white;
+        padding: 16px 0;
+        gap: 8px;
+        border: 0;
+        border-bottom: 1px solid #e5e5ea;
+        min-height: 74px;
+      }
+      .action-row:hover {
+        background: #f8f8fa;
+      }
+      .action-row i {
+        flex: 0 0 32px;
+        height: 32px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: #e5e5ea;
+        font-style: normal;
+        font-size: 16px;
+        color: #262626;
+      }
+      .action-row i svg {
+        width: 16px;
+        height: 16px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .action-row .action-copy {
+        margin: 0;
+        color: #111;
+      }
+      .action-row b {
+        font-size: 14px;
+        font-weight: 400;
+      }
+      .action-row small {
+        display: block;
+        color: #878787;
+        font-size: 10px;
+        margin-top: 6px;
+        line-height: 1.5;
+      }
+      .marker.selected image {
+        filter: drop-shadow(0 0 3px #007aff);
+      }
+      @media (max-width: 700px) {
+        .action-box {
+          right: 12px;
+        }
+      }
+
+      /* Dimensions and scroll boundary from SovMap/infoWindow.vue. */
+      #info {
+        width: 257px;
+        max-height: calc(100dvh - 24px);
+        overflow: auto;
+        border-radius: 8px;
+        background: white;
+      }
+      .sov-tabs {
+        height: 49px;
+        padding: 16px 16px 7px;
+        display: flex;
+        gap: 16px;
+        align-items: flex-end;
+      }
+      .sov-tabs button {
+        padding: 0 0 3px;
+        background: none;
+        color: #878787;
+        border-radius: 0;
+        font-size: 13px;
+        line-height: 1.85;
+        border-bottom: 2px solid transparent;
+      }
+      .sov-tabs button[aria-selected="true"] {
+        color: #ff2d55;
+        border-color: #ff2d55;
+      }
+      #info .close {
+        top: 12px;
+        right: 12px;
+        width: 24px;
+        height: 24px;
+        padding: 0;
+        font-size: 28px;
+        line-height: 24px;
+        font-family: Arial, sans-serif;
+      }
+      .sov-photo {
+        position: relative;
+        height: 240px;
+        margin-bottom: 16px;
+      }
+      #info #sov-photo {
+        width: 100%;
+        height: 240px;
+        object-fit: cover;
+        display: block;
+      }
+      #sov-history {
+        position: absolute;
+        right: 7px;
+        top: 7px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        padding: 6px;
+        background: white;
+      }
+      #info #sov-history img {
+        width: 16px;
+        height: 16px;
+        object-fit: contain;
+        background: none;
+      }
+      #photo-prev,
+      #photo-next {
+        position: absolute;
+        top: 50%;
+        border-radius: 50%;
+        background: white;
+        padding: 2px 7px;
+        font-size: 20px;
+      }
+      #photo-prev {
+        left: 8px;
+      }
+      #photo-next {
+        right: 8px;
+      }
+      #photo-index {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        border-radius: 12px;
+        background: #262626cc;
+        color: white;
+        font-size: 11px;
+        padding: 4px 8px;
+      }
+      .sov-details {
+        padding: 0 16px 16px;
+        max-height: 230px;
+        overflow-y: auto;
+        font-size: 12px;
+      }
+      .sov-edit {
+        display: flex;
+        justify-content: space-between;
+      }
+      .sov-edit button {
+        background: white;
+        padding: 6px 8px;
+        font-size: 13px;
+        border: 1px solid #999;
+        border-radius: 4px;
+        color: black;
+      }
+      #info hr {
+        margin: 16px 0;
+        border: 0;
+        border-bottom: 1px solid #999;
+      }
+      .sov-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+      .sov-row > span:first-child,
+      .sov-muted {
+        color: #999;
+      }
+      .sov-row > span:last-child {
+        text-align: right;
+        overflow-wrap: anywhere;
+      }
+      .sov-heading {
+        margin-bottom: 8px;
+      }
+      .sov-details p {
+        margin: 8px 0 0;
+        line-height: 1.3;
+      }
+      .sov-empty {
+        color: #ff2d55;
+        font-size: 13px;
+      }
+      #sov-dialog {
+        width: min(460px, calc(100% - 32px));
+        border: 0;
+        border-radius: 8px;
+        padding: 24px;
+      }
+      #sov-dialog::backdrop {
+        background: #0005;
+      }
+      #sov-dialog p {
+        white-space: pre-line;
+        line-height: 1.6;
+      }
+      @media (max-width: 700px) {
+        #info {
+          width: min(257px, calc(100vw - 24px));
+          right: auto;
+          bottom: auto;
+        }
+      }
+
+      .sov-panel {
+        margin: auto;
+        border: 0;
+        border-radius: 10px;
+        background: #fffffff2;
+        color: #111;
+        width: 502px;
+        max-width: calc(100% - 24px);
+        max-height: 95vh;
+        padding: 24px;
+        overflow: auto;
+        font:
+          14px Core,
+          Arial,
+          sans-serif;
+      }
+      .sov-panel::backdrop {
+        background: #0001;
+      }
+      .sov-panel .close-panel {
+        border: 0;
+        background: none;
+        color: #888;
+        font-size: 26px;
+        padding: 0;
+        line-height: 24px;
+        margin-bottom: 20px;
+        cursor: pointer;
+      }
+      .sov-panel h2 {
+        font-size: 20px;
+        margin: 0 0 16px;
+      }
+      .sov-panel select {
+        display: block;
+        width: 100%;
+        height: 50px;
+        border: 1px solid #e5e5ea;
+        border-radius: 8px;
+        background: white;
+        padding: 0 16px;
+        font: inherit;
+        margin-bottom: 24px;
+      }
+      .sov-panel .pink {
+        background: #ff2d55;
+        color: white;
+        border: 0;
+        border-radius: 8px;
+        padding: 14px;
+        font: inherit;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .sov-panel .wide {
+        width: 100%;
+      }
+      .download-types {
+        display: grid;
+        grid-template-rows: repeat(4, 1fr);
+        grid-auto-flow: column;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px 12px;
+        margin: 16px 0 36px;
+      }
+      .download-types label {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .sov-panel input[type="checkbox"],
+      .filter-check input {
+        width: 20px;
+        height: 20px;
+        accent-color: #ff2d55;
+        flex-shrink: 0;
+      }
+      .upload-box {
+        background: white;
+        padding: 24px;
+        box-shadow: 0 8px 16px #0001;
+        margin-bottom: 24px;
+      }
+      .drop-zone {
+        display: flex;
+        align-items: center;
+        border: 1px dashed #888;
+        border-radius: 8px;
+        padding: 24px;
+        cursor: pointer;
+        gap: 16px;
+      }
+      .drop-zone img {
+        width: 58px;
+        border-right: 1px solid #d5d5da;
+        padding-right: 16px;
+      }
+      .drop-zone strong {
+        display: block;
+        font-size: 15px;
+        letter-spacing: 1px;
+      }
+      .drop-zone p {
+        font-size: 12px;
+        line-height: 1.7;
+        letter-spacing: 0.6px;
+      }
+      .drop-zone.dragging {
+        background: #fff0f4;
+      }
+      .file-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 0;
+        overflow-wrap: anywhere;
+      }
+      .more-panel {
+        width: 354px;
+        height: min(600px, 95vh);
+        background: white;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+      }
+      .more-panel:not([open]) {
+        display: none;
+      }
+      .more-panel header {
+        display: flex;
+        align-items: center;
+        border-bottom: 8px solid #f5f5fa;
+        padding: 12px 4px;
+      }
+      .more-panel header h2 {
+        margin: 0 auto;
+        font-size: 20px;
+      }
+      .more-panel header .close-panel {
+        margin: 0;
+        color: black;
+      }
+      .more-panel h3 {
+        font-size: 13px;
+        margin: 12px 0;
+      }
+      .occupancy-title {
+        border-bottom: 2px solid #f5f5fa;
+        padding-bottom: 12px;
+      }
+      .range-fields {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 10px solid #f5f5fa;
+        padding-bottom: 18px;
+      }
+      .range-fields label {
+        width: 38%;
+      }
+      .range-fields input {
+        width: 100%;
+        height: 32px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 7px;
+        margin-top: 6px;
+        font: inherit;
+      }
+      .more-panel footer {
+        margin-top: auto;
+        border-top: 8px solid #f5f5fa;
+        padding: 10px 4px 0;
+        display: flex;
+        justify-content: space-between;
+      }
+      .more-panel footer button {
+        padding: 10px 16px;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        background: white;
+        font: inherit;
+      }
+      .more-panel footer .pink {
+        background: #ff2d55;
+      }
+      .filter-check {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 8px 16px;
+        border-bottom: 1px solid #e5e5ea;
+        background: white;
+      }
+      .filter-check .dot {
+        width: 18px;
+        height: 18px;
+        border: 2px solid #e5e5ea;
+        border-radius: 50%;
+        margin-left: auto;
+      }
+      .filter-list {
+        max-height: 120px;
+        overflow: auto;
+      }
+      .filter-footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 16px;
+        background: #fafafa;
+        border: 1px solid #e5e5ea;
+      }
+      .filter-footer button {
+        border: 0;
+        background: none;
+        font: inherit;
+        font-weight: bold;
+        color: #999;
+        cursor: pointer;
+      }
+      .filter-footer .apply {
+        color: #ff2d55;
+      }
+      #placement-list .choice:hover {
+        background: #e5e5ea;
+      }
+      #panel-error {
+        color: #d22;
+        font-size: 12px;
+        margin: 8px 0;
+      }
+      @media (max-width: 520px) {
+        .download-types {
+          gap: 18px 8px;
+          font-size: 12px;
+        }
+        .drop-zone {
+          padding: 16px;
+          gap: 12px;
+        }
+        .upload-box {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="map" id="map" aria-label="Schematic Share of Voice map">
+      <svg
+        viewBox="0 0 1400 850"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden="true"
+      >
+        <rect width="1400" height="850" fill="#e8eae4" />
+        <path
+          class="river"
+          d="M590 0 C540 170 690 250 600 410 S680 660 590 850"
+        />
+        <g class="blocks">
+          <rect class="block" x="50" y="30" width="240" height="105" />
+          <rect class="block" x="320" y="25" width="200" height="110" />
+          <rect class="block" x="730" y="40" width="240" height="100" />
+          <rect class="block" x="1020" y="35" width="250" height="120" />
+          <rect class="park" x="390" y="190" width="160" height="115" />
+          <rect class="block" x="760" y="190" width="220" height="135" />
+          <rect class="block" x="1050" y="210" width="210" height="110" />
+          <rect class="block" x="90" y="410" width="230" height="120" />
+          <rect class="block" x="360" y="430" width="180" height="130" />
+          <rect class="block" x="800" y="450" width="220" height="110" />
+          <rect class="park" x="1100" y="450" width="150" height="120" />
+          <rect class="block" x="80" y="640" width="260" height="110" />
+          <rect class="block" x="760" y="640" width="230" height="100" />
+        </g>
+        <path
+          class="road"
+          d="M0 150 L1400 180 M0 360 L1400 340 M0 590 L1400 610 M300 0 L330 850 M700 0 L690 850 M1040 0 L1070 850"
+        />
+        <path
+          class="arterial"
+          d="M0 480 L520 440 L800 500 L1400 420 M440 0 L500 850"
+        />
+        <text class="label" x="700" y="110">JAKARTA</text>
+        <text class="label" x="250" y="400">TANGERANG</text>
+        <text class="label" x="1000" y="400">BEKASI</text>
+        <text class="label" x="600" y="700">DEPOK</text>
+        <g id="markers"></g>
+      </svg>
+    </main>
+    <aside class="map-nav" id="map-nav">
+      <div class="panel-holder">
+        <div class="panel">
+          <header class="panel-top">
+            <button class="circle" id="close-side" aria-label="Close menu">
+              ☰</button
+            ><a class="panel-title" href="../Dashboard/MeasurementReport.html"
+              >Share of Voice</a
+            ><button
+              class="icon"
+              id="code-toggle"
+              aria-expanded="false"
+              aria-controls="code-search"
+              aria-label="Search code"
+            >
+              ⌕
+            </button>
+          </header>
+          <div class="code-search" id="code-search" hidden>
+            <input
+              id="code-input"
+              placeholder="Type a code"
+              aria-label="Search code"
+            />
+          </div>
+          <section class="section">
+            <button class="section-head" data-expand="city">
+              <span
+                ><strong>CITY</strong
+                ><span class="selection" id="city-selection"
+                  >Jakarta</span
+                ></span
+              ><span>⌃</span>
+            </button>
+            <div id="city-body">
+              <div class="filter-search">
+                <input id="city-search" placeholder="Search City" />
+              </div>
+              <div class="list" id="city-list"></div>
+            </div>
+          </section>
+          <section class="section">
+            <button class="section-head" data-expand="industry">
+              <span
+                ><strong>INDUSTRY</strong
+                ><span class="selection" id="industry-selection"
+                  >All</span
+                ></span
+              ><span>⌄</span>
+            </button>
+            <div id="industry-body" hidden>
+              <div class="list" id="industry-list"></div>
+              <div class="actions">
+                <button data-clear="industry">Clear All</button
+                ><button class="apply" data-apply="industry">Apply</button>
+              </div>
+            </div>
+          </section>
+          <section class="section">
+            <button class="section-head" data-expand="brand">
+              <span
+                ><strong>BRAND</strong
+                ><span class="selection" id="brand-selection"></span></span
+              ><span>⌄</span>
+            </button>
+            <div id="brand-body" hidden>
+              <div class="filter-search">
+                <input id="brand-search" placeholder="Search Brand" />
+              </div>
+              <div class="list" id="brand-list"></div>
+              <div class="actions">
+                <button data-clear="brand">Clear All</button
+                ><button class="apply" data-apply="brand">Apply</button>
+              </div>
+            </div>
+          </section>
+          <section class="section">
+            <button class="section-head" data-expand="type">
+              <span
+                ><strong>MEDIA TYPE</strong
+                ><span class="selection" id="type-selection"></span></span
+              ><span>⌄</span>
+            </button>
+            <div id="type-body" hidden>
+              <div class="list" id="type-list"></div>
+              <div class="actions">
+                <button data-clear="type">Clear All</button
+                ><button class="apply" data-apply="type">Apply</button>
+              </div>
+            </div>
+          </section>
+          <section class="section">
+            <button class="section-head" data-expand="placement">
+              <span
+                ><strong>PLACEMENT</strong
+                ><span class="selection" id="placement-selection"
+                  >All</span
+                ></span
+              ><span>⌄</span>
+            </button>
+            <div id="placement-body" hidden>
+              <div class="list" id="placement-list"></div>
+            </div>
+          </section>
+          <section class="section">
+            <button class="section-head" data-expand="route">
+              <span
+                ><strong>ROUTE</strong
+                ><span class="selection" id="route-selection">All</span></span
+              ><span>⌄</span>
+            </button>
+            <div id="route-body" hidden>
+              <label class="choice"
+                ><span>Airport Route</span
+                ><input
+                  type="checkbox"
+                  name="route"
+                  value="Airport Route" /></label
+              ><label class="choice"
+                ><span>City Route</span
+                ><input type="checkbox" name="route" value="City Route"
+              /></label>
+            </div>
+          </section>
+          <section class="section">
+            <button class="section-head" data-expand="history">
+              <span
+                ><strong>UPDATE HISTORY</strong
+                ><span class="selection" id="history-selection">All</span></span
+              ><span>⌄</span>
+            </button>
+            <div id="history-body" hidden>
+              <label class="choice"
+                ><span>All</span
+                ><input type="radio" name="history" value="All" /></label
+              ><label class="choice"
+                ><span>Updated</span
+                ><input type="radio" name="history" value="Updated" /></label
+              ><label class="choice"
+                ><span>Out Of Date</span
+                ><input type="radio" name="history" value="Out Of Date"
+              /></label>
+            </div>
+          </section>
+          <button class="more" id="more-filter" aria-expanded="false">
+          MORE FILTER 
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m9 18 6-6-6-6" />
+          </svg>
+        </button>
+        </div>
+      </div>
+    </aside>
+    <button class="toggle-side" id="toggle-side" aria-label="Toggle menu">
+      ☰
+    </button>
+    <nav class="top-actions" aria-label="Map actions">
+      <button
+        id="actions-toggle"
+        aria-label="Placement actions"
+        aria-expanded="false"
+        aria-controls="action-box"
+      >
+        <img
+          src="../assets/img/map-controls/adx-ic-desktop.png"
+          alt=""
+        /></button
+      ><button id="reload" aria-label="Reload map">
+        <img src="../assets/img/sov/refresh.png" alt="" />
+      </button>
+    </nav>
+    <section class="action-box" id="action-box" hidden>
+      <h2>Placement</h2>
+      <button class="action-row" data-action="View Placement images">
+        <i aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+        </i>
+        <span class="action-copy"
+          ><b>View Placement images</b
+          ><small>Check images per placement</small></span
+        >
+      </button>
+      <button class="action-row" data-action="Download Placement">
+        <i aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </i>
+        <span class="action-copy"
+          ><b>Download Placement</b
+          ><small>Download placement to xls file</small></span
+        >
+      </button>
+      <button class="action-row" data-action="Create Placement">
+        <i aria-hidden="true">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </i>
+        <span class="action-copy"
+          ><b>Create Placement</b
+          ><small>Create new placement for new or existing SOV</small></span
+        >
+      </button>
+      <button class="action-row" data-action="Switch IM SOV">
+        <i aria-hidden="true">
+          <svg viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="21" y1="21" x2="4" y2="4"/></svg>
+        </i>
+        <span class="action-copy"
+          ><b>Switch IM SOV</b
+          ><small>Switch data between 2 billboards</small></span
+        >
+      </button>
+      <button class="action-row" data-action="Download Placement Queue">
+        <i aria-hidden="true">
+          <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </i>
+        <span class="action-copy"
+          ><b>Download Placement Queue</b
+          ><small>List of placement in download queue</small></span
+        >
+      </button>
+      <button class="action-row" data-action="Upload Brand & Industry">
+        <i aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </i>
+        <span class="action-copy"
+          ><b>Upload Brand & Industry</b
+          ><small>Upload brand and industry from xlsx file</small></span
+        >
+      </button>
+      <button class="action-row" data-action="Bulk Edit Brand & Industry">
+        <i aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </i>
+        <span class="action-copy"
+          ><b>Bulk Edit Brand & Industry</b
+          ><small>Update brand and industry from xlsx file</small></span
+        >
+      </button>
+    </section>
+    <div class="map-controls">
+      <button class="map-control" id="zoom-in" aria-label="Zoom in">+</button
+      ><button class="map-control" id="zoom-out" aria-label="Zoom out">−</button
+      ><button class="map-control" id="reset" aria-label="Reset map">⌖</button>
+    </div>
+    <section class="info" id="info" aria-label="SOV placement details" hidden>
+      <header class="sov-tabs" role="tablist" aria-label="Placement side">
+        <button
+          id="side-a"
+          role="tab"
+          aria-selected="true"
+          aria-controls="sov-content"
+          data-side="A"
+        >
+          A
+        </button>
+        <button
+          id="side-b"
+          role="tab"
+          aria-selected="false"
+          aria-controls="sov-content"
+          data-side="B"
+        >
+          B
+        </button>
+      </header>
+      <button class="close" id="info-close" aria-label="Close detail">×</button>
+      <div id="sov-content" role="tabpanel" aria-labelledby="side-a">
+        <div class="sov-photo">
+          <a id="sov-photo-link" target="_blank" rel="noopener"
+            ><img id="sov-photo" alt="Placement content"
+          /></a>
+          <button id="sov-history" aria-label="View content history">
+            <img src="../assets/img/sov/time.png" alt="" />
+          </button>
+          <button id="photo-prev" aria-label="Previous photo" hidden>‹</button
+          ><button id="photo-next" aria-label="Next photo" hidden>›</button
+          ><span id="photo-index" hidden></span>
+        </div>
+        <div
+          class="sov-details"
+          tabindex="0"
+          aria-label="Scrollable placement information"
+        >
+          <div class="sov-edit">
+            <button id="reuse-content">Reuse Content</button
+            ><button id="info-action">Edit</button>
+          </div>
+          <hr />
+          <div class="sov-row">
+            <span>Updated</span><span id="sov-updated"></span>
+          </div>
+          <div class="sov-row"><span>By</span><span id="sov-by"></span></div>
+          <hr />
+          <div class="sov-heading">Advertising</div>
+          <div id="sov-advertising">
+            <div class="sov-row">
+              <span>Brand</span><span id="info-brand"></span>
+            </div>
+            <div class="sov-muted">Message</div>
+            <p id="sov-message"></p>
+          </div>
+          <p class="sov-empty" id="sov-empty" hidden>
+            *This Placement doesn't have any content right now
+          </p>
+          <div id="sov-owner" hidden>
+            <hr />
+            <div class="sov-row"><span>Owner</span><span>ADX Media</span></div>
+            <div class="sov-row"><span>Contact</span><span>—</span></div>
+          </div>
+          <hr />
+          <div class="sov-row">
+            <span>Code</span><span id="sov-code"></span>
+          </div>
+          <div class="sov-row">
+            <span>Media Type</span><span id="info-type"></span>
+          </div>
+          <div class="sov-row">
+            <span>Road Side</span><span id="sov-road-side"></span>
+          </div>
+          <div class="sov-muted">Road To</div>
+          <p id="sov-road"></p>
+        </div>
+      </div>
+    </section>
+    <dialog id="sov-dialog" aria-labelledby="sov-dialog-title">
+      <h2 id="sov-dialog-title"></h2>
+      <p id="sov-dialog-text"></p>
+      <form method="dialog"><button>Close</button></form>
+    </dialog>
+    <div class="toast" id="toast" hidden></div>
+
+    <dialog
+      id="download-panel"
+      class="sov-panel"
+      aria-labelledby="download-title"
+    >
+      <button class="close-panel" data-close-panel aria-label="Close">×</button>
+      <h2 id="download-title">Download Placement</h2>
+      <select id="download-city" aria-label="City">
+        <option>All City</option>
+        <option>Jakarta</option>
+        <option>Banten</option>
+        <option>Bekasi</option>
+        <option>Bogor</option>
+        <option>Depok</option></select
+      ><select id="download-year" aria-label="Year">
+        <option>2026</option>
+        <option>2025</option>
+        <option>2024</option></select
+      ><select id="download-month" aria-label="Month">
+        <option>All Month</option></select
+      ><select id="download-scope" aria-label="Placement">
+        <option>All Placement</option>
+        <option>Selected Placement</option>
+      </select>
+      <section id="download-media" hidden>
+        <h3>Media Type</h3>
+        <div class="download-types" id="download-types"></div>
+      </section>
+      <p
+        id="download-error"
+        role="alert"
+        style="color: #c22; margin-bottom: 8px"
+      ></p>
+      <button class="pink wide" id="download-submit">Download</button>
+    </dialog>
+    <dialog id="upload-panel" class="sov-panel" aria-labelledby="upload-title">
+      <button class="close-panel" data-close-panel aria-label="Close">×</button>
+      <h2 id="upload-title">Upload Brand &amp; Industry</h2>
+      <div class="upload-box">
+        <input type="file" id="brand-file" accept=".xlsx" hidden /><label
+          for="brand-file"
+          class="drop-zone"
+          id="brand-drop"
+          tabindex="0"
+          ><img src="../assets/img/cloud-upload.png" alt="" />
+          <div>
+            <strong>Drag &amp; drop or click to Upload File</strong>
+            <p>
+              Allowed File is xlsx,<br />tips you can only drop single file here
+            </p>
+          </div></label
+        >
+        <div id="brand-uploaded" hidden>
+          <div class="file-row">
+            <span id="brand-filename"></span
+            ><button id="brand-remove" aria-label="Remove file">×</button>
+          </div>
+          <button id="brand-submit" class="pink wide">
+            Upload Brand &amp; Industry
+          </button>
+        </div>
+        <p id="upload-status" role="status"></p>
+      </div>
+    </dialog>
+    <dialog
+      id="more-panel"
+      class="sov-panel more-panel"
+      aria-labelledby="more-title"
+    >
+      <header>
+        <button class="close-panel" data-close-panel aria-label="Close">
+          ×
+        </button>
+        <h2 id="more-title">More Filter</h2>
+      </header>
+      <h3 class="occupancy-title">OCCUPANCY</h3>
+      <h3>OCCUPANCY RANGE (%)</h3>
+      <div class="range-fields">
+        <label
+          >Min<input
+            id="occupancy-min"
+            placeholder="Min"
+            type="number"
+            min="0"
+            max="100" /></label
+        ><label
+          >Max<input
+            id="occupancy-max"
+            placeholder="Max"
+            type="number"
+            min="0"
+            max="100"
+        /></label>
+      </div>
+      <p id="panel-error" role="alert"></p>
+      <footer>
+        <button id="occupancy-clear">Clear All</button
+        ><button class="pink" id="occupancy-apply">Apply</button>
+      </footer>
+    </dialog>
+    <script>
+      "use strict";
+      const $ = (id) => document.getElementById(id);
+      const placements = [
+        {
+          id: 1,
+          code: "JKT024",
+          city: "Jakarta",
+          industry: "Financial Services",
+          brand: "LinkAja",
+          type: "Billboard",
+          state: "available",
+          x: 540,
+          y: 365,
+          address: "Jl. T. Hasan Dek, Jakarta",
+          occupancy: "72%",
+        },
+        {
+          id: 2,
+          code: "JKT108",
+          city: "Jakarta",
+          industry: "Food & Beverage",
+          brand: "Kopi Kenangan",
+          type: "Videotron",
+          state: "unavailable",
+          x: 780,
+          y: 265,
+          address: "Jl. Sudirman, Jakarta",
+          occupancy: "91%",
+        },
+        {
+          id: 3,
+          code: "BKS016",
+          city: "Bekasi",
+          industry: "Automotive",
+          brand: "Toyota",
+          type: "Billboard",
+          state: "available",
+          x: 1030,
+          y: 420,
+          address: "Jl. Ahmad Yani, Bekasi",
+          occupancy: "46%",
+        },
+        {
+          id: 4,
+          code: "TNG041",
+          city: "Tangerang",
+          industry: "Telecommunication",
+          brand: "Telkomsel",
+          type: "Baliho",
+          state: "unavailable",
+          x: 350,
+          y: 525,
+          address: "Jl. MH Thamrin, Tangerang",
+          occupancy: "88%",
+        },
+        {
+          id: 5,
+          code: "DPK002",
+          city: "Depok",
+          industry: "Financial Services",
+          brand: "Bank Jago",
+          type: "Billboard",
+          state: "available",
+          x: 680,
+          y: 660,
+          address: "Jl. Margonda Raya, Depok",
+          occupancy: "34%",
+        },
+      ];
+      const state = {
+        city: "Jakarta",
+        industry: [],
+        brand: [],
+        type: [],
+        placement: "All",
+        selected: null,
+        zoom: 1,
+      };
+      const values = (key) => [...new Set(placements.map((item) => item[key]))];
+      const toast = (text) => {
+        $("toast").textContent = text;
+        $("toast").hidden = false;
+        clearTimeout(toast.timer);
+        toast.timer = setTimeout(() => {
+          $("toast").hidden = true;
+        }, 2600);
+      };
+      const visible = () =>
+        placements.filter(
+          (item) =>
+            (!state.city || item.city === state.city) &&
+            state.routes.includes(
+              routeNames[(item.id - 1) % routeNames.length],
+            ) &&
+            (!state.history ||
+              state.history === "All" ||
+              state.history === (item.id % 2 ? "Updated" : "Out Of Date")) &&
+            (!state.industry.length ||
+              state.industry.includes(item.industry)) &&
+            (!state.brand.length || state.brand.includes(item.brand)) &&
+            state.type.includes(item.type) &&
+            (state.placement === "All" ||
+              (state.placement === "Empty Placement"
+                ? item.id === 3
+                : item.id !== 3)) &&
+            (state.occupancyMin == null ||
+              parseFloat(item.occupancy) >= state.occupancyMin) &&
+            (state.occupancyMax == null ||
+              parseFloat(item.occupancy) <= state.occupancyMax),
+        );
+      const renderChoices = (target, choices, key, multi) => {
+        $(target).replaceChildren(
+          ...choices.map((value) => {
+            const button = document.createElement("button");
+            const selected = multi
+              ? state[key].includes(value)
+              : state[key] === value;
+            button.className = "choice" + (selected ? " active" : "");
+            button.innerHTML =
+              "<span>" + value + '</span><span class="check">✓</span>';
+            if (key === "city" && selected) {
+              const count = document.createElement("span");
+              count.className = "city-count";
+              count.textContent = placements.filter(
+                (item) => item.city === value,
+              ).length;
+              button.append(count);
+            }
+            button.onclick = () => {
+              if (multi)
+                state[key] = state[key].includes(value)
+                  ? state[key].filter((item) => item !== value)
+                  : [...state[key], value];
+              else state[key] = value;
+              render();
+            };
+            return button;
+          }),
+        );
+      };
+      const render = () => {
+        const query = $("city-search").value.toLowerCase();
+        renderChoices(
+          "city-list",
+          values("city").filter((city) => city.toLowerCase().includes(query)),
+          "city",
+          false,
+        );
+        const brandQuery = $("brand-search").value.toLowerCase();
+        renderChoices("industry-list", values("industry"), "industry", true);
+        renderChoices(
+          "brand-list",
+          values("brand").filter((brand) =>
+            brand.toLowerCase().includes(brandQuery),
+          ),
+          "brand",
+          true,
+        );
+        renderMediaFilters();
+        renderChoices(
+          "placement-list",
+          ["All", "Empty Placement", "Placement With Ads"],
+          "placement",
+          false,
+        );
+        $("city-selection").textContent = state.city;
+        $("industry-selection").textContent = state.industry.length
+          ? state.industry.length + " selected"
+          : "All";
+        $("brand-selection").textContent = state.brand.length
+          ? state.brand.length + " selected"
+          : "";
+        $("type-selection").textContent = state.type.length
+          ? state.type.length + " selected"
+          : "0 selected";
+        $("placement-selection").textContent =
+          state.placement === "All" ? "All" : state.placement;
+        const markerGroup = $("markers");
+        markerGroup.replaceChildren(
+          ...visible().map((item) => {
+            const group = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "g",
+            );
+            group.setAttribute(
+              "class",
+              "marker " +
+                item.state +
+                (state.selected === item.id ? " selected" : ""),
+            );
+            group.setAttribute(
+              "transform",
+              "translate(" + item.x + " " + item.y + ")",
+            );
+            group.setAttribute("tabindex", "0");
+            group.setAttribute("role", "button");
+            group.setAttribute("aria-label", item.code);
+            group.innerHTML =
+              '<image href="../assets/img/sov/' +
+              item.type.toLowerCase() +
+              '.png" x="-14" y="-14" width="28" height="28" />';
+            group.onclick = () => openInfo(item);
+            group.onkeydown = (event) => {
+              if (event.key === "Enter") openInfo(item);
+            };
+            return group;
+          }),
+        );
+      };
+      let activeSide = "A",
+        activePhoto = 0;
+      const sideRecords = new Map();
+      function contentFor(item) {
+        const key = item.id + ":" + activeSide;
+        if (!sideRecords.has(key))
+          sideRecords.set(key, {
+            brand: activeSide === "A" ? item.brand : "KIA",
+            message:
+              activeSide === "A"
+                ? "World class design"
+                : "Movement that inspires",
+            updated: "13 Jul 2026",
+            by: "-",
+            photos:
+              activeSide === "A"
+                ? ["../assets/img/map-controls/sample-billboard.jpg"]
+                : [
+                    "../assets/img/monitoring/img-3.jpg",
+                    "../assets/img/monitoring/img-4.jpg",
+                  ],
+            empty: item.id === 3 && activeSide === "B",
+          });
+        return sideRecords.get(key);
+      }
+      function renderInfo() {
+        const item = placements.find((p) => p.id === state.selected);
+        if (!item) return;
+        const content = contentFor(item);
+        document
+          .querySelectorAll("[data-side]")
+          .forEach((button) =>
+            button.setAttribute(
+              "aria-selected",
+              String(button.dataset.side === activeSide),
+            ),
+          );
+        $("sov-content").setAttribute(
+          "aria-labelledby",
+          activeSide === "A" ? "side-a" : "side-b",
+        );
+        const photo = content.empty
+          ? "../assets/img/sov/empty.png"
+          : content.photos[activePhoto];
+        $("sov-photo").src = photo;
+        $("sov-photo").alt = item.code + activeSide;
+        $("sov-photo-link").href = photo;
+        $("sov-updated").textContent = content.updated;
+        $("sov-by").textContent = content.by;
+        $("info-brand").textContent = content.brand;
+        $("sov-message").textContent = content.message;
+        $("sov-advertising").hidden = content.empty;
+        $("sov-empty").hidden = !content.empty;
+        $("sov-owner").hidden = !content.empty;
+        $("sov-code").textContent = item.code;
+        $("info-type").textContent = item.type;
+        $("sov-road-side").textContent = activeSide === "A" ? "Left" : "Right";
+        $("sov-road").textContent = item.address;
+        ["photo-prev", "photo-next", "photo-index"].forEach(
+          (id) => ($(id).hidden = content.empty || content.photos.length < 2),
+        );
+        $("photo-index").textContent =
+          activePhoto + 1 + " / " + content.photos.length;
+      }
+      function positionInfo() {
+        const marker = [...document.querySelectorAll("#markers .marker")].find(
+          (m) =>
+            m.getAttribute("aria-label") ===
+            placements.find((p) => p.id === state.selected)?.code,
+        );
+        const rect = marker?.getBoundingClientRect();
+        const panel = $("info");
+        panel.style.left =
+          Math.max(
+            12,
+            Math.min(
+              (rect ? rect.left + rect.width / 2 : innerWidth / 2) - 128,
+              innerWidth - 269,
+            ),
+          ) + "px";
+        panel.style.top =
+          Math.max(
+            12,
+            Math.min(
+              (rect ? rect.top : innerHeight / 2) - panel.offsetHeight - 12,
+              innerHeight - panel.offsetHeight - 12,
+            ),
+          ) + "px";
+      }
+      const openInfo = (item) => {
+        state.selected = item.id;
+        activeSide = "A";
+        activePhoto = 0;
+        render();
+        renderInfo();
+        $("info").hidden = false;
+        document.querySelector(".sov-details").scrollTop = 0;
+        positionInfo();
+      };
+      document.querySelectorAll("[data-side]").forEach(
+        (button) =>
+          (button.onclick = () => {
+            activeSide = button.dataset.side;
+            activePhoto = 0;
+            renderInfo();
+            document.querySelector(".sov-details").scrollTop = 0;
+          }),
+      );
+      ["photo-prev", "photo-next"].forEach(
+        (id, index) =>
+          ($(id).onclick = () => {
+            const content = contentFor(
+              placements.find((p) => p.id === state.selected),
+            );
+            activePhoto =
+              (activePhoto + (index ? 1 : -1) + content.photos.length) %
+              content.photos.length;
+            renderInfo();
+          }),
+      );
+      function showContentAction(title, message) {
+        $("sov-dialog-title").textContent = title;
+        $("sov-dialog-text").textContent = message;
+        $("sov-dialog").showModal();
+      }
+      $("sov-history").onclick = () => {
+        const content = contentFor(
+          placements.find((p) => p.id === state.selected),
+        );
+        showContentAction(
+          "Content History — Side " + activeSide,
+          content.updated + " · " + content.brand + "\n" + content.message,
+        );
+      };
+      $("reuse-content").onclick = () =>
+        showContentAction(
+          "Reuse Content — Side " + activeSide,
+          "Content reuse is not available in this static preview yet.",
+        );
+      window.addEventListener("resize", () => {
+        if (!$("info").hidden) positionInfo();
+      });
+      document.querySelectorAll("[data-expand]").forEach(
+        (button) =>
+          (button.onclick = () => {
+            const body = $(button.dataset.expand + "-body");
+            body.hidden = !body.hidden;
+            button.lastElementChild.textContent = body.hidden ? "⌄" : "⌃";
+          }),
+      );
+      $("city-search").oninput = render;
+      $("brand-search").oninput = render;
+      $("code-toggle").onclick = () => {
+        $("code-search").hidden = !$("code-search").hidden;
+        document
+          .querySelector(".panel")
+          .classList.toggle("searching", !$("code-search").hidden);
+        $("code-toggle").setAttribute(
+          "aria-expanded",
+          String(!$("code-search").hidden),
+        );
+        $("code-toggle").setAttribute(
+          "aria-label",
+          $("code-search").hidden ? "Show Type a code" : "Hide Type a code",
+        );
+        if (!$("code-search").hidden) $("code-input").focus();
+      };
+      $("code-input").onkeydown = (event) => {
+        if (event.key === "Enter") {
+          const found = placements.find(
+            (item) =>
+              item.code.toLowerCase() ===
+              event.target.value.trim().toLowerCase(),
+          );
+          if (found) openInfo(found);
+          else toast("Placement code was not found.");
+        }
+      };
+      document.querySelectorAll("[data-clear]").forEach(
+        (button) =>
+          (button.onclick = () => {
+            state[button.dataset.clear] = [];
+            render();
+          }),
+      );
+      document
+        .querySelectorAll("[data-apply]")
+        .forEach(
+          (button) =>
+            (button.onclick = () =>
+              toast("" + button.dataset.apply + " filter applied.")),
+        );
+      $("info-close").onclick = () => {
+        state.selected = null;
+        $("info").hidden = true;
+        render();
+      };
+      $("info-action").onclick = () => {
+        window.location.href =
+          "EditPlacement/Content.html?id=" +
+          encodeURIComponent(state.selected) +
+          "&side=" +
+          encodeURIComponent(activeSide);
+      };
+      $("toggle-side").onclick = $("close-side").onclick = () => {
+        const nav = $("map-nav");
+        nav.classList.toggle("closed");
+        $("toggle-side").textContent = nav.classList.contains("closed")
+          ? "☰"
+          : "×";
+      };
+      $("actions-toggle").onclick = () => {
+        $("action-box").hidden = !$("action-box").hidden;
+        $("actions-toggle").setAttribute(
+          "aria-expanded",
+          String(!$("action-box").hidden),
+        );
+      };
+      document
+        .querySelectorAll("[data-action]")
+        .forEach(
+          (row) =>
+            (row.onclick = () =>
+              toast(
+                row.dataset.action + " is not available in this preview yet.",
+              )),
+        );
+      document.querySelector('[data-action="Create Placement"]').onclick =
+        () => {
+          location.href = "AddSov/PlacementCreation.html";
+        };
+      document.querySelector('[data-action="Switch IM SOV"]').onclick = () => {
+        location.href = "../SwitchBillboardSOV.html";
+      };
+      document.querySelector(
+        '[data-action="Download Placement Queue"]',
+      ).onclick = () => {
+        location.href = "../DownloadPlacement.html?from=sov";
+      };
+      document.querySelector('[data-action="View Placement images"]').onclick =
+        () => {
+          location.href = "../Utility/SearchImageMobile.html";
+        };
+      $("reload").onclick = () => {
+        state.selected = null;
+        $("info").hidden = true;
+        render();
+        toast("Map data refreshed.");
+      };
+      $("zoom-in").onclick = () => {
+        state.zoom = Math.min(1.35, state.zoom + 0.1);
+        $("map").style.transform = "scale(" + state.zoom + ")";
+      };
+      $("zoom-out").onclick = () => {
+        state.zoom = Math.max(0.8, state.zoom - 0.1);
+        $("map").style.transform = "scale(" + state.zoom + ")";
+      };
+      $("reset").onclick = () => {
+        state.zoom = 1;
+        $("map").style.transform = "";
+      };
+      document.querySelectorAll('[name="history"]').forEach(
+        (input) =>
+          (input.onchange = () => {
+            state.history =
+              document.querySelector('[name="history"]:checked')?.value ||
+              "All";
+            $("history-selection").textContent = state.history;
+            render();
+          }),
+      );
+      $("code-input").addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          $("code-toggle").click();
+          $("code-toggle").focus();
+        }
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !$("action-box").hidden)
+          $("actions-toggle").click();
+      });
+
+      const mediaNames = [
+        "Billboard",
+        "Videotron",
+        "Baliho",
+        "Bando",
+        "JPO",
+        "Street Furniture Digital",
+        "Street Furniture Static",
+        "Videotron SF",
+        "Billboard SF",
+        "LED Banner",
+        "Static Banner",
+      ];
+      const mediaColors = [
+        "#ff2d55",
+        "#e600ec",
+        "#08a12b",
+        "#127ac5",
+        "#ff9500",
+        "#733ce0",
+        "#45c8c8",
+        "#fe648d",
+        "#88aa44",
+        "#744a22",
+        "#888",
+      ];
+      const routeNames = [
+        "Daanmogot - Artha Gading - Antasari - Fatmawati",
+        "Grogol - Kokas - Pondok Kopi",
+        "Gunung saharai - HIB - Pemuda - Condet",
+        "Kalimalang",
+        "Tol dalam kota - Tol Lingkar luar - Tol Bandara",
+        "Jakarta - Bekasi",
+        "Jakarta - Tangerang",
+        "Depok - Bogor",
+        "Sudirman - Thamrin",
+        "Semanggi - Cawang",
+        "Airport Route",
+      ];
+      state.type = [...mediaNames];
+      state.routes = [...routeNames];
+      let draftTypes = [...mediaNames],
+        draftRoutes = [...routeNames];
+      function filterRows(target, names, draft, colors) {
+        $(target).replaceChildren(
+          ...names.map((name) => {
+            const label = document.createElement("label");
+            label.className = "filter-check";
+            const input = document.createElement("input");
+            input.type = "checkbox";
+            input.checked = draft.includes(name);
+            input.onchange = () => {
+              if (input.checked) draft.push(name);
+              else draft.splice(draft.indexOf(name), 1);
+            };
+            const text = document.createElement("span");
+            text.textContent = name;
+            label.append(input, text);
+            if (colors) {
+              const dot = document.createElement("span");
+              dot.className = "dot";
+              dot.style.background = mediaColors[mediaNames.indexOf(name)];
+              label.append(dot);
+            }
+            return label;
+          }),
+        );
+      }
+      function renderMediaFilters() {
+        filterRows("type-list", mediaNames, draftTypes, true);
+        $("type-list").classList.add("filter-list");
+      }
+      document.querySelector('[data-clear="type"]').onclick = () => {
+        draftTypes = [];
+        renderMediaFilters();
+      };
+      document.querySelector('[data-apply="type"]').onclick = () => {
+        state.type = [...draftTypes];
+        render();
+      };
+      $("route-body").innerHTML =
+        '<div class="filter-search"><input id="route-search" placeholder="Search Route"></div><div id="route-list" class="filter-list"></div><div class="filter-footer"><button id="route-clear">Clear All</button><button id="route-apply" class="apply">Apply</button></div>';
+      function renderRoutes() {
+        filterRows(
+          "route-list",
+          routeNames.filter((n) =>
+            n.toLowerCase().includes($("route-search").value.toLowerCase()),
+          ),
+          draftRoutes,
+          false,
+        );
+      }
+      $("route-search").oninput = renderRoutes;
+      $("route-clear").onclick = () => {
+        draftRoutes = [];
+        renderRoutes();
+      };
+      $("route-apply").onclick = () => {
+        state.routes = [...draftRoutes];
+        $("route-selection").textContent = state.routes.length + " selected";
+        render();
+      };
+      $("route-selection").textContent = "11 selected";
+      renderRoutes();
+      function openPanel(id) {
+        $("action-box").hidden = true;
+        $("actions-toggle").setAttribute("aria-expanded", "false");
+        $(id).showModal();
+      }
+      document
+        .querySelectorAll("[data-close-panel]")
+        .forEach((b) => (b.onclick = () => b.closest("dialog").close()));
+      $("more-filter").onclick = () => openPanel("more-panel");
+      $("occupancy-clear").onclick = () => {
+        $("occupancy-min").value = $("occupancy-max").value = "";
+        $("panel-error").textContent = "";
+        state.occupancyMin = state.occupancyMax = null;
+        render();
+      };
+      $("occupancy-apply").onclick = () => {
+        const min = $("occupancy-min").value,
+          max = $("occupancy-max").value;
+        if (
+          (min !== "" && (Number(min) < 0 || Number(min) > 100)) ||
+          (max !== "" && (Number(max) < 0 || Number(max) > 100))
+        ) {
+          $("panel-error").textContent = "Occupancy must be between 0 and 100.";
+          return;
+        }
+        if (min !== "" && max !== "" && Number(min) > Number(max)) {
+          $("panel-error").textContent =
+            "* Maximum occupancy can not lower than minimum occupancy";
+          return;
+        }
+        state.occupancyMin = min === "" ? null : Number(min);
+        state.occupancyMax = max === "" ? null : Number(max);
+        $("panel-error").textContent = "";
+        $("more-panel").close();
+        render();
+      };
+      document.querySelector('[data-action="Download Placement"]').onclick =
+        () => openPanel("download-panel");
+      [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ].forEach((m) => $("download-month").add(new Option(m)));
+      ["Select All", ...mediaNames].forEach((name) => {
+        const label = document.createElement("label"),
+          input = document.createElement("input");
+        input.type = "checkbox";
+        input.value = name;
+        label.append(input, document.createTextNode(name));
+        $("download-types").append(label);
+        input.onchange = () => {
+          const boxes = [...$("download-types").querySelectorAll("input")];
+          if (name === "Select All")
+            boxes.forEach((b) => (b.checked = input.checked));
+          else boxes[0].checked = boxes.slice(1).every((b) => b.checked);
+        };
+      });
+      $("download-scope").onchange = () =>
+        ($("download-media").hidden =
+          $("download-scope").value !== "Selected Placement");
+      $("download-submit").onclick = () => {
+        if (
+          !$("download-media").hidden &&
+          !$("download-types").querySelector("input:checked")
+        ) {
+          $("download-error").textContent = "Please select a media type.";
+          return;
+        }
+        $("download-error").textContent = "";
+        const a = document.createElement("a");
+        a.href = "../assets/data/placement-demo.xlsx";
+        a.download =
+          "SOV_placement_" +
+          $("download-city").value +
+          "_" +
+          $("download-year").value +
+          ".xlsx";
+        a.click();
+        $("download-panel").close();
+        toast("Sample placement downloaded.");
+      };
+      let uploadFile = null;
+      function acceptBrandFile(files) {
+        if (
+          files.length !== 1 ||
+          !files[0].name.toLowerCase().endsWith(".xlsx")
+        ) {
+          $("upload-status").textContent = "Choose one .xlsx file.";
+          return;
+        }
+        uploadFile = files[0];
+        $("brand-filename").textContent = uploadFile.name;
+        $("brand-uploaded").hidden = false;
+        $("upload-status").textContent = "";
+      }
+      ["Upload Brand & Industry", "Bulk Edit Brand & Industry"].forEach(
+        (name) => {
+          document.querySelector('[data-action="' + name + '"]').onclick =
+            () => {
+              $("upload-title").textContent = name;
+              $("brand-submit").textContent = name.startsWith("Bulk")
+                ? "Update Brand & Industry"
+                : name;
+              openPanel("upload-panel");
+            };
+        },
+      );
+      $("brand-file").onchange = (e) => acceptBrandFile(e.target.files);
+      $("brand-drop").onkeydown = (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          $("brand-file").click();
+        }
+      };
+      $("brand-drop").ondragover = (e) => {
+        e.preventDefault();
+        $("brand-drop").classList.add("dragging");
+      };
+      $("brand-drop").ondragleave = () =>
+        $("brand-drop").classList.remove("dragging");
+      $("brand-drop").ondrop = (e) => {
+        e.preventDefault();
+        $("brand-drop").classList.remove("dragging");
+        acceptBrandFile(e.dataTransfer.files);
+      };
+      $("brand-remove").onclick = () => {
+        uploadFile = null;
+        $("brand-file").value = "";
+        $("brand-uploaded").hidden = true;
+        $("upload-status").textContent = "";
+      };
+      $("brand-submit").onclick = () => {
+        if (!uploadFile) return;
+        $("upload-status").textContent =
+          "Preview complete. File contents were not imported; demo data is unchanged.";
+      };
+      render();
+    </script>
+  </body>
+</html>

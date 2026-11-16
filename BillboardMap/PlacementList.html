@@ -1,0 +1,2396 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Placement List — Metrics by ADX</title>
+    <style>
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-35light-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-35light-webfont.woff")
+            format("woff");
+        font-weight: 300;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-45regular-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-45regular-webfont.woff")
+            format("woff");
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-65bold-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-65bold-webfont.woff")
+            format("woff");
+        font-weight: 700;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-75extrabold-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-75extrabold-webfont.woff")
+            format("woff");
+        font-weight: 900;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Adxfont";
+        src: url("../assets/fonts/icons/Adxfont.eot?tefm31");
+        src:
+          url("../assets/fonts/icons/Adxfont.eot?tefm31#iefix")
+            format("embedded-opentype"),
+          url("../assets/fonts/icons/Adxfont.ttf?tefm31") format("truetype"),
+          url("../assets/fonts/icons/Adxfont.woff?tefm31") format("woff"),
+          url("../assets/fonts/icons/Adxfont.svg?tefm31#Adxfont") format("svg");
+        font-weight: normal;
+        font-style: normal;
+      }
+      /* Compiled from PlacementList/index.scss */
+      * {
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+      }
+
+      header {
+        display: flex;
+        height: 10vh;
+        margin: auto;
+        align-items: center;
+      }
+
+      .main-container {
+        margin: 36px 48px;
+      }
+      .main-container .update-modal .subTitle {
+        font-size: 13px;
+      }
+      .main-container .update-modal .subTitle.updateWarning {
+        font-size: 14px;
+      }
+      .main-container .update-modal .btn-group {
+        margin-top: 24px;
+      }
+      .main-container .update-modal .btn-group .update-btn {
+        float: right;
+      }
+
+      .text-back {
+        margin: 8px;
+        color: #ff2d55;
+        cursor: pointer;
+      }
+
+      .icon-back {
+        cursor: pointer;
+      }
+
+      .wrapper__header-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .wrapper__title {
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .wrapper__action-buttons {
+        display: flex;
+        align-items: center;
+        color: #ff2d55;
+        font-weight: bold;
+        font-size: 16px;
+        margin-top: 24px;
+      }
+      .wrapper__action-buttons .action-btn-item {
+        padding: 4px 12px;
+        cursor: pointer;
+      }
+      .wrapper__action-buttons .action-btn-item:last-child {
+        border-right: none;
+        padding-right: 0;
+      }
+      .wrapper__action-buttons .action-btn-item:first-child {
+        padding-left: 0;
+      }
+      .wrapper__action-buttons .action-btn-item p {
+        margin: 0;
+      }
+      .wrapper .sort-search-report {
+        margin-top: 28px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .wrapper .sort-search-report .btn-search-style {
+        padding: 0 16px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 8px;
+      }
+      .wrapper .sort-search-report__search {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      .wrapper .sort-search-report__left {
+        display: flex;
+        border: 1px solid #e5e5ea;
+        border-radius: 8px;
+        padding: 0 16px;
+        height: 42px;
+        width: 300px;
+        background: white;
+      }
+      .wrapper .sort-search-report__left i {
+        align-self: center;
+        margin-right: 8px;
+      }
+      .wrapper .sort-search-report__left input {
+        border: 0;
+        margin-left: 16px;
+        height: 100%;
+        width: 100%;
+        outline: none;
+      }
+      .wrapper .table {
+        width: 100%;
+        margin-top: 14px;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+      }
+      .wrapper .table thead {
+        background-color: #facdd6;
+      }
+      .wrapper .table thead tr {
+        height: 40px;
+      }
+      .wrapper .table thead th {
+        text-align: left;
+        padding: 16px 24px;
+      }
+      .wrapper .table tbody tr {
+        background-color: #ffffff;
+        cursor: pointer;
+      }
+      .wrapper .table tbody tr:last-child {
+        border-bottom: none;
+      }
+      .wrapper .table tbody td {
+        padding: 4px 24px;
+        text-align: left;
+      }
+      .wrapper .empty-queue {
+        height: 60vh;
+        font-size: 48px;
+        font-weight: bold;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .wrapper hr {
+        margin: 24px 0;
+        border: 0.5px solid #ff2d55;
+      }
+      @keyframes typing-dot {
+        0%,
+        60%,
+        100% {
+          transform: translateY(0);
+          opacity: 0.4;
+        }
+        30% {
+          transform: translateY(-4px);
+          opacity: 1;
+        }
+      }
+      .table-responsive {
+        overflow-x: auto;
+        width: 100%;
+      }
+
+      .custom-flat-table {
+        width: 100%;
+        white-space: nowrap;
+      }
+      .custom-flat-table th,
+      .custom-flat-table td {
+        padding: 12px 16px;
+        border-bottom: 1px solid #e5e5ea;
+        vertical-align: middle;
+        height: 48px;
+      }
+      .custom-flat-table .editable-cell {
+        position: relative;
+        cursor: cell;
+      }
+      .custom-flat-table .editable-cell:hover {
+        outline: 1px solid #ff2d55;
+        background-color: #fffafb !important;
+      }
+      .custom-flat-table .inline-input {
+        width: 100%;
+        height: 100%;
+        padding: 4px 8px;
+        border: 1px solid #007aff;
+        border-radius: 4px;
+        font-size: 13px;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
+        background-color: white;
+        font-family: inherit;
+      }
+      .custom-flat-table .inline-input::-webkit-outer-spin-button,
+      .custom-flat-table .inline-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      .custom-flat-table .status-pill {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: bold;
+      }
+      .custom-flat-table .status-pill.empty {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+      }
+      .custom-flat-table .status-pill.occupied {
+        background-color: #ffebee;
+        color: #c62828;
+      }
+
+      /* Toolbar Edit Mode */
+      .edit-toolbar-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #fffafb;
+        border: 1px solid #ffccd5;
+        border-left: 4px solid #ff2d55;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-top: 16px;
+        margin-bottom: 16px;
+      }
+      .edit-toolbar-container .edit-toolbar-left .edit-toolbar-label {
+        font-size: 14px;
+        color: #333;
+        display: flex;
+        align-items: center;
+      }
+      .edit-toolbar-container .edit-toolbar-left .edit-toolbar-label i {
+        color: #ff2d55;
+        font-size: 18px;
+      }
+      .edit-toolbar-container .edit-toolbar-left .edit-toolbar-label strong {
+        color: #ff2d55;
+        margin: 0 4px;
+      }
+      .edit-toolbar-container .edit-toolbar-right {
+        display: flex;
+        align-items: center;
+      }
+      .edit-toolbar-container .edit-toolbar-right .btn-regular {
+        padding: 0 20px;
+        height: 36px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 13px;
+      }
+
+      /* Modal Confirm Bulk Edit */
+      .confirm-changes-wrapper {
+        padding: 10px;
+      }
+      .confirm-changes-wrapper .no-changes-text {
+        font-size: 16px;
+        text-align: center;
+        color: #878787;
+        margin: 40px 0;
+      }
+      .confirm-changes-wrapper .summary-text {
+        font-size: 14px;
+        margin-bottom: 12px;
+        color: #333;
+      }
+      .confirm-changes-wrapper .changes-list {
+        margin: 16px 0;
+      }
+      .confirm-changes-wrapper .modal-table-container {
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid #e5e5ea;
+      }
+      .confirm-changes-wrapper .modal-table-container::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      .confirm-changes-wrapper .modal-table-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      .confirm-changes-wrapper .modal-table-container::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 4px;
+      }
+      .confirm-changes-wrapper
+        .modal-table-container::-webkit-scrollbar-thumb:hover {
+        background: #999;
+      }
+      .confirm-changes-wrapper .summary-table {
+        margin-top: 0 !important;
+        border-spacing: 0 !important;
+      }
+      .confirm-changes-wrapper .summary-table th {
+        background-color: #facdd6 !important;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 2px solid #e5e5ea;
+      }
+      .confirm-changes-wrapper .summary-table td {
+        padding: 10px 14px;
+        font-size: 12px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f0f0f0;
+      }
+      .confirm-changes-wrapper .summary-table .highlight-change {
+        background-color: #f0fdf4 !important;
+        border-bottom: 1px solid #c8e6c9 !important;
+      }
+      .confirm-changes-wrapper .summary-table .change-data {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .confirm-changes-wrapper .summary-table .change-data .old-val {
+        text-decoration: line-through;
+        color: #9e9e9e;
+      }
+      .confirm-changes-wrapper .summary-table .change-data i {
+        font-size: 10px;
+        color: #4caf50;
+      }
+      .confirm-changes-wrapper .summary-table .change-data .new-val {
+        color: #1b5e20;
+        font-weight: 600;
+      }
+      .confirm-changes-wrapper .action-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid #e5e5ea;
+      }
+
+      /* Filter Tag UI */
+      .active-filters-container {
+        display: flex;
+        align-items: center;
+        background-color: #fcfcfd;
+        border: 1px solid #e5e5ea;
+        border-radius: 8px;
+        padding: 8px 16px;
+        margin-top: 16px;
+        margin-bottom: 16px;
+      }
+      .active-filters-container .active-filters-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: #878787;
+        margin-right: 12px;
+        white-space: nowrap;
+      }
+      .active-filters-container .filters-scroll-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        flex: 1;
+      }
+      .active-filters-container .filter-chip {
+        display: inline-flex;
+        align-items: center;
+        background-color: #ffeef1;
+        border: 1px solid #ffccd5;
+        border-radius: 16px;
+        padding: 4px 10px;
+        font-size: 12px;
+        color: #ff2d55;
+      }
+      .active-filters-container .filter-chip .chip-field {
+        font-weight: 600;
+      }
+      .active-filters-container .filter-chip .chip-operator {
+        margin: 0 4px;
+        color: #878787;
+        font-style: italic;
+      }
+      .active-filters-container .filter-chip .chip-value {
+        font-weight: bold;
+        color: #333;
+      }
+      .active-filters-container .filter-chip .chip-close {
+        margin-left: 8px;
+        font-size: 10px;
+        cursor: pointer;
+        color: #ff2d55;
+        padding: 2px;
+        border-radius: 50%;
+        transition: background-color 0.2s;
+      }
+      .active-filters-container .filter-chip .chip-close:hover {
+        background-color: #ff2d55;
+        color: #fff;
+      }
+      .active-filters-container .btn-clear-all {
+        background: none;
+        border: none;
+        color: #878787;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-left: 12px;
+        white-space: nowrap;
+      }
+      .active-filters-container .btn-clear-all:hover {
+        color: #ff2d55;
+        text-decoration: underline;
+      }
+
+      .filter-active {
+        background-color: #ff2d55 !important;
+        color: white !important;
+        border-color: #ff2d55 !important;
+      }
+      body {
+        font:
+          14px "Core Sans C",
+          system-ui;
+        background: #fff;
+        color: #262626;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      button,
+      a {
+        cursor: pointer;
+      }
+      button {
+        padding: 10px 14px;
+        border: 1px solid #e5e5ea;
+        background: white;
+        border-radius: 6px;
+        color: #262626;
+      }
+      button:hover {
+        background: #f5f5fa;
+      }
+      button:disabled {
+        opacity: 0.45;
+        cursor: default;
+      }
+      a {
+        color: #ff2d55;
+        text-decoration: none;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      summary:focus-visible,
+      [tabindex]:focus-visible {
+        outline: 3px solid #007aff;
+        outline-offset: 2px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .primary {
+        background: #ff2d55;
+        color: white;
+        border-color: #ff2d55;
+      }
+      .primary:hover {
+        background: #d92449;
+      }
+      .back {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .back span {
+        font-size: 24px;
+      }
+      .wrapper__action-buttons {
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+      .wrapper__action-buttons button {
+        border: 0;
+        color: #ff2d55;
+        font-weight: bold;
+        padding: 4px 12px;
+      }
+      .wrapper__action-buttons button:first-child {
+        padding-left: 0;
+      }
+      h1.wrapper__title {
+        font-size: 18px;
+      }
+      .toolbar {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: center;
+        margin: 28px 0 16px;
+        flex-wrap: wrap;
+      }
+      .search-form {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      input,
+      select,
+      textarea {
+        padding: 10px;
+        border: 1px solid #d5d5da;
+        border-radius: 4px;
+        color: #262626;
+        background: white;
+      }
+      .search-form input {
+        width: 300px;
+        max-width: 100%;
+      }
+      .edit-toolbar-container {
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .table-responsive {
+        max-height: 65vh;
+        border: 1px solid #e5e5ea;
+        margin-top: 16px;
+      }
+      .wrapper .table.custom-flat-table {
+        margin: 0;
+        border-spacing: 0;
+        min-width: 800px;
+      }
+      .wrapper .table th {
+        font-size: 12px;
+        padding: 12px 16px;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background: #facdd6;
+        white-space: nowrap;
+      }
+      .wrapper .table td {
+        padding: 8px 16px;
+        height: 48px;
+        font-size: 12px;
+        min-width: 135px;
+      }
+      .table td:first-child,
+      .table th:first-child {
+        position: sticky;
+        left: 0;
+        background: #fff;
+        z-index: 1;
+      }
+      .table th:first-child {
+        z-index: 2;
+        background: #facdd6;
+      }
+      .cell {
+        border: 0;
+        padding: 4px 0;
+        text-align: left;
+        background: transparent;
+        font-size: 12px;
+        border-radius: 0;
+      }
+      .table td input {
+        width: 160px;
+        padding: 6px;
+        font-size: 12px;
+      }
+      .table td.changed {
+        background: #fff2f5;
+      }
+      .text-danger {
+        color: #d92449;
+      }
+      .pagination {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        margin-top: 18px;
+      }
+      .pagination button {
+        min-width: 36px;
+      }
+      .pagination button[aria-current] {
+        background: #ff2d55;
+        color: white;
+      }
+      .muted {
+        font-size: 12px;
+        color: #68686c;
+        line-height: 1.6;
+      }
+      .summary {
+        margin-top: 12px;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin: 10px 0;
+      }
+      .chip {
+        background: #ffeef1;
+        color: #a81f3c;
+        border-color: #ffccd5;
+        padding: 5px 10px;
+        font-size: 12px;
+      }
+      .empty {
+        padding: 60px 20px !important;
+        text-align: center !important;
+      }
+      dialog {
+        border: 0;
+        border-radius: 8px;
+        padding: 24px;
+        width: min(760px, calc(100% - 32px));
+        max-height: 85dvh;
+        overflow: auto;
+        color: #262626;
+      }
+      dialog::backdrop {
+        background: #0005;
+      }
+      .dialog-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+      .dialog-heading h2 {
+        font-size: 20px;
+      }
+      .close {
+        padding: 6px 12px;
+        font-size: 18px;
+      }
+      .dialog-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 20px;
+      }
+      .rule {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin: 10px 0;
+      }
+      .rule select,
+      .rule input {
+        min-width: 0;
+        flex: 1;
+      }
+      .rule button {
+        flex-shrink: 0;
+      }
+      .review {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 16px;
+      }
+      .review th,
+      .review td {
+        border: 1px solid #e5e5ea;
+        padding: 10px;
+        font-size: 12px;
+        text-align: left;
+        overflow-wrap: anywhere;
+      }
+      .review th {
+        background: #facdd6;
+      }
+      .review .old {
+        color: #777;
+        text-decoration: line-through;
+      }
+      .review .new {
+        color: #176b37;
+      }
+      .status {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 20px;
+        background: #262626;
+        color: white;
+        border-radius: 6px;
+        z-index: 10;
+        max-width: calc(100% - 32px);
+      }
+      .full-input {
+        width: 100%;
+        margin: 10px 0;
+      }
+      .error {
+        font-size: 13px;
+        color: #b6203e;
+        margin: 8px 0;
+      }
+      .review-scroll {
+        overflow: auto;
+        max-height: 45vh;
+      }
+      @media (max-width: 767px) {
+        .main-container {
+          margin: 16px;
+        }
+        header {
+          height: 55px;
+        }
+        .toolbar {
+          align-items: stretch;
+        }
+        .search-form {
+          width: 100%;
+        }
+        .search-form input {
+          width: 100%;
+          font-size: 16px;
+        }
+        .wrapper__action-buttons {
+          font-size: 13px;
+          margin-top: 16px;
+        }
+        .wrapper__action-buttons button {
+          font-size: 13px;
+          padding: 8px;
+        }
+        .rule {
+          flex-wrap: wrap;
+        }
+        .rule select,
+        .rule input {
+          flex: 1 1 40%;
+          font-size: 16px;
+        }
+        .edit-toolbar-right {
+          flex-wrap: wrap;
+        }
+        dialog {
+          padding: 18px;
+        }
+        .review th,
+        .review td {
+          min-width: 100px;
+        }
+        .pagination {
+          flex-wrap: wrap;
+        }
+      }
+
+      .wrapper__action-buttons button {
+        font-size: 16px;
+      }
+      .search-form {
+        position: relative;
+      }
+      .search-form:before {
+        content: "\e943";
+        font-family: Adxfont;
+        position: absolute;
+        left: 16px;
+        top: 10px;
+        font-size: 22px;
+        color: #777;
+      }
+      .search-form input {
+        padding-left: 40px;
+        background: white;
+        width: 310px;
+      }
+      .toolbar button {
+        min-height: 42px;
+      }
+      #edit-toggle:after {
+        content: " ✎";
+      }
+      #edit-toggle[aria-pressed="true"]:after {
+        content: " ×";
+      }
+      #edit-toolbar > span:before {
+        content: "✎";
+        color: #ff2d55;
+        margin-right: 12px;
+      }
+      #edit-toolbar strong {
+        color: #ff2d55;
+      }
+      dialog {
+        margin: auto;
+        background: #ffffffe0;
+        border: 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px #0003;
+        padding: 42px;
+      }
+      dialog::backdrop {
+        background: #ffffff70;
+      }
+      #filter-dialog,
+      #sort-dialog,
+      #review-dialog {
+        width: 80vw;
+        max-width: none;
+        height: 90vh;
+        max-height: 95vh;
+      }
+      .dialog-heading {
+        justify-content: flex-start;
+        gap: 0;
+        margin-bottom: 24px;
+      }
+      .dialog-heading .close {
+        order: -1;
+        border: 0;
+        padding: 0;
+        background: none;
+        color: black;
+        font-size: 24px;
+      }
+      .dialog-heading h2 {
+        font-size: 20px;
+      }
+      .query-head {
+        display: grid;
+        grid-template-columns: 35% 30% 30% 5%;
+        color: #878787;
+        font-weight: 600;
+        font-size: 13px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #e5e5ea;
+        margin-bottom: 8px;
+      }
+      .sort-head {
+        grid-template-columns: 45% 45% 10%;
+      }
+      #filter-rules,
+      #sort-rules {
+        max-height: 400px;
+        overflow: auto;
+      }
+      .rule {
+        display: grid !important;
+        grid-template-columns: 35% 30% 30% 5%;
+        gap: 0;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .rule select,
+      .rule input {
+        min-width: 0;
+        width: calc(100% - 8px);
+        height: 38px;
+        border: 1px solid #d5d5da;
+        border-radius: 6px;
+        padding: 0 12px;
+        font-size: 13px;
+      }
+      .rule select:disabled,
+      .rule input:disabled {
+        background: #f5f5f5;
+        color: #aaa;
+      }
+      .rule button {
+        border: 0;
+        background: none;
+        color: #ff2d55;
+        font-size: 20px;
+        padding: 4px;
+      }
+      .rule button:disabled {
+        color: #ccc;
+      }
+      .sort-rule {
+        grid-template-columns: 45% 45% 10%;
+      }
+      #filter-add,
+      #sort-add {
+        border: 0;
+        background: none;
+        color: #ff2d55;
+        font-size: 13px;
+        font-weight: 600;
+        margin-top: 8px;
+        padding: 8px 0;
+      }
+      #sort-add {
+        width: 94%;
+        border: 1px dashed #ff2d55;
+        border-radius: 4px;
+        text-align: center;
+      }
+      .dialog-actions {
+        border-top: 1px solid #e5e5ea;
+        padding-top: 16px;
+        margin-top: 32px;
+      }
+      .dialog-actions .primary:disabled {
+        opacity: 1;
+        background: #e5e5ea;
+        color: #999;
+        border-color: #e5e5ea;
+      }
+      .review th {
+        background: #f9ced7;
+        white-space: nowrap;
+        padding: 12px 16px;
+      }
+      .review td {
+        white-space: nowrap;
+        padding: 12px;
+      }
+      .review .changed {
+        background: #f0fff4;
+        color: #1b5e20;
+      }
+      .review .old {
+        color: #9e9e9e;
+        text-decoration: line-through;
+      }
+      .review .new {
+        color: #1b5e20;
+        font-weight: 600;
+      }
+      #review-count {
+        margin: 48px 0 12px;
+      }
+      .review-scroll {
+        border: 1px solid #e5e5ea;
+      }
+      #photo-dialog {
+        width: 590px;
+        max-width: calc(100vw - 24px);
+      }
+      #photo-dialog label[for="codes"] {
+        display: none;
+      }
+      #photo-dialog .full-input {
+        height: 56px;
+        font-size: 16px;
+        padding: 16px;
+        margin-bottom: 20px;
+      }
+      #photo-dialog .muted {
+        color: black;
+        line-height: 1.3;
+        font-size: 14px;
+      }
+      #photo-dialog .dialog-actions {
+        justify-content: space-between;
+        border: 0;
+        margin-top: 40px;
+      }
+      @media (max-width: 700px) {
+        #filter-dialog,
+        #sort-dialog,
+        #review-dialog {
+          width: 96vw;
+          padding: 18px;
+        }
+        .rule,
+        .sort-rule {
+          grid-template-columns: 1fr;
+          gap: 8px;
+        }
+        .rule select,
+        .rule input {
+          width: 100%;
+        }
+        .query-head {
+          display: none;
+        }
+        .rule button {
+          justify-self: end;
+        }
+        .search-form input {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+      <header>
+        <a class="back" id="back" href="BillboardMap.html"
+          ><span aria-hidden="true">←</span>Back</a
+        >
+      </header>
+      <main>
+        <div class="wrapper">
+          <div class="wrapper__header-container">
+            <h1 class="wrapper__title">Placement List</h1>
+            <div class="wrapper__action-buttons">
+              <button id="new-placement">+ New Placement</button
+              ><button id="bulk-create">Bulk Create</button
+              ><button id="bulk-edit">Bulk Edit</button
+              ><button id="photo-open">Update Photo(s)</button
+              ><button id="queue-open">Queue Update Photos</button>
+            </div>
+          </div>
+          <hr />
+          <aside id="placement-storage-notice" hidden style="margin:16px 0;padding:14px 16px;border:1px solid #f3d2da;border-radius:8px;background:#fff7fa;line-height:1.6">
+            <strong id="placement-storage-notice-name"></strong><p id="placement-storage-notice-info" style="margin:4px 0"></p>
+          </aside>
+          <div class="toolbar">
+            <form class="search-form" id="search-form">
+              <input
+                type="search"
+                id="search"
+                placeholder="Search Placement Code or SOV Code"
+                aria-label="Search Placement Code or SOV Code"
+              /><button class="primary">Search</button
+              ><button type="button" id="filter-open">Filter</button
+              ><button type="button" id="sort-open">Sort</button>
+            </form>
+            <button id="edit-toggle" class="primary" aria-pressed="false">
+              Edit on Table
+            </button>
+          </div>
+          <div id="edit-toolbar" class="edit-toolbar-container" hidden>
+            <span
+              >Edit Mode Active: <strong id="change-count">0</strong> unsaved
+              changes</span
+            >
+            <div class="edit-toolbar-right">
+              <button id="discard" disabled>Discard</button
+              ><button class="primary" id="review-open" disabled>
+                Review &amp; Save Changes
+              </button>
+            </div>
+          </div>
+          <div class="chips" id="filter-chips"></div>
+          <div class="chips" id="sort-chips"></div>
+          <div
+            class="table-responsive"
+            role="region"
+            aria-label="Placement table, scroll horizontally for all columns"
+            tabindex="0"
+          >
+            <table class="table custom-flat-table">
+              <thead>
+                <tr id="columns"></tr>
+              </thead>
+              <tbody id="rows"></tbody>
+            </table>
+          </div>
+          <nav class="pagination" id="pages" aria-label="Placement pages"></nav>
+          <p
+            class="muted summary"
+            id="summary"
+            role="status"
+            aria-live="polite"
+          ></p>
+        </div>
+      </main>
+    </div>
+    <dialog id="filter-dialog">
+      <form id="filter-form">
+        <div class="dialog-heading">
+          <h2>Filter</h2>
+          <button
+            type="button"
+            class="close"
+            data-close
+            aria-label="Close filters"
+          >
+            ×
+          </button>
+        </div>
+        <div class="query-head">
+          <span>Field</span><span>Operator</span><span>Value</span><span></span>
+        </div>
+        <div id="filter-rules"></div>
+        <button type="button" id="filter-add">+ Add More</button>
+        <div class="dialog-actions">
+          <button type="button" data-close>Cancel</button
+          ><button class="primary">Apply Filter</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="sort-dialog">
+      <form id="sort-form">
+        <div class="dialog-heading">
+          <h2>Sort</h2>
+          <button
+            type="button"
+            class="close"
+            data-close
+            aria-label="Close sort"
+          >
+            ×
+          </button>
+        </div>
+        <div class="query-head sort-head">
+          <span>Field</span><span>Order Direction</span><span></span>
+        </div>
+        <div id="sort-rules"></div>
+        <button type="button" id="sort-add">+ Add More</button>
+        <div class="dialog-actions">
+          <button type="button" data-close>Cancel</button
+          ><button class="primary">Apply Sort</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="review-dialog">
+      <div class="dialog-heading">
+        <h2>Confirm Changes</h2>
+        <button class="close" data-close aria-label="Close review">×</button>
+      </div>
+      <p id="review-count"></p>
+      <div class="review-scroll">
+        <table class="review">
+          <thead>
+            <tr>
+              <th>Placement</th>
+              <th>Field</th>
+              <th>Before</th>
+              <th>After</th>
+            </tr>
+          </thead>
+          <tbody id="review-rows"></tbody>
+        </table>
+      </div>
+      <p class="error" id="save-error" role="status"></p>
+      <div class="dialog-actions">
+        <button id="review-discard">Discard</button
+        ><button class="primary" id="save">Save Changes</button>
+      </div>
+    </dialog>
+    <dialog id="discard-dialog">
+      <div class="dialog-heading">
+        <h2>Discard unsaved changes?</h2>
+        <button
+          class="close"
+          data-close
+          aria-label="Close discard confirmation"
+        >
+          ×
+        </button>
+      </div>
+      <p>Your table edits will be removed.</p>
+      <div class="dialog-actions">
+        <button data-close>Keep Editing</button
+        ><button class="primary" id="confirm-discard">Discard</button>
+      </div>
+    </dialog>
+    <dialog id="photo-dialog">
+      <form id="photo-form">
+        <div class="dialog-heading">
+          <h2>Update Photo(s)</h2>
+          <button
+            type="button"
+            class="close"
+            data-close
+            aria-label="Close photo update"
+          >
+            ×
+          </button>
+        </div>
+        <label for="codes">Input Placement Code(s)</label
+        ><input
+          class="full-input"
+          id="codes"
+          required
+          placeholder="Input Placement Code(s)"
+        />
+        <p class="muted">
+          Notes:<br />• Kode harus sesuai dengan format placement code (Contoh:
+          JKT001)<br />• Gunakan koma sebagai pemisah untuk memasukan lebih dari
+          1 code<br />(Contoh: JKT001,JKT002,JKT003)
+        </p>
+        <p id="photo-error" class="error" role="status"></p>
+        <div class="dialog-actions">
+          <button type="button" data-close>Cancel</button
+          ><button class="primary" id="photo-submit">Update</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog id="notice-dialog">
+      <div class="dialog-heading">
+        <h2 id="notice-title"></h2>
+        <button class="close" data-close aria-label="Close notice">×</button>
+      </div>
+      <p class="muted" id="notice-text"></p>
+    </dialog>
+    <p id="status" class="status" role="status" hidden></p>
+    <script>
+      "use strict";
+      // Migrate legacy preview codes while preserving record IDs and other edits.
+      (() => {
+        const key = "metrics-preview-placement-records-v1";
+        const normalize = (value) =>
+          String(value || "")
+            .toUpperCase()
+            .replace(/^SOV-/, "")
+            .replace(/-/g, "");
+        try {
+          const rows = JSON.parse(sessionStorage.getItem(key) || "null");
+          const aliases = new Map();
+          if (Array.isArray(rows)) {
+            const cities = {
+              Jakarta: "JKT",
+              Tangerang: "TGR",
+              Bekasi: "BKS",
+              Depok: "DPK",
+              Bogor: "BGR",
+              Bandung: "BDG",
+              Surabaya: "SBY",
+              Aceh: "ACH",
+              Ambon: "AMB",
+            };
+            const used = new Set(
+              rows.map((r) => normalize(r["Placement Code"])),
+            );
+            rows.forEach((row) => {
+              const old = row["Placement Code"];
+              if (typeof old !== "string") return;
+              let code = normalize(old);
+              if (/^BULKDEMO/.test(code)) {
+                let number = Number(row.id) || 1;
+                const prefix = cities[row.City] || "JKT";
+                do {
+                  code = prefix + String(number++).padStart(3, "0");
+                } while (used.has(code));
+              }
+              used.add(code);
+              aliases.set(old, code);
+              row["Placement Code"] = code;
+              row["SOV Code"] = code;
+            });
+            sessionStorage.setItem(key, JSON.stringify(rows));
+          }
+          const queueKey = "metrics-preview-photo-queue-v1";
+          const queue = JSON.parse(sessionStorage.getItem(queueKey) || "null");
+          if (Array.isArray(queue)) {
+            queue.forEach((row) => {
+              if (typeof row.code === "string")
+                row.code = aliases.get(row.code) || normalize(row.code);
+            });
+            sessionStorage.setItem(queueKey, JSON.stringify(queue));
+          }
+        } catch {}
+      })();
+
+      const seed = {
+        headers: [
+          "Placement Code",
+          "SOV Code",
+          "Side",
+          "City",
+          "Media Owner",
+          "Owner Type",
+          "Media Type",
+          "Area",
+          "Address",
+          "Direction",
+          "Coordinate",
+          "Is it on Gmaps?",
+          "Road Type",
+          "Profile Audience",
+          "Profile Job",
+          "Surrounding",
+          "View",
+          "Traffic",
+          "Width (m)",
+          "Height (m)",
+          "Unit",
+          "Orientation",
+          "Lighting",
+          "Spot /day",
+          "Client Slot",
+          "Duration /slot",
+          "Resolution",
+          "Price Capital 1M (IDR)",
+          "Price Capital 3M (IDR)",
+          "Price Capital 6M (IDR)",
+          "Price Capital 12M (IDR)",
+          "Price 1M (IDR)",
+          "Price 3M (IDR)",
+          "Price 6M (IDR)",
+          "Price 12M (IDR)",
+          "Note",
+          "Already Updated?",
+          "Updated Date",
+          "Price Updated Date",
+          "Availability Date",
+          "Price Update Status",
+          "Region",
+          "Discount IM (%)",
+          "Price Tier",
+          "Operational Hour",
+          "MO Priority",
+          "Nielsen City",
+          "CAP Priority",
+          "Last Updated",
+        ],
+        placements: [
+          {
+            id: 1,
+            code: "JKT001",
+            name: "Sudirman",
+            city: "Jakarta",
+            type: "Billboard",
+            owner: "ADX Media",
+            surrounding: "Office",
+            x: 500,
+            y: 330,
+            lat: -6.208,
+            lng: 106.844,
+            width: 12,
+            height: 6,
+            price: 85000000,
+            traffic: 125000,
+            available: true,
+          },
+          {
+            id: 2,
+            code: "JKT002",
+            name: "Thamrin",
+            city: "Jakarta",
+            type: "Videotron",
+            owner: "Urban Media",
+            surrounding: "Shopping Mall",
+            x: 600,
+            y: 240,
+            lat: -6.194,
+            lng: 106.823,
+            width: 8,
+            height: 4,
+            price: 120000000,
+            traffic: 150000,
+            available: true,
+          },
+          {
+            id: 3,
+            code: "JKT003",
+            name: "Casablanca",
+            city: "Jakarta",
+            type: "Baliho",
+            owner: "ADX Media",
+            surrounding: "Shopping Mall",
+            x: 710,
+            y: 490,
+            lat: -6.224,
+            lng: 106.843,
+            width: 4,
+            height: 8,
+            price: 45000000,
+            traffic: 80000,
+            available: false,
+          },
+          {
+            id: 4,
+            code: "TGR001",
+            name: "Alam Sutera",
+            city: "Tangerang",
+            type: "Billboard",
+            owner: "Urban Media",
+            surrounding: "Residential",
+            x: 320,
+            y: 430,
+            lat: -6.245,
+            lng: 106.653,
+            width: 10,
+            height: 5,
+            price: 60000000,
+            traffic: 92000,
+            available: true,
+          },
+          {
+            id: 5,
+            code: "BKS001",
+            name: "Summarecon Bekasi",
+            city: "Bekasi",
+            type: "Videotron",
+            owner: "ADX Media",
+            surrounding: "Shopping Mall",
+            x: 920,
+            y: 350,
+            lat: -6.226,
+            lng: 107.001,
+            width: 6,
+            height: 3,
+            price: 72000000,
+            traffic: 98000,
+            available: true,
+          },
+          {
+            id: 6,
+            code: "DPK001",
+            name: "Margonda",
+            city: "Depok",
+            type: "Baliho",
+            owner: "City Outdoor",
+            surrounding: "Campus",
+            x: 610,
+            y: 650,
+            lat: -6.374,
+            lng: 106.833,
+            width: 4,
+            height: 8,
+            price: 35000000,
+            traffic: 75000,
+            available: true,
+          },
+          {
+            id: 7,
+            code: "BGR001",
+            name: "Pajajaran",
+            city: "Bogor",
+            type: "Billboard",
+            owner: "City Outdoor",
+            surrounding: "Residential",
+            x: 520,
+            y: 740,
+            lat: -6.595,
+            lng: 106.806,
+            width: 12,
+            height: 6,
+            price: 52000000,
+            traffic: 70000,
+            available: false,
+          },
+          {
+            id: 8,
+            code: "JKT004",
+            name: "Kelapa Gading",
+            city: "Jakarta",
+            type: "Billboard",
+            owner: "Urban Media",
+            surrounding: "Residential",
+            x: 820,
+            y: 210,
+            lat: -6.158,
+            lng: 106.905,
+            width: 10,
+            height: 5,
+            price: 95000000,
+            traffic: 110000,
+            available: true,
+          },
+        ],
+      };
+      const $ = (id) => document.getElementById(id),
+        headers = seed.headers;
+      const numeric = new Set(
+        headers.filter((h) =>
+          /Traffic|Width|Height|^Unit$|Price Capital|^Price \d|Discount|Duration/.test(
+            h,
+          ),
+        ),
+      );
+      const readonly = new Set([
+        "SOV Code",
+        "Coordinate",
+        "Last Updated",
+        "Updated Date",
+        "Price Updated Date",
+      ]);
+      let records = seed.placements.map((p) => {
+        const row = Object.fromEntries(headers.map((h) => [h, ""]));
+        Object.assign(row, {
+          id: p.id,
+          "Placement Code": p.code,
+          "SOV Code": p.code,
+          Side: "A",
+          City: p.city,
+          "Media Owner": p.owner,
+          "Owner Type": "Owner",
+          "Media Type": p.type,
+          Area: p.name,
+          Address: "Jl. " + p.name + ", " + p.city,
+          Direction: "North",
+          Coordinate: p.lat + ", " + p.lng,
+          "Is it on Gmaps?": "Yes",
+          "Road Type": "Main Road",
+          "Profile Audience": "Commuter",
+          "Profile Job": "Office Worker",
+          Surrounding: p.surrounding,
+          View: "Clear",
+          Traffic: p.traffic,
+          "Width (m)": p.width,
+          "Height (m)": p.height,
+          Unit: 1,
+          Orientation: p.width >= p.height ? "Landscape" : "Portrait",
+          Lighting: "Frontlit",
+          "Spot /day": "120",
+          "Client Slot": "6",
+          "Duration /slot": 15,
+          Resolution: "1920 × 1080",
+          Note: "Sample placement",
+          "Already Updated?": "Yes",
+          "Updated Date": "2026-09-01",
+          "Price Updated Date": "2026-09-01",
+          "Availability Date": p.available ? "2026-10-01" : "2027-01-01",
+          "Price Update Status": "Updated",
+          Region: "Jabodetabek",
+          "Discount IM (%)": 10,
+          "Price Tier": "AAA",
+          "Operational Hour": "06:00–24:00",
+          "MO Priority": "No",
+          "Nielsen City": "Yes",
+          "CAP Priority": "No",
+          "Last Updated": "2026-09-01 10:00",
+        });
+        [1, 3, 6, 12].forEach((m) => {
+          row["Price " + m + "M (IDR)"] = p.price * m;
+          row["Price Capital " + m + "M (IDR)"] = Math.round(p.price * m * 0.7);
+        });
+        return row;
+      });
+      // Shared demo records with EditPlacement, scoped to this browser tab.
+      try {
+        const stored = JSON.parse(
+          sessionStorage.getItem("metrics-preview-placement-records-v1"),
+        );
+        if (
+          Array.isArray(stored) &&
+          stored.every(
+            (r) =>
+              r &&
+              Number.isInteger(r.id) &&
+              typeof r["Placement Code"] === "string",
+          )
+        )
+          records = stored;
+      } catch {}
+      try {
+        const stored = sessionStorage.getItem("metrics-preview-placement-records-v1");
+        if (stored === null) sessionStorage.setItem("metrics-preview-placement-records-v1", JSON.stringify(records));
+        else {
+          const rows = JSON.parse(stored);
+          if (!Array.isArray(rows) || rows.some(r => !r || !Number.isInteger(r.id) || typeof r["Placement Code"] !== "string"))
+            throw Error("Invalid preview records");
+        }
+      } catch {
+        records = [];
+        $("placement-storage-notice").hidden = false;
+        $("placement-storage-notice-name").textContent = "Data placement preview tidak dapat digunakan.";
+        $("placement-storage-notice-info").textContent = "Data tersimpan tetap dipertahankan. Periksa data atau akses penyimpanan browser sebelum memperbarui placement.";
+        ["edit-toggle", "bulk-edit"].forEach(id => $(id).disabled = true);
+      }
+      const drafts = new Map();
+      let edit = false,
+        page = 1,
+        query = "",
+        filters = [],
+        sorts = [],
+        queue = [],
+        discardAction = null;
+      const pageSize = 5;
+      let timer;
+      function toast(text) {
+        $("status").textContent = text;
+        $("status").hidden = false;
+        clearTimeout(timer);
+        timer = setTimeout(() => ($("status").hidden = true), 4000);
+      }
+      document
+        .querySelectorAll("[data-close]")
+        .forEach((b) => (b.onclick = () => b.closest("dialog").close()));
+      function notice(title, text) {
+        $("notice-title").textContent = title;
+        $("notice-text").textContent = text;
+        $("notice-dialog").showModal();
+      }
+      document
+        .querySelectorAll("[data-pending]")
+        .forEach(
+          (b) =>
+            (b.onclick = () =>
+              notice(
+                b.dataset.pending,
+                "This page is not available in this preview yet.",
+              )),
+        );
+      function current(row) {
+        return drafts.get(row.id) || row;
+      }
+      function changes() {
+        return records.flatMap((r) => {
+          const d = drafts.get(r.id);
+          return d
+            ? headers
+                .filter((h) => d[h] !== r[h])
+                .map((h) => ({
+                  id: r.id,
+                  code: r["Placement Code"],
+                  field: h,
+                  before: r[h],
+                  after: d[h],
+                }))
+            : [];
+        });
+      }
+      function syncChanges() {
+        const count = new Set(changes().map((c) => c.id)).size;
+        $("change-count").textContent = count;
+        $("discard").disabled = $("review-open").disabled = !count;
+      }
+      function filtered() {
+        return records
+          .map(current)
+          .filter(
+            (r) =>
+              !query ||
+              String(r["Placement Code"]).toLowerCase().includes(query) ||
+              String(r["SOV Code"]).toLowerCase().includes(query),
+          )
+          .filter((r) =>
+            filters.every((f) => {
+              const value = String(r[f.field] ?? "").toLowerCase(),
+                test = f.value.toLowerCase();
+              const empty = value === "" || value === "-";
+              const left =
+                  fieldType(f.field) === "number" ? Number(value) : value,
+                right = fieldType(f.field) === "number" ? Number(test) : test;
+              return f.op === "contains"
+                ? value.includes(test)
+                : f.op === "equals"
+                  ? left === right
+                  : f.op === "greater than"
+                    ? left > right
+                    : f.op === "gte"
+                      ? left >= right
+                      : f.op === "less than"
+                        ? left < right
+                        : f.op === "lte"
+                          ? left <= right
+                          : f.op === "is not empty"
+                            ? !empty
+                            : empty;
+            }),
+          )
+          .sort((a, b) => {
+            for (const s of sorts) {
+              const n = numeric.has(s.field)
+                ? Number(a[s.field]) - Number(b[s.field])
+                : String(a[s.field]).localeCompare(String(b[s.field]));
+              if (n) return s.direction === "asc" ? n : -n;
+            }
+            return a.id - b.id;
+          });
+      }
+      function render() {
+        const list = filtered(),
+          max = Math.max(1, Math.ceil(list.length / pageSize));
+        page = Math.min(page, max);
+        $("rows").replaceChildren();
+        list.slice((page - 1) * pageSize, page * pageSize).forEach((r) => {
+          const tr = document.createElement("tr");
+          headers.forEach((h) => {
+            const td = document.createElement("td");
+            if (h === "SOV Code") td.className = "text-danger";
+            const original = records.find((x) => x.id === r.id);
+            td.classList.toggle("changed", r[h] !== original[h]);
+            if (edit && !readonly.has(h)) {
+              const input = document.createElement("input");
+              input.type = numeric.has(h) ? "number" : h === "Availability Date" ? "date" : "text";
+              input.value = r[h];
+              input.setAttribute("aria-label", r["Placement Code"] + " " + h);
+              input.dataset.id = r.id;
+              input.dataset.field = h;
+              if (numeric.has(h)) {
+                input.min = "0";
+                input.step = "any";
+              }
+              input.addEventListener("change", () => {
+                if (!input.checkValidity()) {
+                  input.reportValidity();
+                  return;
+                }
+                const value = numeric.has(h)
+                  ? input.value === ""
+                    ? ""
+                    : Number(input.value)
+                  : input.value.trim();
+                const draft = { ...current(original), [h]: value };
+                if (h === "Placement Code")
+                  draft["Placement Code"] = draft["SOV Code"] =
+                    value.toUpperCase();
+                drafts.set(r.id, draft);
+                td.classList.toggle("changed", value !== original[h]);
+                syncChanges();
+              });
+              input.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") input.blur();
+              });
+              td.append(input);
+            } else if (h === "Placement Code") {
+              const b = document.createElement("button");
+              b.className = "cell";
+              b.textContent = r[h];
+              b.onclick = () =>
+                confirmDiscard(() => {
+                  try {
+                    sessionStorage.setItem(
+                      "metrics-preview-placement-records-v1",
+                      JSON.stringify(records),
+                    );
+                  } catch {}
+                  location.assign(
+                    "EditPlacement.html?id=" + encodeURIComponent(r.id),
+                  );
+                });
+              td.append(b);
+            } else td.textContent = r[h] === "" ? "-" : r[h];
+            tr.append(td);
+          });
+          $("rows").append(tr);
+        });
+        if (!list.length) {
+          const tr = document.createElement("tr"),
+            td = document.createElement("td");
+          td.colSpan = headers.length;
+          td.className = "empty";
+          td.textContent =
+            "No placements found. Clear search or filters to try again.";
+          tr.append(td);
+          $("rows").append(tr);
+        }
+        $("pages").replaceChildren();
+        function add(label, n, disabled = false) {
+          const b = document.createElement("button");
+          b.textContent = label;
+          b.disabled = disabled;
+          b.setAttribute(
+            "aria-label",
+            label === "‹"
+              ? "Previous page"
+              : label === "›"
+                ? "Next page"
+                : "Page " + label,
+          );
+          if (label === String(page)) b.setAttribute("aria-current", "page");
+          b.onclick = () => {
+            page = n;
+            render();
+            $("pages").querySelector("[aria-current]")?.focus();
+          };
+          $("pages").append(b);
+        }
+        add("‹", page - 1, page === 1);
+        for (let n = 1; n <= max; n++) add(String(n), n);
+        add("›", page + 1, page === max);
+        $("pages").hidden = !list.length;
+        $("summary").textContent = list.length
+          ? "Showing " +
+            ((page - 1) * pageSize + 1) +
+            "–" +
+            Math.min(page * pageSize, list.length) +
+            " of " +
+            list.length +
+            " placements · " +
+            headers.length +
+            " columns"
+          : "0 placements";
+        $("edit-toolbar").hidden = !edit;
+        $("edit-toggle").textContent = edit
+          ? "Exit Edit Mode"
+          : "Edit on Table";
+        $("edit-toggle").setAttribute("aria-pressed", String(edit));
+        syncChanges();
+        renderChips();
+      }
+      headers.forEach((h) => {
+        const th = document.createElement("th");
+        th.scope = "col";
+        th.textContent = h;
+        $("columns").append(th);
+      });
+      $("search-form").onsubmit = (e) => {
+        e.preventDefault();
+        query = $("search").value.trim().toLowerCase();
+        page = 1;
+        render();
+      };
+      $("search").onsearch = () => {
+        if (!$("search").value) {
+          query = "";
+          page = 1;
+          render();
+        }
+      };
+      function confirmDiscard(action) {
+        if (changes().length) {
+          discardAction = action;
+          $("discard-dialog").showModal();
+        } else {
+          drafts.clear();
+          action();
+        }
+      }
+      $("edit-toggle").onclick = () => {
+        if (edit)
+          confirmDiscard(() => {
+            edit = false;
+            render();
+          });
+        else {
+          edit = true;
+          render();
+        }
+      };
+      $("discard").onclick = () => confirmDiscard(render);
+      $("confirm-discard").onclick = () => {
+        drafts.clear();
+        $("discard-dialog").close();
+        const action = discardAction;
+        discardAction = null;
+        action?.();
+      };
+      $("back").onclick = (e) => {
+        if (changes().length) {
+          e.preventDefault();
+          confirmDiscard(() => location.assign($("back").href));
+        }
+      };
+      window.addEventListener("beforeunload", (e) => {
+        if (changes().length) {
+          e.preventDefault();
+          e.returnValue = "";
+        }
+      });
+      $("review-open").onclick = () => {
+        $("save-error").textContent = "";
+        const changed = records.filter((r) =>
+          changes().some((c) => c.id === r.id),
+        );
+        $("review-count").textContent =
+          "You are about to update " + changed.length + " placement(s):";
+        const head = $("review-dialog").querySelector("thead tr");
+        head.replaceChildren(
+          ...headers.map((h) => {
+            const th = document.createElement("th");
+            th.textContent = h;
+            return th;
+          }),
+        );
+        $("review-rows").replaceChildren(
+          ...changed.map((r) => {
+            const tr = document.createElement("tr"),
+              draft = current(r);
+            headers.forEach((h) => {
+              const td = document.createElement("td");
+              if (draft[h] !== r[h]) {
+                td.className = "changed";
+                const old = document.createElement("span"),
+                  next = document.createElement("span");
+                old.className = "old";
+                old.textContent = r[h] || "-";
+                next.className = "new";
+                next.textContent = draft[h] || "-";
+                td.append(old, document.createTextNode(" → "), next);
+              } else td.textContent = r[h] || "-";
+              tr.append(td);
+            });
+            return tr;
+          }),
+        );
+        $("review-dialog").showModal();
+      };
+      $("save").onclick = () => {
+        const updated = records.map(current),
+          codes = updated.map((r) => r["Placement Code"].trim().toUpperCase());
+        if (
+          codes.some((c) => !/^[A-Z]{2,4}\d+[A-Z]?$/.test(c)) ||
+          new Set(codes).size !== codes.length
+        ) {
+          $("save-error").textContent =
+            "Use unique city codes such as JKT001 or JKT001A (no separators).";
+          return;
+        }
+        if (
+          updated.some((r) =>
+            [...numeric].some(
+              (h) =>
+                r[h] !== "" &&
+                (!Number.isFinite(Number(r[h])) || Number(r[h]) < 0),
+            ),
+          )
+        ) {
+          $("save-error").textContent =
+            "Numeric values must be zero or greater.";
+          return;
+        }
+        const nextRecords = updated.map((r) => ({ ...r }));
+        try {
+          sessionStorage.setItem("metrics-preview-placement-records-v1", JSON.stringify(nextRecords));
+        } catch {
+          $("save-error").textContent = "Penyimpanan gagal. Perubahan belum disimpan; silakan coba lagi.";
+          return;
+        }
+        records = nextRecords;
+        drafts.clear();
+        $("review-dialog").close();
+        render();
+        toast("Changes saved locally for this preview.");
+      };
+      const booleanFields = new Set([
+        "Is it on Gmaps?",
+        "Already Updated?",
+        "MO Priority",
+        "Nielsen City",
+        "CAP Priority",
+      ]);
+      const fieldType = (field) =>
+        numeric.has(field)
+          ? "number"
+          : booleanFields.has(field)
+            ? "boolean"
+            : /Date|Last Updated/.test(field)
+              ? "date"
+              : "text";
+      function validateRules(kind) {
+        const rules = [...$(kind + "-rules").children];
+        $(kind + "-form").querySelector("button.primary").disabled =
+          !rules.length ||
+          rules.some((r) => {
+            const selects = r.querySelectorAll("select");
+            return (
+              !selects[0].value ||
+              !selects[1].value ||
+              (kind === "filter" &&
+                !["is empty", "is not empty"].includes(selects[1].value) &&
+                !r.querySelector(".rule-value").value.trim())
+            );
+          });
+        rules.forEach((r) => (r.lastChild.disabled = rules.length === 1));
+      }
+      function makeRule(kind, initial = {}) {
+        const div = document.createElement("div");
+        div.className = "rule" + (kind === "sort" ? " sort-rule" : "");
+        const field = document.createElement("select");
+        field.setAttribute("aria-label", "Field");
+        field.add(new Option("Select Field", ""));
+        field.options[0].disabled = true;
+        headers.forEach((h) =>
+          field.add(
+            new Option(
+              h
+                .replace(/ \(m\)| \(IDR\)/g, "")
+                .replace("Spot /day", "Spot Per Day")
+                .replace("Client Slot", "Slot Per Day")
+                .replace("Duration /slot", "Duration"),
+              h,
+            ),
+          ),
+        );
+        field.value = initial.field || "";
+        const op = document.createElement("select");
+        op.setAttribute(
+          "aria-label",
+          kind === "filter" ? "Operator" : "Order Direction",
+        );
+        div.append(field, op);
+        let value;
+        if (kind === "filter") {
+          value = document.createElement("input");
+          value.className = "rule-value";
+          value.placeholder = "Input value...";
+          value.setAttribute("aria-label", "Value");
+          div.append(value);
+        }
+        function setOptions() {
+          const type = fieldType(field.value);
+          let options =
+            kind === "sort"
+              ? [
+                  [
+                    "asc",
+                    type === "number"
+                      ? "Small - Big"
+                      : type === "date"
+                        ? "Old - New"
+                        : type === "boolean"
+                          ? "Ascending"
+                          : "A - Z",
+                  ],
+                  [
+                    "desc",
+                    type === "number"
+                      ? "Big - Small"
+                      : type === "date"
+                        ? "New - Old"
+                        : type === "boolean"
+                          ? "Descending"
+                          : "Z - A",
+                  ],
+                ]
+              : [
+                  ["", "Select Operator"],
+                  ...(type === "text"
+                    ? [
+                        ["contains", "Contains"],
+                        ["equals", "Exact Match"],
+                      ]
+                    : type === "boolean"
+                      ? [["equals", "Is"]]
+                      : [
+                          ["equals", type === "date" ? "Exact Date" : "Equal"],
+                          [
+                            "greater than",
+                            type === "date" ? "After" : "Greater Than",
+                          ],
+                          [
+                            "gte",
+                            type === "date"
+                              ? "On or After"
+                              : "Greater Than Equal",
+                          ],
+                          [
+                            "less than",
+                            type === "date" ? "Before" : "Less Than",
+                          ],
+                          [
+                            "lte",
+                            type === "date"
+                              ? "On or Before"
+                              : "Less Than Equal",
+                          ],
+                        ]),
+                  ...(type === "boolean"
+                    ? []
+                    : [
+                        ["is empty", "Is Empty"],
+                        ["is not empty", "Is Not Empty"],
+                      ]),
+                ];
+          op.replaceChildren(...options.map(([v, l]) => new Option(l, v)));
+          op.disabled = !field.value;
+          if (kind === "filter") op.options[0].disabled = true;
+        }
+        function setValue() {
+          if (kind === "sort") return;
+          const type = fieldType(field.value),
+            old = value;
+          value = document.createElement(
+            type === "boolean" ? "select" : "input",
+          );
+          value.className = "rule-value";
+          value.setAttribute("aria-label", "Value");
+          if (type === "boolean") {
+            value.add(new Option("Yes", "Yes"));
+            value.add(new Option("No", "No"));
+          } else {
+            value.type =
+              type === "number" ? "number" : type === "date" ? "date" : "text";
+            value.placeholder = "Input value...";
+          }
+          value.disabled = ["is empty", "is not empty"].includes(op.value);
+          if (value.disabled && value.tagName === "INPUT")
+            value.placeholder = "-";
+          old.replaceWith(value);
+          value.oninput = () => validateRules(kind);
+        }
+        setOptions();
+        op.value =
+          initial.op || initial.direction || (kind === "sort" ? "asc" : "");
+        setValue();
+        if (value)
+          value.value =
+            initial.value ??
+            (fieldType(field.value) === "boolean" ? "Yes" : "");
+        field.onchange = () => {
+          setOptions();
+          setValue();
+          validateRules(kind);
+        };
+        op.onchange = () => {
+          setValue();
+          validateRules(kind);
+        };
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.textContent = "×";
+        remove.setAttribute("aria-label", "Remove rule");
+        remove.onclick = () => {
+          div.remove();
+          validateRules(kind);
+        };
+        div.append(remove);
+        return div;
+      }
+      ["filter", "sort"].forEach((kind) => {
+        $(kind + "-open").onclick = () => {
+          $(kind + "-rules").replaceChildren(
+            ...(kind === "filter" ? filters : sorts).map((r) =>
+              makeRule(kind, r),
+            ),
+          );
+          if (!$(kind + "-rules").children.length)
+            $(kind + "-rules").append(makeRule(kind));
+          validateRules(kind);
+          $(kind + "-dialog").showModal();
+        };
+        $(kind + "-add").onclick = () => {
+          $(kind + "-rules").append(makeRule(kind));
+          validateRules(kind);
+        };
+        $(kind + "-form").onsubmit = (e) => {
+          e.preventDefault();
+          validateRules(kind);
+          if ($(kind + "-form").querySelector("button.primary").disabled)
+            return;
+          const rules = [...$(kind + "-rules").children].map((div) => {
+            const selects = div.querySelectorAll("select");
+            return kind === "filter"
+              ? {
+                  field: selects[0].value,
+                  op: selects[1].value,
+                  value: div.querySelector(".rule-value").value.trim(),
+                }
+              : { field: selects[0].value, direction: selects[1].value };
+          });
+          if (kind === "filter") filters = rules;
+          else sorts = rules;
+          page = 1;
+          render();
+          $(kind + "-dialog").close();
+        };
+      });
+      function renderChips() {
+        ["filter", "sort"].forEach((kind) => {
+          const items = kind === "filter" ? filters : sorts,
+            container = $(kind + "-chips");
+          container.replaceChildren();
+          items.forEach((r, i) => {
+            const b = document.createElement("button");
+            b.className = "chip";
+            b.textContent =
+              r.field +
+              " " +
+              (r.op || r.direction) +
+              " " +
+              (r.value || "") +
+              " ×";
+            b.setAttribute(
+              "aria-label",
+              "Remove " + b.textContent.slice(0, -2),
+            );
+            b.onclick = () => {
+              items.splice(i, 1);
+              page = 1;
+              render();
+            };
+            container.append(b);
+          });
+          if (items.length) {
+            const clear = document.createElement("button");
+            clear.textContent =
+              "Clear All " + (kind === "filter" ? "Filters" : "Sorts");
+            clear.onclick = () => {
+              items.length = 0;
+              page = 1;
+              render();
+            };
+            container.append(clear);
+          }
+          $(kind + "-open").classList.toggle("filter-active", !!items.length);
+        });
+      }
+      $("photo-open").onclick = () => {
+        $("codes").value = "";
+        $("photo-error").textContent = "";
+        $("photo-dialog").showModal();
+      };
+      let updating = false;
+      $("photo-dialog").addEventListener("cancel", (e) => {
+        if (updating) e.preventDefault();
+      });
+      $("photo-form").onsubmit = async (e) => {
+        e.preventDefault();
+        if (updating) return;
+        const codes = [
+          ...new Set(
+            $("codes")
+              .value.split(",")
+              .map((s) => s.trim().toUpperCase()),
+          ),
+        ];
+        const unknown = codes.filter(
+          (code) =>
+            !records.some((r) => r["Placement Code"].toUpperCase() === code),
+        );
+        if (unknown.length) {
+          $("photo-error").textContent =
+            "Unknown sample code(s): " +
+            unknown.map((c) => c || "(empty)").join(", ");
+          return;
+        }
+        updating = true;
+        $("photo-error").textContent = "";
+        $("photo-form")
+          .querySelectorAll("button,input")
+          .forEach((b) => (b.disabled = true));
+        $("photo-submit").textContent = "Loading…";
+        await new Promise((r) => setTimeout(r, 500));
+        try {
+          const stored = JSON.parse(
+            sessionStorage.getItem("metrics-preview-photo-queue-v1") || "[]",
+          );
+          if (Array.isArray(stored)) queue = stored;
+        } catch {}
+        queue.push(
+          ...codes.map((code) => ({
+            code,
+            status: "Completed (simulation)",
+            updated_date: new Date().toISOString(),
+            notes: "Local simulation; no photos were uploaded.",
+          })),
+        );
+        let queueStored = true;
+        try {
+          sessionStorage.setItem(
+            "metrics-preview-photo-queue-v1",
+            JSON.stringify(queue),
+          );
+        } catch {
+          queueStored = false;
+        }
+        updating = false;
+        $("photo-form")
+          .querySelectorAll("button,input")
+          .forEach((b) => (b.disabled = false));
+        $("photo-submit").textContent = "Update";
+        $("photo-dialog").close();
+        toast(
+          queueStored
+            ? "Photo update simulated for " + codes.length + " placement(s)."
+            : "Local storage unavailable: the photo queue could not be saved.",
+        );
+      };
+      $("queue-open").onclick = () =>
+        confirmDiscard(() => {
+          location.href = "QueueUpdatePhotos.html";
+        });
+      $("bulk-edit").onclick = () =>
+        confirmDiscard(() => {
+          try {
+            sessionStorage.setItem(
+              "metrics-preview-placement-records-v1",
+              JSON.stringify(records),
+            );
+          } catch {}
+          location.href = "BulkEdit.html";
+        });
+      const bulkEditResult = new URLSearchParams(location.search);
+      if (bulkEditResult.has("bulkEdited")) {
+        const count = Number(bulkEditResult.get("bulkEdited"));
+        const missing = bulkEditResult.get("missing") || "";
+        if (Number.isInteger(count) && count >= 0) {
+          const title =
+            count === 0
+              ? "Update Failed"
+              : missing
+                ? "Partial Success"
+                : "Success";
+          notice(
+            title,
+            "Simulation: updated " +
+              count +
+              " placement(s)." +
+              (missing ? " Not Found: " + missing : ""),
+          );
+        }
+        history.replaceState(null, "", "PlacementList.html");
+      }
+      $("bulk-create").onclick = () =>
+        confirmDiscard(() => {
+          try {
+            sessionStorage.setItem(
+              "metrics-preview-placement-records-v1",
+              JSON.stringify(records),
+            );
+          } catch {}
+          location.href = "BulkCreate.html";
+        });
+      if (new URLSearchParams(location.search).get("bulkCreated") === "2") {
+        toast("Simulation complete: 2 placements created.");
+        history.replaceState(null, "", "PlacementList.html");
+      }
+      $("new-placement").onclick = () =>
+        confirmDiscard(() => {
+          try {
+            sessionStorage.setItem(
+              "metrics-preview-placement-records-v1",
+              JSON.stringify(records),
+            );
+          } catch {}
+          location.href = "CreatePlacement.html";
+        });
+      $("review-discard").onclick = () => {
+        drafts.clear();
+        $("review-dialog").close();
+        render();
+      };
+      render();
+      window.addEventListener("pageshow", (e) => {
+        if (e.persisted && !changes().length) {
+          try {
+            const stored = JSON.parse(
+              sessionStorage.getItem("metrics-preview-placement-records-v1"),
+            );
+            if (
+              Array.isArray(stored) &&
+              stored.every(
+                (r) =>
+                  r &&
+                  Number.isInteger(r.id) &&
+                  typeof r["Placement Code"] === "string",
+              )
+            ) {
+              records = stored;
+
+              render();
+            }
+          } catch {}
+        }
+      });
+    </script>
+  </body>
+</html>

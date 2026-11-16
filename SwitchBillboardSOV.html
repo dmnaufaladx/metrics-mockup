@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Switch IM SOV — Metrics</title>
+    <style>
+      @font-face {
+        font-family: Core;
+        src: url("assets/fonts/Core/coresansc-45regular-webfont.woff2");
+      }
+      @font-face {
+        font-family: Core;
+        src: url("assets/fonts/Core/coresansc-65bold-webfont.woff2");
+        font-weight: 700;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #fff;
+        color: #262626;
+        font:
+          14px Core,
+          Arial,
+          sans-serif;
+      }
+      main {
+        max-width: 584px;
+        margin: auto;
+        padding: 51px 0 77px;
+      }
+      a {
+        color: #ff2d55;
+        text-decoration: none;
+      }
+      .back {
+        display: block;
+        margin-bottom: 24px;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0;
+      }
+      .subtitle {
+        padding-top: 32px;
+        border-bottom: 1px solid #e5e5ea;
+        margin-bottom: 24px;
+      }
+      .subtitle h2 {
+        font-size: 20px;
+        margin: 0;
+      }
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 24px 0;
+      }
+      .step h2 {
+        font-size: 13px;
+        letter-spacing: 1px;
+        margin: 0;
+      }
+      .number {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        border-radius: 50%;
+        text-align: center;
+        color: white;
+        background: linear-gradient(to left, #7ae2bd, #07b48d);
+        box-shadow: 0 4px 8px #0003;
+      }
+      button,
+      input {
+        font: inherit;
+        color: inherit;
+      }
+      button,
+      .button {
+        display: inline-block;
+        background: white;
+        border: 1px solid #e5e5ea;
+        border-radius: 8px;
+        padding: 16px;
+        cursor: pointer;
+      }
+      .primary {
+        background: #ff2d55;
+        color: white;
+        border-color: #ff2d55;
+      }
+      .inputs {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+      .field {
+        position: relative;
+      }
+      .field input {
+        width: 100%;
+        height: 56px;
+        padding: 24px 16px 8px;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+      }
+      .field span {
+        position: absolute;
+        top: 8px;
+        left: 16px;
+        color: #999;
+        font-size: 12px;
+        pointer-events: none;
+      }
+      .field input:placeholder-shown:not(:focus) + span {
+        top: 20px;
+        font-size: 14px;
+      }
+      form {
+        padding-bottom: 24px;
+        border-bottom: 1px solid #e5e5ea;
+      }
+      #comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        border-bottom: 1px solid #e5e5ea;
+        padding-bottom: 24px;
+        margin-bottom: 24px;
+        overflow-wrap: anywhere;
+      }
+      .data-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin: 0;
+      }
+      .data-content {
+        margin: 0 0 8px;
+        border-bottom: 1px solid #e5e5ea;
+      }
+      .photo {
+        width: 100%;
+        max-width: 280px;
+        margin-bottom: 16px;
+      }
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 48px;
+      }
+      .actions button,
+      .actions a {
+        font-size: 13px;
+        font-weight: bold;
+        color: #262626;
+      }
+      .actions .primary {
+        color: white;
+      }
+      button:disabled {
+        opacity: 0.65;
+        cursor: wait;
+      }
+      input:focus-visible,
+      button:focus-visible,
+      a:focus-visible {
+        outline: 2px solid #32c5ff;
+        outline-offset: 2px;
+      }
+      #notice {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #262626;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 6px;
+        max-width: calc(100% - 32px);
+        z-index: 5;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      @media (max-width: 620px) {
+        main {
+          padding: 30px 16px;
+        }
+        .inputs {
+          grid-template-columns: 1fr;
+        }
+        .data-title {
+          font-size: 16px;
+        }
+        .step:first-of-type {
+          margin-top: 52px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="back" href="SovMap/SovMap.html">← &nbsp;Back</a>
+      <h1>Swtich Data</h1>
+      <div class="subtitle"><h2>Switch IM SOV</h2></div>
+      <section>
+        <div class="step">
+          <span class="number">1</span>
+          <h2>SOV</h2>
+        </div>
+        <form id="check-form" novalidate>
+          <div class="inputs">
+            <label class="field"
+              ><input
+                id="code1"
+                placeholder=" "
+                autocomplete="off"
+                list="demo-codes"
+              /><span>SOV Code 1</span></label
+            >
+            <label class="field"
+              ><input
+                id="code2"
+                placeholder=" "
+                autocomplete="off"
+                list="demo-codes"
+              /><span>SOV Code 2</span></label
+            >
+          </div>
+          <datalist id="demo-codes">
+            <option value="JKT024"></option>
+            <option value="JKT108"></option>
+            <option value="BKS016"></option>
+            <option value="TNG041"></option></datalist
+          ><button class="primary" id="check">Check Code</button>
+        </form>
+      </section>
+      <section>
+        <div class="step">
+          <span class="number">2</span>
+          <h2>Check Data</h2>
+        </div>
+        <div id="comparison" aria-live="polite">
+          <div id="left"></div>
+          <div id="right"></div>
+        </div>
+      </section>
+      <div class="actions">
+        <a class="button" href="SovMap/SovMap.html">Cancel</a
+        ><button class="primary" id="switch">Switch Data</button>
+      </div>
+    </main>
+    <p id="notice" role="status" hidden></p>
+    <script>
+      "use strict";
+      const $ = (id) => document.getElementById(id);
+      const sample = {
+        city: "Jakarta",
+        area: "Jakarta Pusat",
+        address: "Jl. Jend. Sudirman",
+        vendor: "ADX",
+        phone: "-",
+        orientation: "Horizontal",
+        road_type: "Jalan Utama",
+        road_side: "Left",
+        road_to: "Bundaran HI",
+        side: "A",
+        direction: "South",
+        photo: "assets/img/map-controls/sample-billboard.jpg",
+        is_im: true,
+      };
+      const records = {
+        JKT024: [{ ...sample, code: "JKT024", sov_code: "JKT024" }],
+        JKT108: [
+          {
+            ...sample,
+            code: "JKT108",
+            sov_code: "JKT108",
+            address: "Jl. Gatot Subroto",
+            road_to: "Semanggi",
+            side: "B",
+          },
+        ],
+        BKS016: ["A", "B"].map((side) => ({
+          ...sample,
+          code: "BKS016",
+          sov_code: "BKS016",
+          city: "Bekasi",
+          side,
+        })),
+        TNG041: [
+          {
+            ...sample,
+            code: "-",
+            sov_code: "TNG041",
+            city: "Tangerang",
+            is_im: false,
+          },
+        ],
+      };
+      const fields = [
+        ["code", "IM Code"],
+        ["sov_code", "SOV Code"],
+        ["city", "City"],
+        ["area", "Area"],
+        ["address", "Address"],
+        ["vendor", "Vendor"],
+        ["phone", "Phone"],
+        ["orientation", "Orientation"],
+        ["road_type", "Road Type"],
+        ["road_side", "Road Side"],
+        ["road_to", "Road To"],
+        ["side", "Side"],
+        ["direction", "Direction"],
+      ];
+      let pair = null,
+        busy = false;
+      function notify(text) {
+        $("notice").textContent = text;
+        $("notice").hidden = false;
+        clearTimeout(notify.timer);
+        notify.timer = setTimeout(() => ($("notice").hidden = true), 4000);
+      }
+      function setBusy(value) {
+        busy = value;
+        $("check").disabled = $("switch").disabled = value;
+        $("code1").disabled = $("code2").disabled = value;
+        $("check-form").setAttribute("aria-busy", String(value));
+      }
+      function render(target, data) {
+        $(target).replaceChildren(
+          ...data.map((item) => {
+            const article = document.createElement("article");
+            for (const [key, title] of fields) {
+              const label = document.createElement("p");
+              label.className = "data-title";
+              label.textContent = title;
+              const value = document.createElement("p");
+              value.className = "data-content";
+              value.textContent = item[key] || "-";
+              article.append(label, value);
+            }
+            const title = document.createElement("p");
+            title.className = "data-title";
+            title.textContent = "Photo";
+            const img = document.createElement("img");
+            img.className = "photo";
+            img.src = item.photo;
+            img.alt = item.sov_code + item.side;
+            article.append(title, img);
+            return article;
+          }),
+        );
+      }
+      function invalidate() {
+        pair = null;
+        render("left", []);
+        render("right", []);
+      }
+      $("code1").oninput = $("code2").oninput = invalidate;
+      $("check-form").onsubmit = (e) => {
+        e.preventDefault();
+        if (busy) return;
+        invalidate();
+        const codes = [
+          $("code1").value.trim().toUpperCase(),
+          $("code2").value.trim().toUpperCase(),
+        ];
+        for (let i = 0; i < 2; i++)
+          if (!codes[i]) {
+            notify("Please Enter SOV Code " + (i + 1));
+            $("code" + (i + 1)).focus();
+            return;
+          }
+        setBusy(true);
+        $("check").textContent = "Checking...";
+        setTimeout(() => {
+          render("left", records[codes[0]] || []);
+          render("right", records[codes[1]] || []);
+          const missing = codes.findIndex((code) => !records[code]);
+          if (missing >= 0) notify("SOV code " + (missing + 1) + " not found");
+          else {
+            pair = codes;
+            notify("Awesome! Data SOV 2 Found.");
+          }
+          setBusy(false);
+          $("check").textContent = "Check Code";
+        }, 300);
+      };
+      $("switch").onclick = () => {
+        if (busy) return;
+        if (!pair) return notify("Please check both SOV codes first");
+        if (pair[0] === pair[1])
+          return notify("Please choose two different SOV codes");
+        const [a, b] = pair.map((code) => records[code]);
+        if (a.length !== b.length) return notify("Placement Length Not Same");
+        if (!a[0].is_im || !b[0].is_im)
+          return notify("Two of the code need to be IM and SOV");
+        setBusy(true);
+        $("switch").textContent = "Switching...";
+        setTimeout(() => {
+          // Exchange the dummy IM associations without changing backend data.
+          for (let i = 0; i < a.length; i++) {
+            const first = a[i].code;
+            a[i].code = b[i].code;
+            b[i].code = first;
+          }
+          notify("Awesome! Data Switched.");
+          setTimeout(() => (location.href = "SovMap/SovMap.html"), 500);
+        }, 300);
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Detail Placement Campaign — Metrics</title>
+  <style>
+    html,body{height:100%;margin:0;background:#fff;overflow:hidden}
+    iframe{display:block;width:100%;height:100dvh;border:0}
+  </style>
+</head>
+<body>
+  <iframe id="campaign-page" title="Detail Placement Campaign"></iframe>
+  <noscript>Aktifkan JavaScript untuk membuka Campaign CAP Verification.</noscript>
+  <script>
+    // Reuse the existing campaign editor so both presentations share behavior and data.
+    const params=new URLSearchParams(location.search);
+    const source=new URL('BillboardMap.html',location.href);
+    source.searchParams.set('cap-page','1');
+    for(const key of ['campaign','role','cities','placement'])if(params.has(key))source.searchParams.set(key,params.get(key));
+    document.getElementById('campaign-page').src=source.href;
+  </script>
+</body>
+</html>

@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Download Daily Device Reports — Metrics by ADX</title>
+    <style>
+      @font-face {
+        font-family: "Adxfont";
+        src: url("assets/fonts/icons/Adxfont.woff") format("woff");
+        font-weight: normal;
+        font-style: normal;
+      }
+      .adx-ic_user_circle {
+        font-family: "Adxfont" !important;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 28px;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .adx-ic_user_circle::before {
+        content: "\e94d";
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src: url("assets/fonts/Core/coresansc-45regular-webfont.woff2")
+          format("woff2");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src: url("assets/fonts/Core/coresansc-65bold-webfont.woff2")
+          format("woff2");
+        font-weight: 700;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        color: #262626;
+        background: #f5f5fa;
+        font:
+          14px "Core Sans C",
+          system-ui;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+        border: 0;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible {
+        outline: 3px solid #007aff;
+        outline-offset: 3px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .skip {
+        position: absolute;
+        top: -100px;
+        left: 12px;
+        z-index: 10;
+        padding: 12px;
+        background: white;
+      }
+      .skip:focus {
+        top: 8px;
+      }
+      .topbar {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        background: white;
+        border-bottom: 1px solid #e5e5ea;
+      }
+      .brand-group,
+      .account {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .logo img {
+        height: 40px;
+        width: auto;
+      }
+      .mobile-nav {
+        display: none;
+      }
+      .account {
+        position: relative;
+      }
+      .account button {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: white;
+        font-size: 24px;
+      }
+      .account-panel {
+        position: absolute;
+        z-index: 4;
+        right: 0;
+        top: 46px;
+        width: 160px;
+        background: white;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px #0002;
+      }
+      .account-panel a {
+        display: block;
+        padding: 16px;
+      }
+      .shell {
+        display: flex;
+        min-height: calc(100vh - 56px);
+      }
+      .sidebar {
+        width: 300px;
+        flex-shrink: 0;
+        padding: 8px 0 24px 16px;
+        background-image: linear-gradient(to left, #fc2d2d, #fc2e90 70%);
+      }
+      .sidebar nav > button,
+      .sidebar-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        min-height: 52px;
+        margin-bottom: 4px;
+        padding: 16px;
+        color: white;
+        background: transparent;
+        text-align: left;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      .sidebar nav > button img,
+      .sidebar-link img {
+        width: 16px;
+        height: 16px;
+      }
+      .sidebar button:hover,
+      .sidebar-link:hover,
+      .submenu a:hover {
+        background: #e5e5ea55;
+      }
+      .sidebar .active {
+        background-image: linear-gradient(to left, #32c5ff, #ff1c47 100%);
+      }
+      .chevron {
+        margin-left: auto;
+        transition: transform 0.2s;
+      }
+      .sidebar button[aria-expanded="true"] .chevron {
+        transform: rotate(180deg);
+      }
+      .submenu {
+        padding: 4px 16px 12px 24px;
+      }
+      .submenu a,
+      .submenu button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        color: white;
+        background: transparent;
+        text-align: left;
+        font-size: 14px;
+      }
+      .content {
+        flex: 1;
+        min-width: 0;
+        padding: 40px 30px 136px;
+      }
+      .download-daily-report__wrapper {
+        max-width: 1140px;
+        margin: 0 auto;
+      }
+      .report-title h1 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1.25;
+        letter-spacing: 1px;
+      }
+      .report-title hr {
+        width: 37px;
+        height: 4px;
+        margin: 24px 0;
+        border: 1px solid #ff2d55;
+        background: #ff2d55;
+      }
+      .report-description {
+        max-width: 800px;
+        line-height: 1.5;
+        letter-spacing: 1px;
+      }
+      .download-form {
+        display: flex;
+        align-items: flex-start;
+        gap: 24px;
+        width: min(760px, 100%);
+        margin-top: 28px;
+      }
+      .field {
+        min-width: 0;
+        flex: 1;
+      }
+      .field h2 {
+        margin: 0 0 8px;
+        font-size: 12px;
+      }
+      .field input {
+        width: 100%;
+        min-height: 56px;
+        padding: 16px 13px;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        background: white;
+      }
+      .button-download {
+        display: flex;
+        align-items: center;
+        padding-top: 24px;
+      }
+      .hit-button {
+        padding: 8px 12px;
+        border-radius: 4px;
+        background: #ff2d55;
+        color: white;
+        font-weight: 700;
+      }
+      .hit-button:hover {
+        background: #d42548;
+      }
+      .error {
+        min-height: 20px;
+        margin: 16px 0 0;
+        color: #b6203e;
+        line-height: 1.5;
+      }
+      .success {
+        color: #176b37;
+      }
+      .hint {
+        margin-top: 28px;
+        max-width: 760px;
+        color: #68686c;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      dialog {
+        width: min(480px, calc(100% - 32px));
+        padding: 28px;
+        border: 0;
+        border-radius: 8px;
+        color: #262626;
+        box-shadow: 0 8px 32px #0003;
+      }
+      dialog::backdrop {
+        background: #0005;
+      }
+      dialog h2 {
+        margin: 0 36px 16px 0;
+        font-size: 22px;
+      }
+      dialog p {
+        margin: 0;
+        line-height: 1.7;
+        white-space: pre-line;
+      }
+      dialog .close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        border-radius: 4px;
+        background: #f5f5fa;
+      }
+      @media (max-width: 1140px) {
+        .sidebar {
+          width: 250px;
+        }
+        .content {
+          padding: 32px 24px 96px;
+        }
+      }
+      @media (max-width: 767px) {
+        .topbar {
+          padding: 0 12px;
+        }
+        .logo img {
+          height: 32px;
+        }
+        .account .email {
+          display: none;
+        }
+        .mobile-nav {
+          display: block;
+          width: 40px;
+          height: 40px;
+          background: white;
+          font-size: 22px;
+        }
+        .shell {
+          display: block;
+        }
+        .sidebar {
+          display: none;
+          width: 100%;
+          padding: 8px 16px;
+        }
+        .sidebar.open {
+          display: block;
+        }
+        .content {
+          padding: 28px 16px 72px;
+        }
+        .report-title h1 {
+          font-size: 28px;
+        }
+        .download-form {
+          flex-direction: column;
+          gap: 16px;
+        }
+        .field {
+          width: 100%;
+        }
+        .button-download {
+          padding-top: 0;
+        }
+        .hit-button {
+          width: 100%;
+          padding: 13px;
+        }
+      }
+
+      .adx-ic_chevron_down {
+        font-family: "Adxfont" !important;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+      }
+      .adx-ic_chevron_down::before {
+        content: "\e911";
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to download form</a>
+    <header class="topbar">
+      <div class="brand-group">
+        <button
+          class="mobile-nav"
+          id="nav-toggle"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+          aria-controls="sidebar"
+        >
+          ☰
+        </button>
+        <a class="logo" href="Home.html"
+          ><img
+            src="assets/img/icons/metrics-ico-color.png"
+            alt="Metrics by ADX — Home"
+        /></a>
+      </div>
+      <div class="account">
+        <span class="email">demo@metrics.test</span
+        ><button
+          id="account-toggle"
+          aria-label="Account"
+          aria-expanded="false"
+          aria-controls="account-panel"
+        >
+          <i class="adx-ic_user_circle" aria-hidden="true"></i>
+        </button>
+        <div class="account-panel" id="account-panel" hidden>
+          <a href="Login.html">Sign Out</a>
+        </div>
+      </div>
+    </header>
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <nav aria-label="Dashboard">
+          <button
+            id="discovery-toggle"
+            aria-expanded="false"
+            aria-controls="discovery-menu"
+          >
+            <img src="assets/img/icons/adx-ic-location.png" alt="" />Discovery
+            Map <i class="adx-ic_chevron_down chevron" aria-hidden="true"></i>
+          </button>
+          <div class="submenu" id="discovery-menu" hidden>
+            <a href="SovMap/SovMap.html">Share of Voice</a
+            ><a href="BillboardMap/BillboardMap.html">Insight Maps</a
+            ><a href="Utility/KmlConverter.html">KML Converter</a>
+          </div>
+          <a class="sidebar-link" href="Dashboard/Monitoring/ReportList.html">
+            <img
+              src="assets/img/icons/adx-ic-monitoring.png"
+              alt=""
+            />Monitoring Report
+          </a>
+          <a class="sidebar-link" href="Dashboard/MeasurementReport.html"
+            ><img
+              src="assets/img/icons/adx-ic-measurement.png"
+              alt=""
+            />Measurement Report</a
+          >
+          <a
+            class="sidebar-link active"
+            href="DownloadReport.html"
+            aria-current="page"
+            ><img src="assets/img/icons/adx-ic-monitoring.png" alt="" />Download
+            Daily Report</a
+          >
+        </nav>
+      </aside>
+      <main class="content download-daily-report" id="content" tabindex="-1">
+        <div class="download-daily-report__wrapper">
+          <div class="report-title">
+            <h1>Download Daily Device Reports</h1>
+            <hr />
+          </div>
+          <div class="report-description">
+            This feature allow user to download daily device report based on
+            given date.
+          </div>
+          <form class="download-form" id="download-form" novalidate>
+            <div class="field">
+              <h2>Placement</h2>
+              <input
+                id="placement-code"
+                name="placement"
+                placeholder="Placement"
+                autocomplete="off"
+                required
+              />
+            </div>
+            <div class="field">
+              <h2>Start</h2>
+              <input id="start-date" name="start" type="date" required />
+            </div>
+            <div class="field">
+              <h2>End</h2>
+              <input id="end-date" name="end" type="date" required />
+            </div>
+            <div class="button-download">
+              <button class="hit-button" id="download" type="submit">
+                Download
+              </button>
+            </div>
+          </form>
+          <p class="error" id="status" role="status" aria-live="polite"></p>
+        </div>
+      </main>
+    </div>
+    <dialog id="notice" aria-labelledby="notice-title">
+      <button class="close" aria-label="Close">✕</button>
+      <h2 id="notice-title"></h2>
+      <p id="notice-text"></p>
+    </dialog>
+    <script>
+      "use strict";
+      const byId = (id) => document.getElementById(id);
+      const dialog = byId("notice");
+      const notice = (title, text) => {
+        byId("notice-title").textContent = title;
+        byId("notice-text").textContent = text;
+        dialog.showModal();
+      };
+      dialog.querySelector(".close").onclick = () => dialog.close();
+      const toggle = (button, panel) => {
+        const open = button.getAttribute("aria-expanded") !== "true";
+        button.setAttribute("aria-expanded", String(open));
+        panel.hidden = !open;
+      };
+      byId("discovery-toggle").onclick = () =>
+        toggle(byId("discovery-toggle"), byId("discovery-menu"));
+      byId("account-toggle").onclick = () =>
+        toggle(byId("account-toggle"), byId("account-panel"));
+      byId("nav-toggle").onclick = () => {
+        const open =
+          byId("nav-toggle").getAttribute("aria-expanded") !== "true";
+        byId("nav-toggle").setAttribute("aria-expanded", String(open));
+        byId("sidebar").classList.toggle("open", open);
+      };
+      document
+        .querySelectorAll("[data-pending]")
+        .forEach(
+          (button) =>
+            (button.onclick = () =>
+              notice(
+                button.dataset.pending,
+                "This page is not available in this preview yet.",
+              )),
+        );
+      byId("download-form").onsubmit = (event) => {
+        event.preventDefault();
+        const code = byId("placement-code").value.trim().toUpperCase();
+        const start = byId("start-date").value,
+          end = byId("end-date").value,
+          status = byId("status");
+        status.className = "error";
+        if (!code || !start || !end) {
+          status.textContent = "Placement, Start, and End are required.";
+          return;
+        }
+        if (start > end) {
+          status.textContent = "Start date must be on or before End date.";
+          return;
+        }
+        const rows = [
+          "Placement,Date,Device,Status,Impressions",
+          `${code},${start},Jetson-01,Online,12450`,
+          `${code},${end},Jetson-01,Online,13120`,
+        ];
+        const blob = new Blob([rows.join("\r\n")], {
+          type: "text/csv;charset=utf-8",
+        });
+        const url = URL.createObjectURL(blob),
+          link = document.createElement("a");
+        link.href = url;
+        link.download = `jetson-reports_${code}_${start}_${end}.csv`;
+        document.body.append(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        status.className = "error success";
+        status.textContent = "Sample report downloaded locally.";
+      };
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".account")) {
+          byId("account-panel").hidden = true;
+          byId("account-toggle").setAttribute("aria-expanded", "false");
+        }
+      });
+    </script>
+  </body>
+</html>

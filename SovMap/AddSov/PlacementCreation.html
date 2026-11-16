@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Create SOV Placement</title>
+    <style>
+      @font-face {
+        font-family: Core;
+        src: url("../../assets/fonts/Core/coresansc-45regular-webfont.woff2");
+      }
+      @font-face {
+        font-family: Core;
+        src: url("../../assets/fonts/Core/coresansc-65bold-webfont.woff2");
+        font-weight: 700;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        color: #262626;
+        background: white;
+        font:
+          14px Core,
+          Arial,
+          sans-serif;
+      }
+      main {
+        max-width: 584px;
+        margin: auto;
+        padding: 51px 0 77px;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0;
+      }
+      button,
+      input,
+      textarea {
+        font: inherit;
+        color: inherit;
+      }
+      button {
+        cursor: pointer;
+        background: white;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        padding: 12px 16px;
+      }
+      button:disabled {
+        cursor: not-allowed;
+      }
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible {
+        outline: 2px solid #32c5ff;
+        outline-offset: 2px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .tabs {
+        display: flex;
+        gap: 32px;
+        padding-top: 24px;
+        border-bottom: 1px solid #e5e5ea;
+      }
+      .tabs button {
+        border: 0;
+        border-radius: 0;
+        padding: 0 0 21px;
+        background: none;
+        color: #999;
+        font-weight: 700;
+        font-size: 13px;
+        letter-spacing: 0.81px;
+      }
+      .tabs .active {
+        border-bottom: 2px solid #ff2d55;
+        color: #262626;
+      }
+      .content {
+        margin-top: 48px;
+        border-bottom: 1px solid #e5e5ea;
+      }
+      .section-heading {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+      .number {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        text-align: center;
+        border-radius: 50%;
+        background: linear-gradient(to left, #7ae2bd, #07b48d);
+        color: white;
+        box-shadow: 0 4px 8px #0003;
+      }
+      .section-heading h2 {
+        font-size: 13px;
+        letter-spacing: 1px;
+        margin: 0;
+      }
+      .brand-row {
+        display: flex;
+        margin-bottom: 24px;
+      }
+      .brand-wrap {
+        flex: 1;
+        position: relative;
+        min-width: 0;
+      }
+      .brand-trigger {
+        height: 48px;
+        width: 100%;
+        padding: 5px 16px;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand-trigger small {
+        display: block;
+        color: #999;
+        font-size: 12px;
+      }
+      .brand-trigger:disabled {
+        border-color: #f2f2f5;
+        background: #f2f2f5;
+        color: #999;
+      }
+      .chevron {
+        width: 8px;
+        height: 8px;
+        border-right: 1.5px solid;
+        border-bottom: 1.5px solid;
+        transform: rotate(45deg);
+        margin-right: 4px;
+      }
+      .brand-trigger[aria-expanded="true"] .chevron {
+        transform: rotate(225deg);
+      }
+      .add-brand {
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        font-size: 28px;
+      }
+      .add-brand:disabled {
+        background: #e5e5ea;
+        color: #878787;
+      }
+      .dropdown {
+        position: absolute;
+        top: 56px;
+        width: 100%;
+        z-index: 3;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        background: white;
+        box-shadow: 0 0 4px #0003;
+        padding: 24px;
+      }
+      .search {
+        width: 100%;
+        background: #fafafa;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        padding: 14px;
+        margin-bottom: 24px;
+      }
+      .options {
+        max-height: 200px;
+        overflow: auto;
+      }
+      .options button {
+        display: block;
+        width: 100%;
+        border: 0;
+        text-align: left;
+        padding: 8px 16px;
+      }
+      .options button:hover {
+        background: #f5f5fa;
+      }
+      .message {
+        display: block;
+        position: relative;
+        margin-bottom: 24px;
+      }
+      .message span {
+        position: absolute;
+        left: 16px;
+        top: 8px;
+        color: #999;
+        font-size: 12px;
+      }
+      .message textarea {
+        width: 100%;
+        height: 130px;
+        resize: none;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        padding: 26px 16px 12px;
+      }
+      .message textarea:disabled {
+        background: #e5e5ea;
+      }
+      .images {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 40px;
+      }
+      .image-box {
+        height: 85px;
+        padding: 8px;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        min-width: 0;
+      }
+      .image-box img {
+        width: 65px;
+        height: 65px;
+        object-fit: cover;
+        margin-left: auto;
+      }
+      .filename {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        flex: 1;
+        font-size: 13px;
+      }
+      .remove {
+        border: 0;
+        padding: 0;
+        font-size: 22px;
+      }
+      .upload-copy {
+        font-size: 12px;
+        flex: 1;
+      }
+      .upload-copy small {
+        display: block;
+        color: #999;
+        font-size: 10px;
+      }
+      .open {
+        padding: 6px 10px;
+      }
+      .empty-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 36px;
+      }
+      .empty-label input {
+        width: 22px;
+        height: 22px;
+        margin: 0;
+        accent-color: #ff2d55;
+      }
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 48px;
+      }
+      .actions button {
+        font-weight: 700;
+        font-size: 13px;
+        padding: 16px;
+        border-radius: 8px;
+      }
+      .primary {
+        background: #ff2d55;
+        color: white;
+        border-color: #ff2d55;
+      }
+      #add-more {
+        width: 100%;
+        border: 0;
+        border-bottom: 1px solid #e5e5ea;
+        color: #ff2d55;
+        font-weight: 700;
+      }
+      dialog {
+        border: 0;
+        border-radius: 8px;
+        padding: 24px;
+        width: min(420px, calc(100% - 32px));
+        box-shadow: 0 8px 30px #0003;
+      }
+      dialog::backdrop {
+        background: #0005;
+      }
+      dialog h2 {
+        font-size: 20px;
+        margin: 0 0 20px;
+      }
+      dialog input {
+        width: 100%;
+        padding: 14px;
+        border: 1px solid #e5e5ea;
+        margin: 8px 0 20px;
+      }
+      .dialog-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+      #notice {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: calc(100% - 32px);
+        background: #262626;
+        color: white;
+        border-radius: 6px;
+        padding: 12px 20px;
+        z-index: 6;
+      }
+      @media (max-width: 620px) {
+        main {
+          padding: 30px 16px;
+        }
+        .images {
+          grid-template-columns: 1fr;
+        }
+        .tabs {
+          gap: 24px;
+        }
+        .tabs button {
+          font-size: 12px;
+        }
+        .dropdown {
+          padding: 16px;
+        }
+      }
+
+      .fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 16px;
+        margin-top: 24px;
+      }
+      .field {
+        position: relative;
+        min-width: 0;
+      }
+      .field input,
+      .field select {
+        width: 100%;
+        height: 56px;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        background: white;
+        padding: 24px 16px 8px;
+      }
+      .field span {
+        position: absolute;
+        left: 16px;
+        top: 8px;
+        color: #999;
+        font-size: 12px;
+        pointer-events: none;
+      }
+      .field input:placeholder-shown:not(:focus) {
+        padding: 16px;
+      }
+      .field input:placeholder-shown:not(:focus) + span {
+        top: 20px;
+        font-size: 14px;
+      }
+      .field input:disabled {
+        background: #e5e5ea;
+      }
+      .field select {
+        appearance: none;
+        padding-right: 30px;
+      }
+      .field .chevron {
+        position: absolute;
+        right: 16px;
+        top: 24px;
+        pointer-events: none;
+      }
+      .route-button {
+        width: 100%;
+        height: 56px;
+        text-align: left;
+        padding: 24px 32px 8px 16px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+      .route-options {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: white;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        padding: 16px;
+        box-shadow: 0 2px 8px #0002;
+        z-index: 5;
+      }
+      .route-options input {
+        padding: 12px;
+        height: 44px;
+      }
+      .route-options button {
+        display: block;
+        text-align: left;
+        width: 100%;
+        border: 0;
+        padding: 10px 0;
+      }
+      .route-options #routes {
+        max-height: 180px;
+        overflow: auto;
+      }
+      .note {
+        grid-column: 1/-1;
+        margin: 0;
+      }
+      .note textarea {
+        display: block;
+      }
+      .note textarea:placeholder-shown:not(:focus) + span {
+        font-size: 14px;
+        top: 16px;
+      }
+      .actions {
+        margin: 24px 0 0;
+      }
+      .delete-location {
+        margin-top: 59px;
+        padding: 16px 8px 14px;
+        text-align: center;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        background: #f5f5fa;
+      }
+      .delete-location h2 {
+        font-size: 13px;
+        text-transform: uppercase;
+        margin: 0 0 8px;
+      }
+      .delete-location button {
+        padding: 16px;
+      }
+      .tabs a {
+        text-decoration: none;
+        color: #999;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.81px;
+        padding-bottom: 21px;
+      }
+      .tabs a.active {
+        color: #262626;
+      }
+      #delete-dialog p {
+        line-height: 1.6;
+      }
+      @media (max-width: 620px) {
+        .fields {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+        .tabs a {
+          font-size: 12px;
+        }
+        .actions button {
+          padding: 14px 10px;
+        }
+      }
+
+      a.back {
+        display: block;
+        color: #ff2d55;
+        text-decoration: none;
+        margin-bottom: 24px;
+      }
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 24px 0;
+      }
+      .step h2 {
+        font-size: 13px;
+        letter-spacing: 1px;
+        margin: 0;
+      }
+      .coordinates {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+      .block {
+        border-bottom: 1px solid #e5e5ea;
+        padding-bottom: 24px;
+      }
+      .primary {
+        padding: 16px;
+        border-radius: 8px;
+      }
+      .mode {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin: 24px 0;
+      }
+      .mode input {
+        margin: 0 4px 0 8px;
+      }
+      .placement .number {
+        background: linear-gradient(to left, #fc2d2d, #fc2e90 70%);
+      }
+      .placement {
+        margin-bottom: 36px;
+      }
+      .placement .fields {
+        margin-top: 0;
+      }
+      .field select:disabled {
+        background: #ededf0;
+      }
+      .add {
+        border: 0;
+        color: #ff2d55;
+        font-weight: bold;
+        display: block;
+        width: 100%;
+        padding: 16px;
+      }
+      .actions {
+        margin: 0 0 48px;
+      }
+      #nearby img {
+        width: 180px;
+        max-width: 100%;
+      }
+      #nearby article {
+        border: 1px solid #e5e5ea;
+        padding: 8px;
+        width: fit-content;
+        margin-top: 12px;
+      }
+      #existing-box {
+        margin-bottom: 24px;
+      }
+      #existing-box .field {
+        display: block;
+      }
+      .tabs button {
+        text-transform: none;
+      }
+      @media (max-width: 620px) {
+        .coordinates {
+          grid-template-columns: 1fr;
+        }
+        .fields {
+          gap: 8px;
+        }
+        .actions {
+          gap: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a class="back" href="../SovMap.html">← &nbsp;Back</a>
+      <h1>Create SOV Placement</h1>
+      <nav class="tabs" aria-label="Creation steps">
+        <a class="active" href="./PlacementCreation.html" aria-current="page">
+          Placement Creation
+        </a>
+        <a href="./SideCreation.html">Side Creation</a>
+      </nav>
+      <section class="block">
+        <div class="step">
+          <span class="number">1</span>
+          <h2>Check IM Availability</h2>
+        </div>
+        <form id="coordinate-form">
+          <div class="coordinates">
+            <label class="field"
+              ><select id="city">
+                <option value="">---</option>
+                <option>Jakarta</option>
+                <option>Banten</option>
+                <option>Bekasi</option>
+                <option>Bogor</option>
+                <option>Depok</option></select
+              ><span>City</span><i class="chevron"></i></label
+            ><label class="field"
+              ><input id="latitude" placeholder=" " inputmode="decimal" /><span
+                >Latitude</span
+              ></label
+            ><label class="field"
+              ><input id="longitude" placeholder=" " inputmode="decimal" /><span
+                >Longitude</span
+              ></label
+            >
+          </div>
+          <button class="primary" id="check">Check Coordinate</button>
+        </form>
+        <div id="nearby" aria-live="polite"></div>
+      </section>
+      <section class="block">
+        <div class="step">
+          <span class="number">2</span>
+          <h2>Fill Information</h2>
+        </div>
+        <div class="mode">
+          <label
+            ><input type="radio" name="mode" value="New" checked />New</label
+          ><label
+            ><input type="radio" name="mode" value="Existing" />Existing</label
+          >
+        </div>
+        <div id="existing-box" hidden>
+          <p>Select Code</p>
+          <label class="field"
+            ><select id="code">
+              <option value="">---</option></select
+            ><span>Code</span><i class="chevron"></i
+          ></label>
+        </div>
+        <div id="placements"></div>
+        <button id="add" class="add">Add More Placement +</button>
+        <div class="actions">
+          <button id="remove">Remove Placement</button
+          ><button id="save" class="primary">Save Placement</button>
+        </div>
+      </section>
+    </main>
+    <dialog id="merge">
+      <h2>Merge this Placement ?</h2>
+      <p id="merge-message"></p>
+      <p>Notes : this proccess can't be undo</p>
+      <div class="dialog-actions">
+        <button id="cancel">Cancel</button
+        ><button class="primary" id="confirm">Save</button>
+      </div>
+    </dialog>
+    <p id="notice" role="status" hidden></p>
+    <script>
+      "use strict";
+      const $ = (id) => document.getElementById(id);
+      let placements = [],
+        checked = false;
+      const choices = {
+        roadType: ["Jalan Utama", "Jalan Umum"],
+        roadSide: ["Left", "Right", "Middle"],
+        route: [
+          "Tol dalam kota - Tol Lingkar luar - Tol Bandara",
+          "Jakarta - Bekasi",
+        ],
+        billboardType: ["Billboard", "Videotron", "Baliho", "Bando"],
+        orientation: ["Vertical", "Horizontal"],
+      };
+      const fields = [
+        ["roadTo", "Road To"],
+        ["side", "Side"],
+        ["city", "City"],
+        ["roadType", "Road Type"],
+        ["roadSide", "Road Side"],
+        ["route", "Route"],
+        ["billboardType", "Billboard Type"],
+        ["orientation", "Orientation"],
+        ["vendorName", "Vendor Name"],
+        ["vendorPhone", "Vendor Phone"],
+      ];
+      function notify(text) {
+        $("notice").textContent = text;
+        $("notice").hidden = false;
+        clearTimeout(notify.timer);
+        notify.timer = setTimeout(() => ($("notice").hidden = true), 3500);
+      }
+      function render() {
+        $("placements").replaceChildren(
+          ...placements.map((data, index) => {
+            const section = document.createElement("section");
+            section.className = "placement";
+            section.innerHTML =
+              '<div class="step"><span class="number">' +
+              (index + 1) +
+              '</span><h2>PLACEMENT</h2></div><div class="fields"></div>';
+            for (const [key, title] of fields) {
+              const label = document.createElement("label");
+              label.className = "field";
+              const select = key === "city" || choices[key];
+              const control = document.createElement(
+                select ? "select" : "input",
+              );
+              control.dataset.key = key;
+              control.id = "placement-" + index + "-" + key;
+              if (select) {
+                const values =
+                  key === "city"
+                    ? [$("city").value].filter(Boolean)
+                    : choices[key];
+                control.add(new Option("---", ""));
+                for (const v of values) control.add(new Option(v, v));
+                control.disabled = key === "city";
+                control.value =
+                  key === "city" ? $("city").value : data[key] || "";
+              } else {
+                control.placeholder = " ";
+                control.value = data[key] || "";
+                if (key === "vendorPhone") control.type = "tel";
+              }
+              control.oninput = () => (data[key] = control.value);
+              const caption = document.createElement("span");
+              caption.textContent = title;
+              label.append(control, caption);
+              if (select) {
+                const arrow = document.createElement("i");
+                arrow.className = "chevron";
+                label.append(arrow);
+              }
+              section.querySelector(".fields").append(label);
+            }
+            return section;
+          }),
+        );
+      }
+      $("add").onclick = () => {
+        placements.push({});
+        render();
+      };
+      $("remove").onclick = () => {
+        placements.pop();
+        render();
+      };
+      function invalidate() {
+        checked = false;
+        $("nearby").replaceChildren();
+        $("code").replaceChildren(new Option("---", ""));
+      }
+      $("city").onchange = () => {
+        invalidate();
+        render();
+      };
+      $("latitude").oninput = $("longitude").oninput = invalidate;
+      $("coordinate-form").onsubmit = (e) => {
+        e.preventDefault();
+        const lat = $("latitude").value.trim(),
+          lon = $("longitude").value.trim();
+        if (!/^-?\d{1,2}(\.\d{1,8})?$/.test(lat) || Math.abs(Number(lat)) > 90)
+          return notify("Latitude coordinate is not valid");
+        if (!/^\d{1,3}(\.\d{1,8})?$/.test(lon) || Number(lon) > 180)
+          return notify("Longitude coordinate is not valid");
+        checked = true;
+        const near =
+          Math.abs(Number(lat) + 6.1074428) < 0.05 &&
+          Math.abs(Number(lon) - 106.69381) < 0.05;
+        $("code").replaceChildren(new Option("---", ""));
+        $("nearby").replaceChildren();
+        if (near) {
+          $("code").add(new Option("JKT024", "JKT024"));
+          const article = document.createElement("article");
+          article.innerHTML =
+            '<p>JKT024</p><p>A</p><img src="../../assets/img/map-controls/sample-billboard.jpg" alt="Nearby placement A">';
+          $("nearby").append(article);
+        }
+        const info = document.createElement("p");
+        info.textContent = near
+          ? "Harap cek manual di IM untuk mengecek apakah sudah terdaftar di IM"
+          : "Tidak Ditemukan Nearby Placement";
+        $("nearby").append(info);
+      };
+      document
+        .querySelectorAll("[name=mode]")
+        .forEach(
+          (r) =>
+            (r.onchange = () =>
+              ($("existing-box").hidden = r.value !== "Existing")),
+        );
+      $("code").onchange = () => {
+        placements = $("code").value
+          ? [
+              {
+                roadTo: "",
+                side: "A",
+                roadType: "Jalan Utama",
+                roadSide: "Left",
+                route: choices.route[0],
+                billboardType: "Billboard",
+                orientation: "Horizontal",
+                vendorName: "ADX",
+              },
+            ]
+          : [{}];
+        render();
+      };
+      function saveData() {
+        $("merge").close();
+        $("save").disabled = true;
+        $("save").textContent = "Saving...";
+        notify("Awesome! Placement has been created.");
+        setTimeout(() => (location.href = "../SovMap.html"), 600);
+      }
+      $("save").onclick = () => {
+        if (!checked) return notify("Please check coordinate first");
+        if (!placements.length)
+          return notify(
+            "Please add at least one placement data (Click Add More Placement)",
+          );
+        for (let i = 0; i < placements.length; i++) {
+          for (const key of [
+            "orientation",
+            "billboardType",
+            "route",
+            "roadSide",
+            "roadType",
+            "roadTo",
+          ]) {
+            if (!placements[i][key]?.trim()) {
+              notify(
+                fields.find((f) => f[0] === key)[1] +
+                  " cannot be empty. Placement " +
+                  (i + 1),
+              );
+              $("placement-" + i + "-" + key).focus();
+              return;
+            }
+          }
+        }
+        if (
+          document.querySelector("[name=mode]:checked").value === "Existing"
+        ) {
+          if (!$("code").value) return notify("Please select an existing code");
+          $("merge-message").textContent =
+            "Are you sure want to merge this " +
+            $("code").value +
+            " with the data ?";
+          $("merge").showModal();
+        } else saveData();
+      };
+      $("cancel").onclick = () => $("merge").close();
+      $("confirm").onclick = saveData;
+      render();
+    </script>
+  </body>
+</html>

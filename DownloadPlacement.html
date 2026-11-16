@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Queue Download Placement — Metrics</title>
+    <style>
+      @font-face {
+        font-family: Core;
+        src: url("assets/fonts/Core/coresansc-45regular-webfont.woff2");
+      }
+      @font-face {
+        font-family: Core;
+        src: url("assets/fonts/Core/coresansc-65bold-webfont.woff2");
+        font-weight: 700;
+      }
+      @font-face {
+        font-family: icomoon;
+        src: url("assets/fonts/icomoon/icomoon.woff");
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font:
+          14px Core,
+          Arial,
+          sans-serif;
+        color: #262626;
+        background: #fff;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        margin: 20px 24px 40px;
+      }
+      #back {
+        display: flex;
+        align-items: center;
+        color: #ff2d55;
+        text-decoration: none;
+        gap: 8px;
+        padding: 8px 0;
+      }
+      #back img {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+      }
+      main {
+        margin: 32px;
+      }
+      .wrapper {
+        width: 90%;
+        margin: auto;
+      }
+      h1 {
+        font-size: 18px;
+        font-weight: 700;
+      }
+      hr {
+        margin: 24px 0;
+        border: 0.5px solid #ff2d55;
+      }
+      .table-scroll {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+      }
+      thead tr {
+        height: 40px;
+      }
+      th {
+        text-align: left;
+        padding: 16px 24px;
+        white-space: nowrap;
+      }
+      td {
+        padding: 4px 24px;
+        text-align: left;
+      }
+      td:nth-child(2) {
+        text-align: center;
+      }
+      td:nth-child(8) {
+        white-space: nowrap;
+      }
+      button {
+        font: inherit;
+        background: none;
+        border: 0;
+        color: inherit;
+        cursor: pointer;
+      }
+      .icon {
+        font-family: icomoon;
+        font-style: normal;
+      }
+      .download:before {
+        content: "\e930";
+      }
+      .remove:before {
+        content: "\e92b";
+      }
+      .row-action {
+        padding: 8px;
+      }
+      button:focus-visible,
+      a:focus-visible {
+        outline: 2px solid #32c5ff;
+        outline-offset: 2px;
+      }
+      .pagination {
+        display: flex;
+        gap: 13px;
+        justify-content: flex-end;
+        align-items: center;
+        margin: 16px 8px 0;
+      }
+      .pagination button {
+        font-size: 13px;
+      }
+      .pagination .arrow {
+        padding: 8px;
+        border: 1px solid #d5d5da;
+      }
+      .pagination .selected {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #ff2d55;
+        color: #fff;
+      }
+      .pagination button:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      #empty {
+        height: 60vh;
+        font-size: 48px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      #loading {
+        padding: 48px;
+        text-align: center;
+        color: #ff2d55;
+      }
+      #notice {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #262626;
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 6px;
+        max-width: calc(100% - 32px);
+      }
+      [hidden] {
+        display: none !important;
+      }
+      @media (max-width: 700px) {
+        main {
+          margin: 24px 16px;
+        }
+        .wrapper {
+          width: 100%;
+        }
+        #empty {
+          font-size: 32px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a id="back" href="SovMap/SovMap.html"
+        ><img src="assets/img/icons/metrics-ic-arrow-left.png" alt="" />Back</a
+      >
+    </header>
+    <main>
+      <div class="wrapper">
+        <h1>Queue Download Placement</h1>
+        <hr />
+        <p id="loading" role="status">Loading...</p>
+        <div id="content" hidden>
+          <div
+            class="table-scroll"
+            id="table-wrap"
+            tabindex="0"
+            aria-label="Placement download queue"
+          >
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Campaign Name</th>
+                  <th>Download Type</th>
+                  <th>City</th>
+                  <th>Year</th>
+                  <th>Month</th>
+                  <th>Status</th>
+                  <th>Created Date</th>
+                  <th>Download</th>
+                  <th>Remove</th>
+                </tr>
+              </thead>
+              <tbody id="rows"></tbody>
+            </table>
+          </div>
+          <p id="empty" hidden>Your Queue is Empty</p>
+          <nav id="pagination" class="pagination" aria-label="Pagination"></nav>
+        </div>
+      </div>
+    </main>
+    <p id="notice" role="status" hidden></p>
+    <script>
+      "use strict";
+      const $ = (id) => document.getElementById(id),
+        types = ["SOV", "IM", "Export CPG", "Billboard", "Campaign"];
+      let queue = Array.from({ length: 28 }, (_, i) => ({
+        id: (0xa0010000 + i).toString(16) + "-demo",
+        campaign: i % 5 === 4 ? "Airport Campaign" : "",
+        download_type: types[i % 5],
+        city: ["Jakarta", "Banten", "Bekasi"][i % 3],
+        year: 2026,
+        month: 9,
+        status: i % 5 === 4 ? "Processing" : i === 6 ? "Failed" : "Completed",
+        created_at:
+          "2026-09-" +
+          String(17 - Math.floor(i / 4)).padStart(2, "0") +
+          " " +
+          String(16 - (i % 4)).padStart(2, "0") +
+          ":00:00",
+      }));
+      let page = 1;
+      const from = new URLSearchParams(location.search).get("from");
+      $("back").href =
+        from === "billboard"
+          ? "BillboardMap/BillboardMap.html"
+          : "SovMap/SovMap.html";
+      function notify(message) {
+        $("notice").textContent = message;
+        $("notice").hidden = false;
+        clearTimeout(notify.timer);
+        notify.timer = setTimeout(() => ($("notice").hidden = true), 3000);
+      }
+      function render() {
+        const pages = Math.max(1, Math.ceil(queue.length / 25));
+        page = Math.min(page, pages);
+        $("rows").replaceChildren(
+          ...queue.slice((page - 1) * 25, page * 25).map((item) => {
+            const tr = document.createElement("tr");
+            for (const value of [
+              item.id.slice(0, 8),
+              item.campaign || "-",
+              item.download_type,
+              item.city,
+              item.year,
+              item.month,
+              item.status,
+              item.created_at,
+            ]) {
+              const td = document.createElement("td");
+              td.textContent = value;
+              tr.append(td);
+            }
+            const download = document.createElement("td");
+            if (item.status === "Completed") {
+              const a = document.createElement("a");
+              a.className = "row-action";
+              a.style.color = "inherit";
+              a.href =
+                item.download_type === "Export CPG"
+                  ? "assets/data/placement-demo.zip"
+                  : "assets/data/placement-demo.xlsx";
+              const date = item.created_at.slice(8, 10) + " Sep 2026";
+              a.download =
+                item.download_type.replaceAll(" ", "_") +
+                "_placement_" +
+                item.city +
+                "_" +
+                date +
+                (item.download_type === "Export CPG" ? ".zip" : ".xlsx");
+              a.setAttribute("aria-label", "Download " + item.id);
+              a.innerHTML = '<i class="icon download" aria-hidden="true"></i>';
+              download.append(a);
+            } else download.textContent = "-";
+            const remove = document.createElement("td"),
+              button = document.createElement("button");
+            button.className = "row-action";
+            button.setAttribute("aria-label", "Remove " + item.id);
+            button.innerHTML = '<i class="icon remove" aria-hidden="true"></i>';
+            button.onclick = () => {
+              queue = queue.filter((q) => q.id !== item.id);
+              render();
+              notify("Queue item removed.");
+            };
+            remove.append(button);
+            tr.append(download, remove);
+            return tr;
+          }),
+        );
+        $("empty").hidden = queue.length > 0;
+        $("table-wrap").hidden = !queue.length;
+        $("pagination").replaceChildren();
+        for (const [label, target] of [
+          ["‹", page - 1],
+          ...Array.from({ length: pages }, (_, i) => [String(i + 1), i + 1]),
+          ["›", page + 1],
+        ]) {
+          const b = document.createElement("button");
+          b.textContent = label;
+          b.className =
+            label === "‹" || label === "›"
+              ? "arrow"
+              : target === page
+                ? "selected"
+                : "";
+          b.disabled = target < 1 || target > pages;
+          if (b.className === "selected")
+            b.setAttribute("aria-current", "page");
+          b.setAttribute(
+            "aria-label",
+            label === "‹"
+              ? "Previous page"
+              : label === "›"
+                ? "Next page"
+                : "Page " + target,
+          );
+          b.onclick = () => {
+            page = target;
+            render();
+          };
+          $("pagination").append(b);
+        }
+      }
+      setTimeout(() => {
+        render();
+        $("loading").hidden = true;
+        $("content").hidden = false;
+      }, 200);
+    </script>
+  </body>
+</html>

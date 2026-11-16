@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Create SOV Side</title>
+
+    <style>
+      @font-face {
+        font-family: Core;
+        src: url("../../assets/fonts/Core/coresansc-45regular-webfont.woff2");
+        font-weight: 400;
+      }
+
+      @font-face {
+        font-family: Core;
+        src: url("../../assets/fonts/Core/coresansc-65bold-webfont.woff2");
+        font-weight: 700;
+      }
+
+      :root {
+        --black: #262626;
+        --warm-grey: #999999;
+        --pale-grey: #e5e5ea;
+        --soft-grey: #f5f5fa;
+        --reddish-pink: #ff2d55;
+        --white: #ffffff;
+        --focus: #32c5ff;
+        --danger: #fc2d2d;
+        --success: #07b48d;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        color: var(--black);
+        background: var(--white);
+        font:
+          14px Core,
+          Arial,
+          sans-serif;
+      }
+
+      button,
+      input {
+        font: inherit;
+        color: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      button:focus-visible,
+      input:focus-visible,
+      a:focus-visible {
+        outline: 2px solid var(--focus);
+        outline-offset: 2px;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      main.add-placement {
+        width: 100%;
+        max-width: 584px;
+        margin: 0 auto;
+        padding-top: 51px;
+        padding-bottom: 77px;
+      }
+
+      a.back {
+        display: block;
+        color: #ff2d55;
+        text-decoration: none;
+        margin-bottom: 24px;
+      }
+
+      h1.page-title {
+        margin: 0;
+        font-size: 20px;
+        line-height: 1.25;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 32px;
+        width: 100%;
+        padding-top: 24px;
+        border-bottom: 1px solid var(--pale-grey);
+      }
+
+      .tabs a {
+        margin: 0;
+        padding: 0 0 21px;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        color: var(--warm-grey);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: normal;
+        letter-spacing: 0.81px;
+      }
+
+      .tabs a.active {
+        color: var(--black);
+        border-bottom: 2px solid var(--reddish-pink);
+      }
+
+      .add-placement-content__wrapper {
+        margin-top: 24px;
+      }
+
+      .section-header {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 24px;
+      }
+
+      .step {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      .number {
+        width: 24px;
+        height: 24px;
+        flex: 0 0 24px;
+        border-radius: 24px;
+        background-image: linear-gradient(to left, #7ae2bd, #07b48d);
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.16);
+        color: white;
+        text-align: center;
+        line-height: 24px;
+      }
+
+      .step-title {
+        align-self: center;
+        margin-left: 16px;
+      }
+
+      .step-title h2 {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.23;
+        letter-spacing: 1px;
+      }
+
+      .section-content {
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--pale-grey);
+      }
+
+      .inline {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 8px;
+      }
+
+      .field {
+        position: relative;
+        min-width: 0;
+        flex: 1;
+      }
+
+      .field input {
+        width: 100%;
+        height: 56px;
+        border: 1px solid var(--pale-grey);
+        border-radius: 4px;
+        background: var(--white);
+        padding: 24px 16px 8px;
+        transition:
+          border-color 0.15s ease,
+          box-shadow 0.15s ease;
+      }
+
+      .field input:hover {
+        border-color: #cfcfd5;
+      }
+
+      .field input:focus {
+        border-color: #9d9da5;
+        outline: none;
+      }
+
+      .field span {
+        position: absolute;
+        top: 8px;
+        left: 16px;
+        color: var(--warm-grey);
+        font-size: 12px;
+        pointer-events: none;
+        transition:
+          top 0.12s ease,
+          font-size 0.12s ease;
+      }
+
+      .field input:placeholder-shown:not(:focus) {
+        padding: 16px;
+      }
+
+      .field input:placeholder-shown:not(:focus) + span {
+        top: 20px;
+        font-size: 14px;
+      }
+
+      .btn-primary,
+      .btn-secondary-v2 {
+        min-height: 48px;
+        padding: 14px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.38;
+        letter-spacing: -0.1px;
+      }
+
+      .btn-primary {
+        border: 1px solid var(--reddish-pink);
+        background: var(--reddish-pink);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        filter: brightness(0.97);
+      }
+
+      .btn-secondary-v2 {
+        border: 1px solid var(--pale-grey);
+        background: white;
+        color: var(--black);
+      }
+
+      .btn-secondary-v2:hover {
+        background: var(--soft-grey);
+      }
+
+      .btn-primary:disabled,
+      .btn-secondary-v2:disabled {
+        cursor: not-allowed;
+        opacity: 0.58;
+      }
+
+      #check-sov {
+        margin-top: 0;
+      }
+
+      .placement-input {
+        margin-bottom: 36px;
+      }
+
+      .placement-input .number {
+        background-image: linear-gradient(to left, #fc2d2d, #fc2e90 70%);
+      }
+
+      .placement-input .section-header {
+        margin-bottom: 24px;
+      }
+
+      .add-more {
+        width: 100%;
+        border: 0;
+        background: white;
+        color: var(--reddish-pink);
+        padding: 16px;
+        text-align: center;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .button-action {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 48px;
+      }
+
+      .empty-state {
+        margin: 0 0 24px;
+        padding: 18px;
+        border: 1px dashed var(--pale-grey);
+        border-radius: 4px;
+        color: var(--warm-grey);
+        text-align: center;
+        line-height: 1.5;
+      }
+
+      .loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 160px;
+      }
+
+      .spinner {
+        width: 28px;
+        height: 28px;
+        border: 3px solid var(--pale-grey);
+        border-top-color: var(--reddish-pink);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      #notice {
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        z-index: 10;
+        width: max-content;
+        max-width: calc(100% - 32px);
+        transform: translateX(-50%);
+        padding: 12px 18px;
+        border-radius: 6px;
+        background: var(--black);
+        color: white;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        line-height: 1.45;
+      }
+
+      #notice.success {
+        background: #087c65;
+      }
+
+      #notice.danger {
+        background: #b42318;
+      }
+
+      @media (max-width: 620px) {
+        main.add-placement {
+          min-width: 360px;
+          width: 100%;
+          padding: 30px 16px;
+        }
+
+        .add-placement-content__wrapper {
+          margin-top: 52px;
+        }
+
+        .tabs {
+          gap: 24px;
+        }
+
+        .tabs a {
+          font-size: 12px;
+        }
+
+        .inline {
+          gap: 12px;
+        }
+
+        .button-action {
+          gap: 12px;
+        }
+      }
+
+      @media (max-width: 430px) {
+        main.add-placement {
+          min-width: 0;
+        }
+
+        .inline {
+          flex-direction: column;
+        }
+
+        .button-action button {
+          flex: 1;
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="add-placement">
+      <header class="add-placement__header">
+        <a class="back" href="../SovMap.html">← &nbsp;Back</a>
+
+        <h1 class="page-title">Create SOV Placement</h1>
+
+        <nav class="tabs" aria-label="Creation steps">
+          <a href="./PlacementCreation.html">Placement Creation</a>
+          <a class="active" href="./SideCreation.html" aria-current="page">
+            Side Creation
+          </a>
+        </nav>
+      </header>
+
+      <section class="add-placement-content">
+        <div id="page-loading" class="loading" hidden>
+          <div class="spinner" aria-label="Loading"></div>
+        </div>
+
+        <div id="content-wrapper" class="add-placement-content__wrapper">
+          <section>
+            <div class="section-header">
+              <div class="step">
+                <span class="number">1</span>
+                <div class="step-title">
+                  <h2>SOV</h2>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-content">
+              <div class="inline">
+                <label class="field">
+                  <input
+                    id="sov-code"
+                    type="text"
+                    placeholder=" "
+                    autocomplete="off"
+                  />
+                  <span>SOV Code</span>
+                </label>
+              </div>
+
+              <button id="check-sov" class="btn-primary" type="button">
+                Check SOV Code
+              </button>
+            </div>
+          </section>
+
+          <section>
+            <div class="section-header">
+              <div class="step">
+                <span class="number">2</span>
+                <div class="step-title">
+                  <h2>Fill Information</h2>
+                </div>
+              </div>
+            </div>
+
+            <div class="section-content">
+              <div id="placements"></div>
+
+              <button id="add-more" class="add-more" type="button">
+                Add More Side +
+              </button>
+
+              <div class="button-action">
+                <button id="remove-side" class="btn-secondary-v2" type="button">
+                  Remove Side
+                </button>
+
+                <button id="save-side" class="btn-primary" type="button">
+                  Save Side
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <p id="notice" role="status" aria-live="polite" hidden></p>
+
+    <script>
+      "use strict";
+
+      const $ = (id) => document.getElementById(id);
+
+      /*
+       * Static preview mode.
+       *
+       * The Vue page calls:
+       *   GET  sov/sites/?search=<SOV_CODE>
+       *   GET  sov/placements/?site_code=<SOV_CODE>
+       *   POST sov/placements/
+       *
+       * Because this HTML is intended to run standalone like
+       * PlacementCreation.html, the data below simulates those responses.
+       * Replace checkSOVCode() / savePlacement() with fetch() when the real
+       * API base URL and authentication strategy are available.
+       */
+      const mockDatabase = {
+        JKT024: [
+          { roadTo: "Bandara Soekarno-Hatta", side: "A" },
+          { roadTo: "Jakarta", side: "B" },
+        ],
+        JKT001: [{ roadTo: "Sudirman", side: "A" }],
+        BTN001: [],
+      };
+
+      let placementContent = [];
+      let checkedSOVCode = "";
+
+      function notify(title, text, type = "danger") {
+        const notice = $("notice");
+        notice.textContent = title + ": " + text;
+        notice.className = type;
+        notice.hidden = false;
+
+        clearTimeout(notify.timer);
+        notify.timer = setTimeout(() => {
+          notice.hidden = true;
+        }, 3500);
+      }
+
+      function setLoading(isLoading) {
+        $("page-loading").hidden = !isLoading;
+        $("content-wrapper").hidden = isLoading;
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function renderPlacements() {
+        const container = $("placements");
+        container.replaceChildren();
+
+        placementContent.forEach((item, index) => {
+          const section = document.createElement("section");
+          section.className = "placement-input";
+
+          section.innerHTML = `
+            <div class="section-header">
+              <div class="step">
+                <span class="number">${index + 1}</span>
+                <div class="step-title">
+                  <h2>SIDE</h2>
+                </div>
+              </div>
+            </div>
+
+            <div class="inline">
+              <label class="field">
+                <input
+                  id="road-to-${index}"
+                  data-index="${index}"
+                  data-key="roadTo"
+                  type="text"
+                  placeholder=" "
+                  value="${escapeHtml(item.roadTo || "")}"
+                  autocomplete="off"
+                />
+                <span>Road To</span>
+              </label>
+
+              <label class="field">
+                <input
+                  id="side-${index}"
+                  data-index="${index}"
+                  data-key="side"
+                  type="text"
+                  placeholder=" "
+                  value="${escapeHtml(item.side || "")}"
+                  autocomplete="off"
+                />
+                <span>Side</span>
+              </label>
+            </div>
+          `;
+
+          container.append(section);
+        });
+
+        container.querySelectorAll("input[data-index]").forEach((input) => {
+          input.addEventListener("input", () => {
+            const index = Number(input.dataset.index);
+            const key = input.dataset.key;
+            placementContent[index][key] = input.value;
+          });
+        });
+
+        $("empty-state").hidden = placementContent.length > 0;
+        $("remove-side").disabled = placementContent.length === 0;
+      }
+
+      async function checkSOVCode() {
+        const sovCode = $("sov-code").value.trim().toUpperCase();
+
+        if (!sovCode) {
+          notify("Error", "Please Enter SOV Code", "danger");
+          $("sov-code").focus();
+          return;
+        }
+
+        $("sov-code").value = sovCode;
+        $("check-sov").disabled = true;
+        $("check-sov").textContent = "Checking...";
+
+        /*
+         * Small delay only to mimic the original API request/loading state.
+         */
+        await new Promise((resolve) => setTimeout(resolve, 250));
+
+        if (!Object.prototype.hasOwnProperty.call(mockDatabase, sovCode)) {
+          checkedSOVCode = "";
+          placementContent = [];
+          renderPlacements();
+
+          notify("Error", "SOV code not found", "danger");
+          $("check-sov").disabled = false;
+          $("check-sov").textContent = "Check SOV Code";
+          return;
+        }
+
+        checkedSOVCode = sovCode;
+        placementContent = mockDatabase[sovCode].map((item, index) => ({
+          idx: index + 1,
+          roadTo: item.roadTo || "",
+          side: item.side || "",
+        }));
+
+        renderPlacements();
+
+        notify("Success", "SOV code found.", "success");
+        $("check-sov").disabled = false;
+        $("check-sov").textContent = "Check SOV Code";
+      }
+
+      function addMore() {
+        placementContent.push({
+          idx: placementContent.length + 1,
+          roadTo: "",
+          side: "",
+        });
+
+        renderPlacements();
+
+        requestAnimationFrame(() => {
+          const input = $("road-to-" + (placementContent.length - 1));
+          input?.focus();
+        });
+      }
+
+      function removePlacement() {
+        if (!placementContent.length) {
+          notify("Error", "There is no side to remove.", "danger");
+          return;
+        }
+
+        placementContent.pop();
+        renderPlacements();
+      }
+
+      async function savePlacement() {
+        const sovCode = $("sov-code").value.trim().toUpperCase();
+
+        if (!sovCode) {
+          notify("Error", "Please Enter SOV Code", "danger");
+          $("sov-code").focus();
+          return;
+        }
+
+        if (!checkedSOVCode || checkedSOVCode !== sovCode) {
+          notify("Error", "Please check SOV Code first.", "danger");
+          $("sov-code").focus();
+          return;
+        }
+
+        if (!placementContent.length) {
+          notify(
+            "Error",
+            "Please add at least one side data (Click Add More Side).",
+            "danger",
+          );
+          return;
+        }
+
+        for (let i = 0; i < placementContent.length; i++) {
+          const placement = placementContent[i];
+
+          if (!placement.roadTo.trim()) {
+            notify(
+              "Error",
+              "Road To cannot be empty. Placement " + (i + 1),
+              "danger",
+            );
+            $("road-to-" + i)?.focus();
+            return;
+          }
+        }
+
+        const body = {
+          sovCode,
+          side: placementContent.map((item, index) => ({
+            idx: index + 1,
+            roadTo: item.roadTo.trim(),
+            side: item.side.trim(),
+          })),
+        };
+
+        const saveButton = $("save-side");
+        saveButton.disabled = true;
+        saveButton.textContent = "Saving...";
+
+        await new Promise((resolve) => setTimeout(resolve, 350));
+
+        /*
+         * Preview behavior:
+         * write back to the in-memory mock database to imitate a successful
+         * POST /sov/placements/.
+         */
+        const alreadyExists = mockDatabase[sovCode].length > 0;
+        mockDatabase[sovCode] = body.side.map((item) => ({
+          roadTo: item.roadTo,
+          side: item.side,
+        }));
+
+        notify(
+          "Success",
+          alreadyExists
+            ? "Awesome! Side has been Updated."
+            : "Awesome! Side has been created.",
+          "success",
+        );
+
+        saveButton.disabled = false;
+        saveButton.textContent = "Save Side";
+
+        /*
+         * The Vue page routes to "sovmap" after save.
+         * Uncomment the line below if this preview sits beside SovMap.html.
+         */
+        // setTimeout(() => (location.href = "../SovMap.html"), 600);
+      }
+
+      $("check-sov").addEventListener("click", checkSOVCode);
+      $("add-more").addEventListener("click", addMore);
+      $("remove-side").addEventListener("click", removePlacement);
+      $("save-side").addEventListener("click", savePlacement);
+
+      $("sov-code").addEventListener("input", () => {
+        const current = $("sov-code").value.trim().toUpperCase();
+
+        if (checkedSOVCode && current !== checkedSOVCode) {
+          checkedSOVCode = "";
+          placementContent = [];
+          renderPlacements();
+        }
+      });
+
+      $("sov-code").addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          checkSOVCode();
+        }
+      });
+
+      renderPlacements();
+    </script>
+  </body>
+</html>

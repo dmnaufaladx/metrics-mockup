@@ -1,0 +1,1211 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Billboard Bulk Edit — Metrics by ADX</title>
+    <style>
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-35light-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-35light-webfont.woff")
+            format("woff");
+        font-weight: 300;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-45regular-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-45regular-webfont.woff")
+            format("woff");
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-65bold-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-65bold-webfont.woff")
+            format("woff");
+        font-weight: 700;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-75extrabold-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-75extrabold-webfont.woff")
+            format("woff");
+        font-weight: 900;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Adxfont";
+        src: url("../assets/fonts/icons/Adxfont.eot?tefm31");
+        src:
+          url("../assets/fonts/icons/Adxfont.eot?tefm31#iefix")
+            format("embedded-opentype"),
+          url("../assets/fonts/icons/Adxfont.ttf?tefm31") format("truetype"),
+          url("../assets/fonts/icons/Adxfont.woff?tefm31") format("woff"),
+          url("../assets/fonts/icons/Adxfont.svg?tefm31#Adxfont") format("svg");
+        font-weight: normal;
+        font-style: normal;
+      }
+      /* Compiled from BulkEdit/index.scss. */
+      .main_container {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 584px;
+        padding-top: 51px;
+        padding-bottom: 77px;
+      }
+      .main_container .back-link {
+        margin-top: 24px;
+        margin-bottom: 24px;
+        cursor: pointer;
+      }
+      .main_container__header__title {
+        font-size: 32px;
+        font-weight: bold;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.25;
+        letter-spacing: 1px;
+      }
+      .main_container__header__strip {
+        width: 37px;
+        height: 4px;
+        background: red;
+        margin-top: 24px;
+      }
+      .main_container__header__desc {
+        margin-top: 24px;
+        font-size: 14px;
+        color: black;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: 1px;
+      }
+      .main_container__upload_content {
+        margin: auto;
+      }
+      .main_container__upload_content .header {
+        font-size: 18px;
+        font-weight: bold;
+        color: #262626;
+      }
+      .main_container__upload_content__upload-view .form-file {
+        display: none;
+      }
+      .main_container__upload_content__upload-view .drop-section {
+        cursor: pointer;
+        height: 154px;
+        margin-top: 48px;
+        padding: 24px;
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.08);
+      }
+      .main_container__upload_content__upload-view .drop-section .upload-here {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        border-radius: 8px;
+        padding: 24px;
+        border: dashed 1px #878787;
+      }
+      .main_container__upload_content__upload-view
+        .drop-section
+        .upload-here__icon {
+        height: 100%;
+        padding-right: 16px;
+        border-right: solid 1px #d5d5da;
+        display: flex;
+        align-items: center;
+      }
+      .main_container__upload_content__upload-view
+        .drop-section
+        .upload-here__icon__image {
+        width: 40px;
+        height: 29px;
+      }
+      .main_container__upload_content__upload-view
+        .drop-section
+        .upload-here__text {
+        margin-left: 16px;
+      }
+      .main_container__upload_content__upload-view
+        .drop-section
+        .upload-here__text__title {
+        color: #262626;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 1.29;
+        letter-spacing: 1px;
+      }
+      .main_container__upload_content__upload-view
+        .drop-section
+        .upload-here__text__description {
+        display: flex;
+        flex-flow: column;
+      }
+      .main_container__upload_content__upload-view
+        .drop-section
+        .upload-here__text__description
+        p {
+        line-height: 1.64;
+        letter-spacing: 0.5px;
+        font-size: 11px;
+        color: #262626;
+      }
+      .main_container__upload_content__upload-view .cursor-over {
+        background-color: #e5e5ea;
+      }
+      .main_container__upload_content__upload-view .cursor-leave {
+        background-color: white;
+      }
+      .main_container__upload_content__upload-view .uploaded-file {
+        margin-top: 24px;
+      }
+      .main_container__upload_content__upload-view .uploaded-file .header {
+        margin-bottom: 12px;
+        font-size: 13px;
+        font-weight: bold;
+        color: #262626;
+        letter-spacing: 0.81px;
+      }
+      .main_container__upload_content__upload-view .uploaded-file .file-csv {
+        display: flex;
+        padding: 16px 24px;
+        background-color: white;
+        margin-bottom: 8px;
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.08);
+      }
+      .main_container__upload_content__upload-view
+        .uploaded-file
+        .file-csv
+        .number {
+        flex: 1%;
+        line-height: 1.29;
+        letter-spacing: 1px;
+        font-size: 14px;
+        margin-right: 24px;
+      }
+      .main_container__upload_content__upload-view
+        .uploaded-file
+        .file-csv
+        .file-name {
+        font-size: 14px;
+        line-height: 1.29;
+        letter-spacing: 1px;
+        flex: calc(97% - 40px);
+        word-wrap: break-word;
+        margin-right: 16px;
+      }
+      .main_container__upload_content__upload-view
+        .uploaded-file
+        .file-csv
+        .icon-wrapper {
+        flex: 2%;
+        text-align: end;
+        cursor: pointer;
+      }
+      .main_container__upload_content__upload-view
+        .uploaded-file
+        .file-csv
+        .icon-wrapper
+        .icon-deleted {
+        border-radius: 16px;
+        padding: 4px;
+        background: #e5e5ea;
+      }
+      .main_container__upload_content__upload-view
+        .uploaded-file
+        .line-wrapper {
+        padding: 16px 0 8px;
+      }
+      .main_container__upload_content__upload-view
+        .uploaded-file
+        .line-wrapper
+        .line {
+        height: 1px;
+        background-color: #e5e5ea;
+        border: none;
+      }
+      .main_container__upload_content__upload-view
+        .uploaded-file
+        .button-download {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .main_container__upload_content__upload-view
+        .uploaded-file
+        .button-download
+        .converter-trigger {
+        margin-top: 24px;
+        text-align: center;
+        font-size: 13px;
+        width: 252px;
+      }
+      .main_container__upload_content__progressing-view {
+        padding-top: 80px;
+      }
+      .main_container__upload_content__progressing-view .loading-state {
+        margin-top: 16px;
+      }
+      .main_container__upload_content__progressing-view .progress-text {
+        text-align: center;
+        width: 100%;
+        height: 15px;
+        font-size: 11px;
+        font-weight: normal;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 1.36;
+        letter-spacing: 0.1px;
+        color: #262626;
+      }
+      .main_container__upload_content__finished-view {
+        margin-top: 48px;
+      }
+      .main_container__upload_content__finished-view .uploaded-icon {
+        margin: auto;
+        width: 100px;
+        height: 100px;
+      }
+      .main_container__upload_content__finished-view .success-title {
+        margin-top: 32px;
+        font-size: 18px;
+        font-weight: bold;
+        color: #262626;
+        text-align: center;
+      }
+      .main_container__upload_content__finished-view .success-caption {
+        margin-top: 8px;
+        color: #262626;
+        text-align: center;
+      }
+      .main_container__upload_content__finished-view .success-caption p {
+        font-size: 14px;
+        line-height: 1.29;
+        letter-spacing: -0.1px;
+      }
+      .main_container__upload_content__finished-view .button-new {
+        display: flex;
+        justify-content: center;
+      }
+      .main_container__upload_content__finished-view .button-new .create-new {
+        margin-top: 50px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 13px;
+        width: 142px;
+        line-height: 1.38;
+        letter-spacing: -0.1px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #fff;
+        color: #262626;
+        font:
+          14px "Core Sans C",
+          system-ui;
+      }
+      button,
+      a {
+        cursor: pointer;
+      }
+      button {
+        font: inherit;
+      }
+      a {
+        color: #ff2d55;
+        text-decoration: none;
+      }
+      .back-link {
+        display: inline-flex;
+        gap: 8px;
+      }
+      h1 {
+        margin: 0;
+      }
+      p {
+        margin: 0;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .primary {
+        background: #ff2d55;
+        color: white;
+        border: 0;
+        border-radius: 6px;
+        padding: 14px 16px;
+        font-weight: 700;
+      }
+      .primary:hover {
+        background: #d42548;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+      }
+      .icon-wrapper {
+        border: 0;
+        background: transparent;
+        color: #68686c;
+        font-size: 20px;
+      }
+      .file-name {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      .preview-note {
+        color: #68686c;
+        font-size: 12px;
+        line-height: 1.6;
+        margin-top: 24px;
+      }
+      .message {
+        margin-top: 16px;
+        line-height: 1.6;
+        color: #b6203e;
+        overflow-wrap: anywhere;
+      }
+      .message:empty {
+        display: none;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #ffe5ec;
+        border-top-color: #ff2d55;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin: 0 auto 20px;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      :focus-visible {
+        outline: 3px solid #007aff;
+        outline-offset: 3px;
+      }
+      dialog {
+        border: 0;
+        border-radius: 8px;
+        padding: 24px;
+        width: min(440px, calc(100% - 32px));
+        color: #262626;
+      }
+      dialog::backdrop {
+        background: #0005;
+      }
+      dialog h2 {
+        margin: 0 0 16px;
+        font-size: 20px;
+      }
+      dialog p {
+        line-height: 1.6;
+      }
+      .dialog-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 24px;
+      }
+      .dialog-actions button {
+        padding: 12px 16px;
+        border-radius: 6px;
+        border: 1px solid #e5e5ea;
+      }
+      .dialog-actions button:not(.primary) {
+        background: white;
+      }
+      @media (max-width: 767px) {
+        .main_container {
+          padding: 30px 16px 60px;
+        }
+        .main_container__header__title {
+          font-size: 28px;
+        }
+        .main_container__upload_content__upload-view .drop-section {
+          height: auto;
+          min-height: 154px;
+          padding: 16px;
+        }
+        .main_container__upload_content__upload-view
+          .drop-section
+          .upload-here {
+          padding: 16px;
+        }
+        .main_container__upload_content__upload-view .uploaded-file .file-csv {
+          padding: 16px;
+        }
+        .main_container__upload_content__upload-view
+          .uploaded-file
+          .button-download
+          .converter-trigger {
+          width: 100%;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .spinner {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="main_container">
+      <a class="back-link" href="PlacementList.html" id="back"
+        ><span aria-hidden="true">←</span> Back</a
+      >
+      <header class="main_container__header">
+        <h1 class="main_container__header__title">Billboard Bulk Edit</h1>
+        <div class="main_container__header__strip"></div>
+        <p class="main_container__header__desc">
+          Bulk edit billboard placement, you can drag or click the button bellow
+        </p>
+      </header>
+    <div class="main">
+        <div class="main_container__upload_content">
+          <section
+            id="picking"
+            class="main_container__upload_content__upload-view"
+          >
+            <input
+              type="file"
+              id="file"
+              class="form-file"
+              accept=".xlsx"
+            /><label
+              for="file"
+              id="drop"
+              tabindex="0"
+              role="button"
+              aria-label="Upload one XLSX file"
+              ><div class="drop-section cursor-leave" id="drop-section">
+                <div class="upload-here">
+                  <div class="upload-here__icon">
+                    <img
+                      class="upload-here__icon__image"
+                      src="../assets/img/cloud-upload.png"
+                      alt=""
+                    />
+                  </div>
+                  <div class="upload-here__text">
+                    <div class="upload-here__text__title">
+                      Drag &amp; drop or click to Upload File
+                    </div>
+                    <div class="upload-here__text__description">
+                      <p>Allowed File is xlsx,</p>
+                      <p>tips you can only drop single file here</p>
+                    </div>
+                  </div>
+                </div>
+              </div></label
+            >
+            <div class="uploaded-file" id="selected" hidden>
+              <div class="list-file">
+                <div class="header">FILE UPLOADED</div>
+                <div class="file-csv">
+                  <div class="number">1</div>
+                  <div class="file-name" id="filename"></div>
+                  <button
+                    type="button"
+                    class="icon-wrapper"
+                    id="remove"
+                    aria-label="Remove selected file"
+                  >
+                    ×
+                  </button>
+                </div>
+                <div class="button-download">
+                  <button
+                    type="button"
+                    class="primary converter-trigger"
+                    id="upload"
+                  >
+                    Upload Billboard Spreadsheet File
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section
+            id="progress"
+            class="main_container__upload_content__progressing-view"
+            hidden
+            role="status"
+            aria-live="polite"
+          >
+            <div class="spinner" aria-hidden="true"></div>
+            <p class="progress-text">Processing spreadsheet…</p>
+          </section>
+          <p class="message" id="error" role="alert"></p>
+        </div>
+      </div>
+    </main>
+    <dialog id="discard-dialog">
+      <h2>Discard selected file?</h2>
+      <p>The selected file will be cleared when you leave this page.</p>
+      <div class="dialog-actions">
+        <button id="keep">Cancel</button
+        ><button id="discard" class="primary">Discard</button>
+      </div>
+    </dialog>
+    <script>
+      "use strict";
+      // Migrate legacy preview codes while preserving record IDs and other edits.
+      (() => {
+        const key = "metrics-preview-placement-records-v1";
+        const normalize = (value) =>
+          String(value || "")
+            .toUpperCase()
+            .replace(/^SOV-/, "")
+            .replace(/-/g, "");
+        try {
+          const rows = JSON.parse(sessionStorage.getItem(key) || "null");
+          const aliases = new Map();
+          if (Array.isArray(rows)) {
+            const cities = {
+              Jakarta: "JKT",
+              Tangerang: "TGR",
+              Bekasi: "BKS",
+              Depok: "DPK",
+              Bogor: "BGR",
+              Bandung: "BDG",
+              Surabaya: "SBY",
+              Aceh: "ACH",
+              Ambon: "AMB",
+            };
+            const used = new Set(
+              rows.map((r) => normalize(r["Placement Code"])),
+            );
+            rows.forEach((row) => {
+              const old = row["Placement Code"];
+              if (typeof old !== "string") return;
+              let code = normalize(old);
+              if (/^BULKDEMO/.test(code)) {
+                let number = Number(row.id) || 1;
+                const prefix = cities[row.City] || "JKT";
+                do {
+                  code = prefix + String(number++).padStart(3, "0");
+                } while (used.has(code));
+              }
+              used.add(code);
+              aliases.set(old, code);
+              row["Placement Code"] = code;
+              row["SOV Code"] = code;
+            });
+            sessionStorage.setItem(key, JSON.stringify(rows));
+          }
+          const queueKey = "metrics-preview-photo-queue-v1";
+          const queue = JSON.parse(sessionStorage.getItem(queueKey) || "null");
+          if (Array.isArray(queue)) {
+            queue.forEach((row) => {
+              if (typeof row.code === "string")
+                row.code = aliases.get(row.code) || normalize(row.code);
+            });
+            sessionStorage.setItem(queueKey, JSON.stringify(queue));
+          }
+        } catch {}
+      })();
+
+      const seed = [
+          {
+            "Placement Code": "JKT001",
+            "SOV Code": "JKT001",
+            Side: "A",
+            City: "Jakarta",
+            "Media Owner": "ADX Media",
+            "Owner Type": "Owner",
+            "Media Type": "Billboard",
+            Area: "Sudirman",
+            Address: "Jl. Sudirman, Jakarta",
+            Direction: "North",
+            Coordinate: "-6.208, 106.844",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Office",
+            View: "Clear",
+            Traffic: 125000,
+            "Width (m)": 12,
+            "Height (m)": 6,
+            Unit: 1,
+            Orientation: "Landscape",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 59500000,
+            "Price Capital 3M (IDR)": 178500000,
+            "Price Capital 6M (IDR)": 357000000,
+            "Price Capital 12M (IDR)": 714000000,
+            "Price 1M (IDR)": 85000000,
+            "Price 3M (IDR)": 255000000,
+            "Price 6M (IDR)": 510000000,
+            "Price 12M (IDR)": 1020000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Available",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Jakarta",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 1,
+          },
+          {
+            "Placement Code": "JKT002",
+            "SOV Code": "JKT002",
+            Side: "A",
+            City: "Jakarta",
+            "Media Owner": "Urban Media",
+            "Owner Type": "Owner",
+            "Media Type": "Videotron",
+            Area: "Thamrin",
+            Address: "Jl. Thamrin, Jakarta",
+            Direction: "North",
+            Coordinate: "-6.194, 106.823",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Shopping Mall",
+            View: "Clear",
+            Traffic: 150000,
+            "Width (m)": 8,
+            "Height (m)": 4,
+            Unit: 1,
+            Orientation: "Landscape",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 84000000,
+            "Price Capital 3M (IDR)": 252000000,
+            "Price Capital 6M (IDR)": 504000000,
+            "Price Capital 12M (IDR)": 1008000000,
+            "Price 1M (IDR)": 120000000,
+            "Price 3M (IDR)": 360000000,
+            "Price 6M (IDR)": 720000000,
+            "Price 12M (IDR)": 1440000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Available",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Jakarta",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 2,
+          },
+          {
+            "Placement Code": "JKT003",
+            "SOV Code": "JKT003",
+            Side: "A",
+            City: "Jakarta",
+            "Media Owner": "ADX Media",
+            "Owner Type": "Owner",
+            "Media Type": "Baliho",
+            Area: "Casablanca",
+            Address: "Jl. Casablanca, Jakarta",
+            Direction: "North",
+            Coordinate: "-6.224, 106.843",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Shopping Mall",
+            View: "Clear",
+            Traffic: 80000,
+            "Width (m)": 4,
+            "Height (m)": 8,
+            Unit: 1,
+            Orientation: "Portrait",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 31500000,
+            "Price Capital 3M (IDR)": 94500000,
+            "Price Capital 6M (IDR)": 189000000,
+            "Price Capital 12M (IDR)": 378000000,
+            "Price 1M (IDR)": 45000000,
+            "Price 3M (IDR)": 135000000,
+            "Price 6M (IDR)": 270000000,
+            "Price 12M (IDR)": 540000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Occupied",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Jakarta",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 3,
+          },
+          {
+            "Placement Code": "TGR001",
+            "SOV Code": "TGR001",
+            Side: "A",
+            City: "Tangerang",
+            "Media Owner": "Urban Media",
+            "Owner Type": "Owner",
+            "Media Type": "Billboard",
+            Area: "Alam Sutera",
+            Address: "Jl. Alam Sutera, Tangerang",
+            Direction: "North",
+            Coordinate: "-6.245, 106.653",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Residential",
+            View: "Clear",
+            Traffic: 92000,
+            "Width (m)": 10,
+            "Height (m)": 5,
+            Unit: 1,
+            Orientation: "Landscape",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 42000000,
+            "Price Capital 3M (IDR)": 126000000,
+            "Price Capital 6M (IDR)": 252000000,
+            "Price Capital 12M (IDR)": 504000000,
+            "Price 1M (IDR)": 60000000,
+            "Price 3M (IDR)": 180000000,
+            "Price 6M (IDR)": 360000000,
+            "Price 12M (IDR)": 720000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Available",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Tangerang",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 4,
+          },
+          {
+            "Placement Code": "BKS001",
+            "SOV Code": "BKS001",
+            Side: "A",
+            City: "Bekasi",
+            "Media Owner": "ADX Media",
+            "Owner Type": "Owner",
+            "Media Type": "Videotron",
+            Area: "Summarecon Bekasi",
+            Address: "Jl. Summarecon Bekasi, Bekasi",
+            Direction: "North",
+            Coordinate: "-6.226, 107.001",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Shopping Mall",
+            View: "Clear",
+            Traffic: 98000,
+            "Width (m)": 6,
+            "Height (m)": 3,
+            Unit: 1,
+            Orientation: "Landscape",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 50400000,
+            "Price Capital 3M (IDR)": 151200000,
+            "Price Capital 6M (IDR)": 302400000,
+            "Price Capital 12M (IDR)": 604800000,
+            "Price 1M (IDR)": 72000000,
+            "Price 3M (IDR)": 216000000,
+            "Price 6M (IDR)": 432000000,
+            "Price 12M (IDR)": 864000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Available",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Bekasi",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 5,
+          },
+          {
+            "Placement Code": "DPK001",
+            "SOV Code": "DPK001",
+            Side: "A",
+            City: "Depok",
+            "Media Owner": "City Outdoor",
+            "Owner Type": "Owner",
+            "Media Type": "Baliho",
+            Area: "Margonda",
+            Address: "Jl. Margonda, Depok",
+            Direction: "North",
+            Coordinate: "-6.374, 106.833",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Campus",
+            View: "Clear",
+            Traffic: 75000,
+            "Width (m)": 4,
+            "Height (m)": 8,
+            Unit: 1,
+            Orientation: "Portrait",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 24500000,
+            "Price Capital 3M (IDR)": 73500000,
+            "Price Capital 6M (IDR)": 147000000,
+            "Price Capital 12M (IDR)": 294000000,
+            "Price 1M (IDR)": 35000000,
+            "Price 3M (IDR)": 105000000,
+            "Price 6M (IDR)": 210000000,
+            "Price 12M (IDR)": 420000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Available",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Depok",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 6,
+          },
+          {
+            "Placement Code": "BGR001",
+            "SOV Code": "BGR001",
+            Side: "A",
+            City: "Bogor",
+            "Media Owner": "City Outdoor",
+            "Owner Type": "Owner",
+            "Media Type": "Billboard",
+            Area: "Pajajaran",
+            Address: "Jl. Pajajaran, Bogor",
+            Direction: "North",
+            Coordinate: "-6.595, 106.806",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Residential",
+            View: "Clear",
+            Traffic: 70000,
+            "Width (m)": 12,
+            "Height (m)": 6,
+            Unit: 1,
+            Orientation: "Landscape",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 36400000,
+            "Price Capital 3M (IDR)": 109200000,
+            "Price Capital 6M (IDR)": 218400000,
+            "Price Capital 12M (IDR)": 436800000,
+            "Price 1M (IDR)": 52000000,
+            "Price 3M (IDR)": 156000000,
+            "Price 6M (IDR)": 312000000,
+            "Price 12M (IDR)": 624000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Occupied",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Bogor",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 7,
+          },
+          {
+            "Placement Code": "JKT004",
+            "SOV Code": "JKT004",
+            Side: "A",
+            City: "Jakarta",
+            "Media Owner": "Urban Media",
+            "Owner Type": "Owner",
+            "Media Type": "Billboard",
+            Area: "Kelapa Gading",
+            Address: "Jl. Kelapa Gading, Jakarta",
+            Direction: "North",
+            Coordinate: "-6.158, 106.905",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Residential",
+            View: "Clear",
+            Traffic: 110000,
+            "Width (m)": 10,
+            "Height (m)": 5,
+            Unit: 1,
+            Orientation: "Landscape",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 66500000,
+            "Price Capital 3M (IDR)": 199500000,
+            "Price Capital 6M (IDR)": 399000000,
+            "Price Capital 12M (IDR)": 798000000,
+            "Price 1M (IDR)": 95000000,
+            "Price 3M (IDR)": 285000000,
+            "Price 6M (IDR)": 570000000,
+            "Price 12M (IDR)": 1140000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Available",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Jakarta",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 8,
+          },
+        ],
+        storageKey = "metrics-preview-placement-records-v1",
+        $ = (id) => document.getElementById(id);
+      let file = null,
+        busy = false;
+      function showError(text) {
+        $("error").textContent = text;
+      }
+      function render() {
+        $("selected").hidden = !file;
+        $("filename").textContent = file?.name || "";
+      }
+      function select(files) {
+        if (busy) return;
+        showError("");
+        if (files.length !== 1) {
+          if (files.length) showError("Please select a single xlsx file.");
+          return;
+        }
+        const next = files[0];
+        if (!/\.xlsx$/i.test(next.name)) {
+          showError("Only accept xlsx file.");
+          $("file").value = "";
+          return;
+        }
+        if (!next.size) {
+          showError(
+            "The selected file is empty. Please choose a valid xlsx file.",
+          );
+          $("file").value = "";
+          return;
+        }
+        file = next;
+        render();
+      }
+      $("file").onchange = () => select([...$("file").files]);
+      $("remove").onclick = () => {
+        file = null;
+        $("file").value = "";
+        showError("");
+        render();
+      };
+      $("drop").onkeydown = (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          $("file").click();
+        }
+      };
+      for (const type of ["dragover", "dragleave", "drop"])
+        $("drop").addEventListener(type, (e) => {
+          e.preventDefault();
+          $("drop-section").classList.toggle(
+            "cursor-over",
+            type === "dragover",
+          );
+          $("drop-section").classList.toggle(
+            "cursor-leave",
+            type !== "dragover",
+          );
+          if (type === "drop") select([...e.dataTransfer.files]);
+        });
+      window.addEventListener("dragover", (e) => e.preventDefault());
+      window.addEventListener("drop", (e) => e.preventDefault());
+      function loading(value) {
+        busy = value;
+        $("picking").hidden = value;
+        $("progress").hidden = !value;
+        $("upload").disabled = value;
+        $("file").disabled = value;
+        $("back").setAttribute("aria-disabled", String(value));
+      }
+      $("upload").onclick = async () => {
+        if (busy) return;
+        if (!file) {
+          showError("Pick an xlsx file first!");
+          return;
+        }
+        showError("");
+        loading(true);
+        try {
+          const bytes = new Uint8Array(await file.slice(0, 4).arrayBuffer());
+          if (
+            bytes[0] !== 80 ||
+            bytes[1] !== 75 ||
+            bytes[2] !== 3 ||
+            bytes[3] !== 4
+          )
+            throw Error(
+              "Please check whether the xlsx file is valid. Expected an XLSX ZIP container.",
+            );
+          await new Promise((r) => setTimeout(r, 700));
+          let records = seed;
+          const stored = sessionStorage.getItem(storageKey);
+          if (stored !== null) {
+            const parsed = JSON.parse(stored);
+            if (
+              !Array.isArray(parsed) ||
+              !parsed.every(
+                (r) =>
+                  r &&
+                  Number.isInteger(r.id) &&
+                  typeof r["Placement Code"] === "string",
+              )
+            )
+              throw Error(
+                "Saved preview data could not be read. Existing data has been preserved.",
+              );
+            records = parsed;
+          }
+          const targetCodes = seed.slice(0, 2).map((r) => r["Placement Code"]);
+          const missing = targetCodes.filter(
+            (code) => !records.some((r) => r["Placement Code"] === code),
+          );
+          const updated = records.map((r) =>
+            targetCodes.includes(r["Placement Code"])
+              ? {
+                  ...r,
+                  Note: "Updated by Bulk Edit preview",
+                  "Last Updated": new Date()
+                    .toISOString()
+                    .slice(0, 16)
+                    .replace("T", " "),
+                }
+              : r,
+          );
+          const count = targetCodes.length - missing.length;
+          if (count)
+            sessionStorage.setItem(storageKey, JSON.stringify(updated));
+          file = null;
+          const result = new URLSearchParams({
+            bulkEdited: String(count),
+            missing: missing.join(", "),
+          });
+          location.href = "PlacementList.html?" + result;
+        } catch (e) {
+          showError(
+            e.name === "QuotaExceededError" || e.name === "SecurityError"
+              ? "Local storage is unavailable or full. No placements were updated."
+              : e.message || "Could not process this file. Please try again.",
+          );
+          loading(false);
+        }
+      };
+      $("back").onclick = (e) => {
+        if (busy) {
+          e.preventDefault();
+          return;
+        }
+        if (file) {
+          e.preventDefault();
+          $("discard-dialog").showModal();
+        }
+      };
+      $("keep").onclick = () => $("discard-dialog").close();
+      $("discard").onclick = () => {
+        file = null;
+        location.href = "PlacementList.html";
+      };
+      window.addEventListener("beforeunload", (e) => {
+        if (file) {
+          e.preventDefault();
+          e.returnValue = "";
+        }
+      });
+      render();
+    </script>
+  </body>
+</html>

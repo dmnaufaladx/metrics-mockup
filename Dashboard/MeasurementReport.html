@@ -1,0 +1,1804 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Measurement Report — Metrics by ADX</title>
+    <style>
+      /* Source: styles/global.scss */
+      *,
+      html,
+      body {
+        font-family: "Core Sans C", system-ui;
+        box-sizing: border-box;
+      }
+
+      html,
+      body,
+      #app {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100% - 168px);
+        padding-top: 24px;
+      }
+      main.container {
+        background: white;
+        padding-top: unset !important;
+        padding-left: unset !important;
+        padding-right: unset !important;
+        width: 100%;
+        max-width: 1920px;
+        margin-bottom: 0px !important;
+        min-height: calc(100vh - 62px) !important;
+      }
+
+      @media (max-width: 767px) {
+        .container {
+          min-width: 300px;
+          margin: 0 auto !important;
+          width: 100%;
+          overflow: hidden;
+        }
+        .btn-regular-white {
+          padding: 8px 8px !important;
+        }
+      }
+      @media (max-width: 1140px) {
+        .container {
+          max-width: 1141px;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          margin: 0 auto !important;
+        }
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        margin: 0;
+        padding: 0;
+        font-weight: 700;
+      }
+
+      p {
+        margin: 0;
+        padding: 0;
+      }
+
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+      }
+
+      a {
+        text-decoration: none;
+        cursor: pointer;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .bg-red {
+        background-color: #ff2d55;
+      }
+
+      button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+      }
+      button:focus {
+        outline: none !important;
+      }
+
+      .btn-regular-white {
+        display: block;
+        padding: 16px 24px;
+        font-size: 14px;
+        color: white;
+        border: 1px solid #ffffff;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        line-height: normal;
+        letter-spacing: 1px;
+      }
+      .btn-regular-white:hover {
+        background-color: #ff2d55;
+        transition: 0.4s;
+      }
+
+      .btn-primary {
+        padding: 16px;
+        background-color: #ff2d55;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        color: #ffffff;
+      }
+      .btn-primary:disabled {
+        color: white;
+        background-color: #cc2444;
+      }
+
+      .btn-secondary-v2 {
+        padding: 16px;
+        border: solid 1px #e5e5ea;
+        background-color: #ffffff;
+        color: #262626;
+        border-radius: 8px;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+      }
+      .btn-secondary-v2:disabled {
+        color: #e5e5ea;
+        background-color: #ffffff;
+      }
+      .btn-secondary-v2:hover {
+        background-color: #e5e5ea;
+      }
+
+      .btn-secondary {
+        border-radius: 8px;
+        border: solid 1px #ffffff;
+        background-color: #ffffff;
+        padding: 16px 24px;
+        color: #ff2d55;
+        line-height: normal;
+        letter-spacing: 1px;
+        width: max-content;
+      }
+      .btn-secondary:hover {
+        box-shadow: 0 8px 4px 0 rgba(0, 0, 0, 0.16);
+      }
+
+      .btn-v1 {
+        background-color: transparent;
+        cursor: pointer;
+        position: relative;
+        font-size: 15px;
+        border: none;
+        font-weight: 400;
+        -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+        border-radius: 8px;
+        -webkit-transition: background-color 0.5s ease;
+        -moz-transition: background-color 0.5s ease;
+        -ms-transition: background-color 0.5s ease;
+        -o-transition: background-color 0.5s ease;
+        transition: background-color 0.5s ease;
+      }
+      .btn-v1.not-rounded {
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+      }
+      .btn-v1.btn-large {
+        padding: 12px 24px;
+        font-weight: 700;
+      }
+      .btn-v1.btn-regular {
+        padding: 8px 16px;
+        border-radius: 4px;
+      }
+      .btn-v1.btn-small {
+        padding: 8px;
+        border-radius: 4px;
+      }
+      .btn-v1.btn-block {
+        font-weight: 700;
+        width: 100%;
+        padding: 12px 0;
+      }
+      .btn-v1.primary {
+        background-color: #ff2d55;
+        border: 1px solid #ff2d55;
+        color: white;
+      }
+      .btn-v1.primary.disabled:disabled {
+        color: white;
+        background-color: #cc2444;
+        border: 1px solid #cc2444;
+      }
+      .btn-v1.primary:hover {
+        background-color: #cc2444;
+        border: 1px solid #cc2444;
+      }
+      .btn-v1.secondary {
+        background-color: #ffffff;
+        border: solid 1px #e5e5ea;
+        color: #262626;
+      }
+      .btn-v1.secondary:hover {
+        background-color: #e5e5ea;
+        border: 1px solid #e5e5ea;
+      }
+      .btn-v1.secondary.disabled:disabled {
+        background-color: #e5e5ea;
+        border: 1px solid #e5e5ea;
+      }
+      .btn-v1.danger {
+        background-color: #ff3b30;
+        border: 1px solid #ff3b30;
+        color: #ffffff;
+      }
+      .btn-v1.danger:hover {
+        background-color: #cc2f26;
+        border: 1px solid #cc2f26;
+      }
+      .btn-v1.warning {
+        background-color: #ff9500;
+        border: 1px solid #ff9500;
+        color: #ffffff;
+      }
+      .btn-v1.warning:hover {
+        background-color: #cc7700;
+        border: 1px solid #cc7700;
+      }
+      .btn-v1.success {
+        background-color: #4cd964;
+        border: 1px solid #4cd964;
+        color: #ffffff;
+      }
+      .btn-v1.success:hover {
+        background-color: #47cc5e;
+        border: 1px solid #47cc5e;
+      }
+      .btn-v1.teal {
+        background-color: #5ac8fa;
+        border: 1px solid #5ac8fa;
+        color: #ffffff;
+      }
+      .btn-v1.teal:hover {
+        background-color: #49a3cc;
+        border: 1px solid #49a3cc;
+      }
+      .btn-v1.pink {
+        background-color: #ff2d55;
+        border: 1px solid #ff2d55;
+        color: #ffffff;
+      }
+      .btn-v1.pink:hover {
+        background-color: #ff2d55;
+        border: 1px solid #ff2d55;
+      }
+      .btn-v1.link {
+        color: #ff2d55;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .btn-v1.link:hover {
+        color: #cc2444;
+      }
+      .btn-v1.link:disabled {
+        background-color: transparent !important;
+        border: none;
+        cursor: no-drop;
+      }
+      .btn-v1.link:disabled:hover {
+        color: #96969a;
+        border: none;
+      }
+      .btn-v1:disabled {
+        cursor: no-drop;
+        background-color: #e5e5ea;
+        border: 1px solid #e5e5ea;
+        color: #96969a;
+      }
+      .btn-v1:disabled:hover {
+        background-color: #e5e5ea;
+        border: 1px solid #e5e5ea;
+      }
+      .btn-v1 .ic-right {
+        margin-left: 5px;
+        display: flex;
+      }
+      .btn-v1 .ic-right i {
+        font-size: 6px;
+        color: #ff2d55;
+      }
+      .btn-v1 .ic-left {
+        margin-right: 5px;
+        display: flex;
+      }
+      .btn-v1 .ic-left i {
+        font-size: 6px;
+      }
+
+      input {
+        outline: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        background-color: white;
+        border: none;
+      }
+      input:focus {
+        outline: none !important;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: none;
+      }
+      img.img-circle {
+        border-radius: 50%;
+      }
+      img.img-rounded {
+        border-radius: 8px;
+      }
+
+      .d-block {
+        display: block;
+      }
+
+      .d-inline-block {
+        display: inline-block;
+      }
+
+      .d-flex {
+        display: flex;
+      }
+
+      .d-none {
+        display: none;
+      }
+      /* Source: styles/typography.scss */
+      b,
+      strong,
+      .strong {
+        font-weight: 700;
+      }
+
+      .base-font {
+        font-size: 16px;
+      }
+
+      .midlarge-title {
+        font-size: 32px;
+      }
+
+      .large-font {
+        font-size: 19px;
+      }
+
+      .header-font {
+        font-size: 19px;
+      }
+
+      .subhead {
+        font-size: 15px;
+      }
+
+      .regular-font {
+        font-size: 14px;
+      }
+
+      .small-font {
+        font-size: 13px;
+      }
+
+      .mini-font {
+        font-size: 12px;
+      }
+
+      .micro-font {
+        font-size: 10px;
+      }
+
+      .medium-font {
+        font-size: 14px;
+      }
+
+      .color-white {
+        color: #ffffff;
+      }
+
+      .color-pink {
+        color: #ff2d55;
+      }
+
+      .color-grey {
+        color: #878787;
+      }
+
+      .color-sunrise {
+        color: #ff9500;
+      }
+      /* Source: styles/fonts.scss */
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-35light-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-35light-webfont.woff")
+            format("woff");
+        font-weight: 300;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-45regular-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-45regular-webfont.woff")
+            format("woff");
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-65bold-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-65bold-webfont.woff")
+            format("woff");
+        font-weight: 700;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-75extrabold-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-75extrabold-webfont.woff")
+            format("woff");
+        font-weight: 900;
+        font-style: normal;
+      }
+      /* Source: styles/adx-font_icon.scss */
+      @font-face {
+        font-family: "Adxfont";
+        src: url("../assets/fonts/icons/Adxfont.eot?tefm31");
+        src:
+          url("../assets/fonts/icons/Adxfont.eot?tefm31#iefix")
+            format("embedded-opentype"),
+          url("../assets/fonts/icons/Adxfont.ttf?tefm31") format("truetype"),
+          url("../assets/fonts/icons/Adxfont.woff?tefm31") format("woff"),
+          url("../assets/fonts/icons/Adxfont.svg?tefm31#Adxfont") format("svg");
+        font-weight: normal;
+        font-style: normal;
+      }
+      [class^="adx-"],
+      [class*=" adx-"] {
+        /* use !important to prevent issues with browser extensions that change fonts */
+        font-family: "Adxfont" !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        /* Better Font Rendering =========== */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .adx-ic_advertiser:before {
+        content: "\e900";
+      }
+
+      .adx-ic_arrow_down:before {
+        content: "\e901";
+      }
+
+      .adx-ic_arrow_drag:before {
+        content: "\e902";
+      }
+
+      .adx-ic_arrow_left:before {
+        content: "\e903";
+      }
+
+      .adx-ic_arrow_right:before {
+        content: "\e904";
+      }
+
+      .adx-ic_arrow_up:before {
+        content: "\e905";
+      }
+
+      .adx-ic_badge:before {
+        content: "\e906";
+      }
+
+      .adx-ic_bell_1:before {
+        content: "\e907";
+      }
+
+      .adx-ic_bell:before {
+        content: "\e908";
+      }
+
+      .adx-ic_billboard:before {
+        content: "\e909";
+      }
+
+      .adx-ic_book:before {
+        content: "\e90a";
+      }
+
+      .adx-ic_briefcase_black:before {
+        content: "\e90b";
+      }
+
+      .adx-ic_briefcase_block:before {
+        content: "\e90c";
+      }
+
+      .adx-ic_briefcase:before {
+        content: "\e90d";
+      }
+
+      .adx-ic_cancel:before {
+        content: "\e90e";
+      }
+
+      .adx-ic_cards:before {
+        content: "\e90f";
+      }
+
+      .adx-ic_check:before {
+        content: "\e910";
+      }
+
+      .adx-ic_chevron_down:before {
+        content: "\e911";
+      }
+
+      .adx-ic_chevron_left:before {
+        content: "\e912";
+      }
+
+      .adx-ic_chevron_right:before {
+        content: "\e913";
+      }
+
+      .adx-ic_chevron_up:before {
+        content: "\e914";
+      }
+
+      .adx-ic_close:before {
+        content: "\e915";
+      }
+
+      .adx-ic_dashboard_1:before {
+        content: "\e916";
+      }
+
+      .adx-ic_dashboard:before {
+        content: "\e917";
+      }
+
+      .adx-ic_desktop:before {
+        content: "\e918";
+      }
+
+      .adx-ic_digital:before {
+        content: "\e919";
+      }
+
+      .adx-ic_download:before {
+        content: "\e91a";
+      }
+
+      .adx-ic_draft:before {
+        content: "\e91b";
+      }
+
+      .adx-ic_edit:before {
+        content: "\e91c";
+      }
+
+      .adx-ic_envelope:before {
+        content: "\e91d";
+      }
+
+      .adx-ic_experience:before {
+        content: "\e91e";
+      }
+
+      .adx-ic_eyes:before {
+        content: "\e91f";
+      }
+
+      .adx-ic_facebook:before {
+        content: "\e920";
+      }
+
+      .adx-ic_fullscreen:before {
+        content: "\e921";
+      }
+
+      .adx-ic_google:before {
+        content: "\e922";
+      }
+
+      .adx-ic_home:before {
+        content: "\e923";
+      }
+
+      .adx-ic_host:before {
+        content: "\e924";
+      }
+
+      .adx-ic_info:before {
+        content: "\e925";
+      }
+
+      .adx-ic_instagram:before {
+        content: "\e926";
+      }
+
+      .adx-ic_list_view:before {
+        content: "\e927";
+      }
+
+      .adx-ic_lock:before {
+        content: "\e928";
+      }
+
+      .adx-ic_love:before {
+        content: "\e929";
+      }
+
+      .adx-ic_media:before {
+        content: "\e92a";
+      }
+
+      .adx-ic_menu_bar .path1:before {
+        content: "\e92b";
+        color: rgb(255, 255, 255);
+      }
+
+      .adx-ic_menu_bar .path2:before {
+        content: "\e92c";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path3:before {
+        content: "\e92d";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path4:before {
+        content: "\e92e";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path5:before {
+        content: "\e92f";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path6:before {
+        content: "\e930";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path7:before {
+        content: "\e931";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path8:before {
+        content: "\e932";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path9:before {
+        content: "\e933";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path10:before {
+        content: "\e934";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path11:before {
+        content: "\e935";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path12:before {
+        content: "\e936";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_menu_bar .path13:before {
+        content: "\e937";
+        margin-left: -1em;
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_more:before {
+        content: "\e938";
+      }
+
+      .adx-ic_next:before {
+        content: "\e939";
+      }
+
+      .adx-ic_partnerup:before {
+        content: "\e93a";
+      }
+
+      .adx-ic_percent:before {
+        content: "\e93b";
+      }
+
+      .adx-ic_phone:before {
+        content: "\e93c";
+      }
+
+      .adx-ic_play_o .path1:before {
+        content: "\e93d";
+        color: rgb(0, 0, 0);
+      }
+
+      .adx-ic_play_o .path2:before {
+        content: "\e93e";
+        margin-left: -1em;
+        color: rgb(255, 255, 255);
+      }
+
+      .adx-ic_plus:before {
+        content: "\e93f";
+      }
+
+      .adx-ic_rate:before {
+        content: "\e940";
+      }
+
+      .adx-ic_reorder:before {
+        content: "\e941";
+      }
+
+      .adx-ic_saved:before {
+        content: "\e942";
+      }
+
+      .adx-ic_search:before {
+        content: "\e943";
+      }
+
+      .adx-ic_signage:before {
+        content: "\e944";
+      }
+
+      .adx-ic_sms:before {
+        content: "\e945";
+      }
+
+      .adx-ic_splash:before {
+        content: "\e946";
+      }
+
+      .adx-ic_store:before {
+        content: "\e947";
+      }
+
+      .adx-ic_thumbnail_view:before {
+        content: "\e948";
+      }
+
+      .adx-ic_time_load:before {
+        content: "\e949";
+      }
+
+      .adx-ic_time:before {
+        content: "\e94a";
+      }
+
+      .adx-ic_transaction:before {
+        content: "\e94b";
+      }
+
+      .adx-ic_twitter:before {
+        content: "\e94c";
+      }
+
+      .adx-ic_user_circle:before {
+        content: "\e94d";
+      }
+
+      .adx-ic_user_group:before {
+        content: "\e94e";
+      }
+
+      .adx-ic_user:before {
+        content: "\e94f";
+      }
+
+      .adx-ic_volume:before {
+        content: "\e950";
+      }
+
+      .adx-ic_warning:before {
+        content: "\e951";
+      }
+      /* Source: views/Dashboard/MeasurementReport/index.scss */
+      .measurement-report-list .main {
+        padding-top: 10px;
+        background: #f5f5fa;
+        min-height: calc(100vh - 62px) !important;
+        padding-bottom: 136px;
+      }
+      .measurement-report-list__wrapper {
+        margin: 0 auto;
+        max-width: 1140px;
+      }
+      .measurement-report-list__wrapper .report-title hr {
+        height: 4px;
+        width: 37px;
+        background: #ff2d55;
+        border: 1px solid #ff2d55;
+        max-width: 100px;
+        margin: 24px 0;
+      }
+      .measurement-report-list__wrapper .report-description .description {
+        width: 70%;
+      }
+      .measurement-report-list__wrapper .sort-search-report {
+        margin-top: 28px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .measurement-report-list__wrapper .sort-search-report__left {
+        display: flex;
+        border: 1px solid #e5e5ea;
+        border-radius: 8px;
+        padding: 12px 16px;
+        width: 300px;
+        background: white;
+      }
+      .measurement-report-list__wrapper .sort-search-report__left i {
+        align-self: center;
+        margin-right: 8px;
+      }
+      .measurement-report-list__wrapper .sort-search-report__left input {
+        border: 0;
+        margin-left: 16px;
+      }
+      .measurement-report-list__wrapper .sort-search-report__right {
+        display: flex;
+        align-items: center;
+      }
+      .measurement-report-list__wrapper
+        .sort-search-report__right
+        .placement-dropdown {
+        margin-left: 8px;
+      }
+      .measurement-report-list__wrapper .report-list {
+        margin-top: 48px;
+      }
+      .measurement-report-list__wrapper .report-list .wrapper .table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 8px;
+      }
+      .measurement-report-list__wrapper .report-list .wrapper .table thead tr {
+        height: 40px;
+      }
+      .measurement-report-list__wrapper .report-list .wrapper .table thead th {
+        text-align: left;
+        padding: 16px 24px;
+      }
+      .measurement-report-list__wrapper
+        .report-list
+        .wrapper
+        .table
+        thead
+        th.campaign,
+      .measurement-report-list__wrapper
+        .report-list
+        .wrapper
+        .table
+        thead
+        th
+        .placement {
+        width: 40%;
+      }
+      .measurement-report-list__wrapper
+        .report-list
+        .wrapper
+        .table
+        thead
+        th.brand,
+      .measurement-report-list__wrapper
+        .report-list
+        .wrapper
+        .table
+        thead
+        th
+        .last-updated {
+        width: 30%;
+      }
+      .measurement-report-list__wrapper
+        .report-list
+        .wrapper
+        .table
+        .emptyLoadingState
+        td {
+        padding: 32px;
+        column-span: 100;
+      }
+      .measurement-report-list__wrapper .report-list .wrapper .table tbody tr {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.08);
+        height: 94px;
+        background-color: #ffffff;
+        cursor: pointer;
+      }
+      .measurement-report-list__wrapper
+        .report-list
+        .wrapper
+        .table
+        tbody
+        tr:last-child {
+        border-bottom: none;
+      }
+      .measurement-report-list__wrapper
+        .report-list
+        .wrapper
+        .table
+        tbody
+        tr:hover {
+        background-color: white;
+        box-shadow:
+          0 4px 16px 0 #e5e5ea,
+          0 -2px 16px 0 #e5e5ea;
+        transition: 0.4s;
+        border: solid 1px rgba(50, 197, 255, 0.64);
+        background-color: #ffffff;
+      }
+      .measurement-report-list__wrapper
+        .report-list
+        .wrapper
+        .table
+        tbody
+        .images {
+        display: flex;
+      }
+      .measurement-report-list__wrapper
+        .report-list
+        .wrapper
+        .table
+        tbody
+        .images
+        img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        margin-right: 8px;
+      }
+      .measurement-report-list__wrapper .report-list .wrapper .table tbody td {
+        padding: 16px 24px;
+        text-align: left;
+      }
+
+      .text-format {
+        line-height: 1.25;
+        letter-spacing: 1px;
+      }
+
+      .text-format-2 {
+        line-height: 1.25;
+        letter-spacing: normal;
+      }
+
+      .margin-format {
+        margin-bottom: 4px;
+      }
+      /* Dashboard shell adapted from Dashboard and HeaderDashboard/SideBar SCSS. */
+      body {
+        margin: 0;
+        color: #262626;
+        background: #f5f5fa;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button,
+      a {
+        color: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      select:focus-visible {
+        outline: 3px solid #007aff !important;
+        outline-offset: 3px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .topbar {
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        background: white;
+        border-bottom: 1px solid #e5e5ea;
+        position: relative;
+        z-index: 3;
+      }
+      .logo img {
+        width: auto;
+        height: 40px;
+      }
+      .account {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+        font-size: 14px;
+      }
+      .account button {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+      }
+      .account i {
+        font-size: 28px;
+      }
+      .account-panel {
+        position: absolute;
+        right: 0;
+        top: 46px;
+        background: white;
+        box-shadow: 0 2px 10px #0002;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        width: 160px;
+      }
+      .account-panel a {
+        display: block;
+        padding: 16px;
+      }
+      .account-panel a:hover {
+        background: #f5f5fa;
+      }
+      .shell {
+        display: flex;
+        min-height: calc(100vh - 56px);
+      }
+      .sidebar {
+        width: 300px;
+        flex-shrink: 0;
+        background-image: linear-gradient(to left, #fc2d2d, #fc2e90 70%);
+        padding: 8px 0 24px 16px;
+      }
+      .sidebar nav > button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-align: left;
+        width: 100%;
+        padding: 16px;
+        color: white;
+        min-height: 52px;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .sidebar .sidebar-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-align: left;
+        width: 100%;
+        padding: 16px;
+        color: white;
+        min-height: 52px;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .sidebar .sidebar-link img {
+        width: 16px;
+        height: 16px;
+      }
+      .sidebar nav > button img {
+        width: 16px;
+        height: 16px;
+      }
+      .sidebar button:hover,
+      .submenu button:hover {
+        background: #e5e5ea55;
+      }
+      .sidebar button.active {
+        background-image: linear-gradient(to left, #32c5ff, #ff1c47 100%);
+      }
+      .chevron {
+        margin-left: auto;
+        transition: transform 0.2s;
+      }
+      .sidebar button[aria-expanded="true"] .chevron {
+        transform: rotate(180deg);
+      }
+      .submenu {
+        padding: 4px 16px 12px 24px;
+      }
+      .submenu a {
+        display: block;
+        color: white;
+        padding: 12px;
+        font-size: 14px;
+      }
+      .submenu a:hover {
+        background: #e5e5ea55;
+      }
+      .submenu button {
+        display: block;
+        text-align: left;
+        width: 100%;
+        padding: 12px;
+        color: white;
+        font-size: 14px;
+      }
+      .content {
+        flex: 1;
+        min-width: 0;
+        padding: 40px 30px;
+      }
+      .measurement-report-list .main {
+        padding-bottom: 40px;
+        min-height: 0 !important;
+      }
+      .measurement-report-list__wrapper .report-description .description {
+        max-width: 800px;
+        width: 100%;
+      }
+      .sort-search-report {
+        gap: 20px;
+      }
+      .sort-search-report__left {
+        max-width: 100%;
+        align-items: center;
+      }
+      .sort-search-report input {
+        font-size: 14px;
+        min-width: 0;
+        width: 100%;
+      }
+      #sort {
+        background: white;
+        border: 1px solid #e5e5ea;
+        border-radius: 6px;
+        padding: 10px 32px 10px 12px;
+        font-size: 14px;
+      }
+      .table-scroll {
+        overflow-x: auto;
+        padding-bottom: 12px;
+      }
+      .table {
+        min-width: 580px;
+      }
+      .campaign-link {
+        text-align: left;
+        padding: 0;
+        line-height: 1.4;
+      }
+      .campaign-link:hover {
+        text-decoration: underline;
+        color: #d42548;
+      }
+      .period {
+        display: block;
+        margin-top: 6px;
+        font-size: 12px;
+        letter-spacing: 1px;
+      }
+      .owner {
+        overflow-wrap: anywhere;
+      }
+      .empty {
+        text-align: center !important;
+        padding: 32px !important;
+      }
+      .pagination {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 20px;
+      }
+      .pagination button {
+        width: 36px;
+        height: 36px;
+        background: white;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+      }
+      .pagination button[aria-current] {
+        background: #ff2d55;
+        color: white;
+        border-color: #ff2d55;
+      }
+      .pagination button:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+      .result-count {
+        font-size: 13px;
+        color: #68686c;
+        margin-top: 12px;
+      }
+      .mobile-nav {
+        display: none;
+      }
+      .skip {
+        position: absolute;
+        top: -100px;
+        left: 12px;
+        background: white;
+        padding: 12px;
+        z-index: 10;
+      }
+      .skip:focus {
+        top: 8px;
+      }
+      dialog {
+        border: 0;
+        border-radius: 8px;
+        padding: 28px;
+        width: min(480px, calc(100% - 32px));
+        color: #262626;
+        box-shadow: 0 8px 32px #0003;
+      }
+      dialog::backdrop {
+        background: #0005;
+      }
+      dialog h2 {
+        font-size: 22px;
+        padding-right: 36px;
+        margin-bottom: 20px;
+      }
+      dialog p {
+        font-size: 14px;
+        line-height: 1.7;
+        white-space: pre-line;
+      }
+      dialog .close {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        width: 36px;
+        height: 36px;
+        border-radius: 4px;
+        background: #f5f5fa;
+      }
+      @media (max-width: 1140px) {
+        .sidebar {
+          width: 250px;
+        }
+        .content {
+          padding: 32px 24px;
+        }
+        .sort-search-report {
+          flex-wrap: wrap;
+        }
+      }
+      @media (max-width: 767px) {
+        .topbar {
+          padding: 0 12px;
+        }
+        .logo img {
+          height: 32px;
+        }
+        .account .email {
+          display: none;
+        }
+        .mobile-nav {
+          display: block;
+          width: 40px;
+          height: 40px;
+          font-size: 22px;
+        }
+        .brand-group {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .shell {
+          display: block;
+        }
+        .sidebar {
+          display: none;
+          width: 100%;
+          padding: 8px 16px;
+        }
+        .sidebar.open {
+          display: block;
+        }
+        .content {
+          padding: 28px 16px;
+        }
+        .sort-search-report__left {
+          width: 100% !important;
+        }
+        .sort-search-report__right {
+          width: 100%;
+          justify-content: space-between;
+        }
+        .sort-search-report input {
+          font-size: 16px;
+        }
+        .measurement-report-list__wrapper .report-list {
+          margin-top: 24px;
+        }
+        h1.midlarge-title {
+          font-size: 28px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to report</a>
+    <header class="topbar">
+      <div class="brand-group">
+        <button
+          class="mobile-nav"
+          id="nav-toggle"
+          aria-label="Toggle navigation"
+          aria-expanded="false"
+          aria-controls="sidebar"
+        >
+          ☰</button
+        ><a class="logo" href="../Home.html"
+          ><img
+            src="../assets/img/icons/metrics-ico-color.png"
+            alt="Metrics by ADX — Home"
+        /></a>
+      </div>
+      <div class="account">
+        <span class="email">demo@metrics.test</span
+        ><button
+          id="account-toggle"
+          aria-label="Account"
+          aria-expanded="false"
+          aria-controls="account-panel"
+        >
+          <i class="adx-ic_user_circle" aria-hidden="true"></i>
+        </button>
+        <div class="account-panel" id="account-panel" hidden>
+          <a href="../Login.html">Sign Out</a>
+        </div>
+      </div>
+    </header>
+    <div class="shell">
+      <aside class="sidebar" id="sidebar">
+        <nav aria-label="Dashboard">
+          <button
+            id="discovery-toggle"
+            aria-expanded="false"
+            aria-controls="discovery-menu"
+          >
+            <img
+              src="../assets/img/icons/adx-ic-location.png"
+              alt=""
+            />Discovery Map<i
+              class="adx-ic_chevron_down chevron"
+              aria-hidden="true"
+            ></i>
+          </button>
+          <div class="submenu" id="discovery-menu" hidden>
+            <a href="../SovMap/SovMap.html">Share of Voice</a>
+            <a href="../BillboardMap/BillboardMap.html">Insight Maps</a
+            ><a href="../Utility/KmlConverter.html">KML Converter</a>
+          </div>
+          <a class="sidebar-link" href="Monitoring/ReportList.html">
+            <img
+              src="../assets/img/icons/adx-ic-monitoring.png"
+              alt=""
+            />Monitoring Report
+          </a>
+          <button class="active" id="measurement-menu" aria-current="page">
+            <img
+              src="../assets/img/icons/adx-ic-measurement.png"
+              alt=""
+            />Measurement Report
+          </button>
+          <a class="sidebar-link" href="../DownloadReport.html">
+            <img
+              src="../assets/img/icons/adx-ic-monitoring.png"
+              alt=""
+            />Download Daily Report
+          </a>
+        </nav>
+      </aside>
+      <main class="content measurement-report-list" id="content" tabindex="-1">
+        <div class="main">
+          <div class="measurement-report-list__wrapper">
+            <div class="report-title">
+              <h1 class="text-format midlarge-title">Measurement Report</h1>
+              <hr />
+            </div>
+            <div class="report-description">
+              <div class="description">
+                <span class="regular-font text-format"
+                  >Just make sure all your campaign has get the 2 weeks report
+                  monitoring, and make sure the campaign running
+                  properlly.</span
+                >
+              </div>
+            </div>
+            <div class="sort-search-report">
+              <div class="sort-search-report__left">
+                <i class="adx-ic_search" aria-hidden="true"></i
+                ><input
+                  id="search"
+                  type="search"
+                  placeholder="Search Campaign or Brand"
+                  aria-label="Search Campaign or Brand"
+                />
+              </div>
+              <div class="sort-search-report__right">
+                <label class="small-font" for="sort">Sort By :</label>
+                <div class="placement-dropdown">
+                  <select id="sort">
+                    <option value="name">Name</option>
+                    <option value="-created" selected>Last Added</option>
+                    <option value="created">First Added</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="report-list">
+              <div
+                class="wrapper table-scroll"
+                role="region"
+                aria-label="Campaign reports"
+                tabindex="0"
+              >
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="campaign mini-font strong">
+                        CAMPAIGN
+                      </th>
+                      <th scope="col" class="brand mini-font strong">
+                        ADV. BRAND
+                      </th>
+                      <th scope="col" class="brand mini-font strong">OWNER</th>
+                    </tr>
+                  </thead>
+                  <tbody id="reports"></tbody>
+                </table>
+              </div>
+            </div>
+            <nav
+              class="pagination"
+              id="pagination"
+              aria-label="Report pages"
+            ></nav>
+            <p
+              class="result-count"
+              id="result-count"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </div>
+        </div>
+      </main>
+    </div>
+    <dialog id="preview" aria-labelledby="preview-title">
+      <button class="close" aria-label="Close preview">✕</button>
+      <h2 id="preview-title"></h2>
+      <p id="preview-description"></p>
+    </dialog>
+    <script>
+      "use strict";
+      // Dummy campaign records; no API or authentication is required for this preview.
+      const campaigns = [
+        {
+          id: 1,
+          name: "LinkAja — Everyday Payments",
+          brand: "LinkAja",
+          owner: "Nadia Putri",
+          start: "2026-01-01",
+          end: "2026-03-31",
+        },
+        {
+          id: 2,
+          name: "Gojek — City Mobility",
+          brand: "Gojek",
+          owner: "Rizky Pratama",
+          start: "2026-02-01",
+          end: "2026-04-30",
+        },
+        {
+          id: 3,
+          name: "Bhinneka — Business Essentials",
+          brand: "Bhinneka",
+          owner: "demo@metrics.test",
+          start: "2026-03-01",
+          end: "2026-05-31",
+        },
+        {
+          id: 4,
+          name: "Safe Care — Everyday Comfort",
+          brand: "Safe Care",
+          owner: "Nadia Putri",
+          start: "2026-04-01",
+          end: "2026-06-30",
+        },
+        {
+          id: 5,
+          name: "LinkAja — Ramadan Campaign",
+          brand: "LinkAja",
+          owner: "Rizky Pratama",
+          start: "2026-02-15",
+          end: "2026-03-31",
+        },
+        {
+          id: 6,
+          name: "Gojek — Jakarta Commute",
+          brand: "Gojek",
+          owner: "demo@metrics.test",
+          start: "2026-05-01",
+          end: "2026-07-31",
+        },
+        {
+          id: 7,
+          name: "Bhinneka — Office Solutions",
+          brand: "Bhinneka",
+          owner: "Nadia Putri",
+          start: "2026-06-01",
+          end: "2026-08-31",
+        },
+        {
+          id: 8,
+          name: "Safe Care — Healthy Journey",
+          brand: "Safe Care",
+          owner: "Rizky Pratama",
+          start: "2026-07-01",
+          end: "2026-09-30",
+        },
+        {
+          id: 9,
+          name: "LinkAja — Independence Day",
+          brand: "LinkAja",
+          owner: "demo@metrics.test",
+          start: "2026-08-01",
+          end: "2026-08-31",
+        },
+        {
+          id: 10,
+          name: "Gojek — Back to Campus",
+          brand: "Gojek",
+          owner: "Nadia Putri",
+          start: "2026-08-15",
+          end: "2026-10-15",
+        },
+        {
+          id: 11,
+          name: "Bhinneka — Business Growth",
+          brand: "Bhinneka",
+          owner: "Rizky Pratama",
+          start: "2026-09-01",
+          end: "2026-11-30",
+        },
+        {
+          id: 12,
+          name: "Safe Care — Family Weekend",
+          brand: "Safe Care",
+          owner: "demo@metrics.test",
+          start: "2026-09-01",
+          end: "2026-12-31",
+        },
+      ];
+      const byId = (id) => document.getElementById(id),
+        search = byId("search"),
+        sort = byId("sort");
+      let page = 1;
+      const pageSize = 5;
+      const date = (value) =>
+        new Date(value + "T00:00:00").toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+      const dialog = byId("preview");
+      function preview(title, description) {
+        byId("preview-title").textContent = title;
+        byId("preview-description").textContent = description;
+        dialog.showModal();
+      }
+      dialog.querySelector(".close").onclick = () => dialog.close();
+      dialog.addEventListener("click", (e) => {
+        if (e.target === dialog) {
+          const r = dialog.getBoundingClientRect();
+          if (
+            e.clientX < r.left ||
+            e.clientX > r.right ||
+            e.clientY < r.top ||
+            e.clientY > r.bottom
+          )
+            dialog.close();
+        }
+      });
+      function render() {
+        const query = search.value.trim().toLowerCase();
+        const list = campaigns
+          .filter((c) => (c.name + " " + c.brand).toLowerCase().includes(query))
+          .sort((a, b) =>
+            sort.value === "name"
+              ? a.name.localeCompare(b.name)
+              : sort.value === "created"
+                ? a.id - b.id
+                : b.id - a.id,
+          );
+        const max = Math.max(1, Math.ceil(list.length / pageSize));
+        page = Math.min(page, max);
+        const rows = list
+          .slice((page - 1) * pageSize, page * pageSize)
+          .map((c) => {
+            const row = document.createElement("tr"),
+              campaign = document.createElement("td"),
+              brand = document.createElement("td"),
+              owner = document.createElement("td");
+            const button = document.createElement("button");
+            button.className = "campaign-link regular-font text-format";
+            button.textContent = c.name;
+            button.onclick = () => {
+              window.location.href =
+                "Measurement/CaptureInsight.html?id=" +
+                encodeURIComponent(c.id);
+            };
+            const period = document.createElement("span");
+            period.className = "period";
+            period.textContent =
+              "Period " + date(c.start) + " - " + date(c.end);
+            campaign.append(button, period);
+            brand.className = "small-font text-format";
+            brand.textContent = c.brand;
+            owner.className = "owner small-font text-format";
+            owner.textContent = c.owner;
+            row.append(campaign, brand, owner);
+            return row;
+          });
+        if (!rows.length) {
+          const row = document.createElement("tr"),
+            cell = document.createElement("td");
+          cell.colSpan = 3;
+          cell.className = "empty";
+          cell.textContent =
+            "No campaigns found. Try another campaign or brand.";
+          row.append(cell);
+          rows.push(row);
+        }
+        byId("reports").replaceChildren(...rows);
+        const buttons = [];
+        function add(label, target, disabled = false, current = false) {
+          const b = document.createElement("button");
+          b.textContent = label;
+          b.disabled = disabled;
+          b.setAttribute(
+            "aria-label",
+            label === "‹"
+              ? "Previous page"
+              : label === "›"
+                ? "Next page"
+                : "Page " + label,
+          );
+          if (current) b.setAttribute("aria-current", "page");
+          b.onclick = () => {
+            page = target;
+            render();
+            const active = byId("pagination").querySelector("[aria-current]");
+            if (active) active.focus();
+          };
+          buttons.push(b);
+        }
+        add("‹", page - 1, page === 1);
+        for (let n = 1; n <= max; n++) add(String(n), n, false, n === page);
+        add("›", page + 1, page === max);
+        byId("pagination").replaceChildren(...buttons);
+        byId("pagination").hidden = !list.length;
+        byId("result-count").textContent = list.length
+          ? "Showing " +
+            ((page - 1) * pageSize + 1) +
+            "–" +
+            Math.min(page * pageSize, list.length) +
+            " of " +
+            list.length +
+            " campaigns"
+          : "0 campaigns";
+      }
+      search.addEventListener("input", () => {
+        page = 1;
+        render();
+      });
+      sort.addEventListener("change", () => {
+        page = 1;
+        render();
+      });
+      render();
+      function toggle(button, panel) {
+        const open = button.getAttribute("aria-expanded") !== "true";
+        button.setAttribute("aria-expanded", String(open));
+        panel.hidden = !open;
+      }
+      byId("discovery-toggle").onclick = () =>
+        toggle(byId("discovery-toggle"), byId("discovery-menu"));
+      byId("account-toggle").onclick = () =>
+        toggle(byId("account-toggle"), byId("account-panel"));
+      byId("nav-toggle").onclick = () => {
+        const open =
+          byId("nav-toggle").getAttribute("aria-expanded") !== "true";
+        byId("nav-toggle").setAttribute("aria-expanded", String(open));
+        byId("sidebar").classList.toggle("open", open);
+      };
+      document
+        .querySelectorAll("[data-pending]")
+        .forEach(
+          (button) =>
+            (button.onclick = () =>
+              preview(
+                button.dataset.pending,
+                "This page is not available in this preview yet.",
+              )),
+        );
+      byId("measurement-menu").onclick = () => {
+        byId("sidebar").classList.remove("open");
+        byId("nav-toggle").setAttribute("aria-expanded", "false");
+        byId("content").focus();
+      };
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".account")) {
+          byId("account-panel").hidden = true;
+          byId("account-toggle").setAttribute("aria-expanded", "false");
+        }
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !dialog.open) {
+          if (!byId("account-panel").hidden) byId("account-toggle").focus();
+          else if (!byId("discovery-menu").hidden)
+            byId("discovery-toggle").focus();
+          byId("account-panel").hidden = true;
+          byId("discovery-menu").hidden = true;
+          byId("account-toggle").setAttribute("aria-expanded", "false");
+          byId("discovery-toggle").setAttribute("aria-expanded", "false");
+        }
+      });
+    </script>
+  </body>
+</html>

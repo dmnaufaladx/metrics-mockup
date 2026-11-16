@@ -1,0 +1,1833 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Placement Data — Metrics by ADX</title>
+    <style>
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-35light-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-35light-webfont.woff")
+            format("woff");
+        font-weight: 300;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-45regular-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-45regular-webfont.woff")
+            format("woff");
+        font-weight: 400;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-65bold-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-65bold-webfont.woff")
+            format("woff");
+        font-weight: 700;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Core Sans C";
+        src:
+          url("../assets/fonts/Core/coresansc-75extrabold-webfont.woff2")
+            format("woff2"),
+          url("../assets/fonts/Core/coresansc-75extrabold-webfont.woff")
+            format("woff");
+        font-weight: 900;
+        font-style: normal;
+      }
+      @font-face {
+        font-family: "Adxfont";
+        src: url("../assets/fonts/icons/Adxfont.eot?tefm31");
+        src:
+          url("../assets/fonts/icons/Adxfont.eot?tefm31#iefix")
+            format("embedded-opentype"),
+          url("../assets/fonts/icons/Adxfont.ttf?tefm31") format("truetype"),
+          url("../assets/fonts/icons/Adxfont.woff?tefm31") format("woff"),
+          url("../assets/fonts/icons/Adxfont.svg?tefm31#Adxfont") format("svg");
+        font-weight: normal;
+        font-style: normal;
+      }
+      /* Compiled from EditPlacement/index.scss */
+      ::-webkit-datetime-edit-year-field:not([aria-valuenow]),
+      ::-webkit-datetime-edit-month-field:not([aria-valuenow]),
+      ::-webkit-datetime-edit-day-field:not([aria-valuenow]) {
+        color: transparent;
+      }
+
+      .placement-data {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 584px;
+        padding-top: 51px;
+        padding-bottom: 77px;
+      }
+      .placement-data__header {
+        margin-bottom: 24px;
+      }
+      .placement-data__header__back-link {
+        margin-bottom: 24px;
+        cursor: pointer;
+      }
+      .placement-data__header__back-link i {
+        margin-right: 8px;
+      }
+
+      .text-format {
+        line-height: normal;
+        letter-spacing: 0.81px;
+      }
+
+      @media (max-width: 767px) {
+        .placement-data {
+          padding: 30px 16px !important;
+          min-width: 360px;
+          width: 100%;
+        }
+      }
+      .placement-data-content__wrapper {
+        margin-top: 24px;
+      }
+      .placement-data-content__wrapper .delete-modal .subTitle {
+        font-size: 13px;
+      }
+      .placement-data-content__wrapper .delete-modal .subTitle.deleteWarning {
+        font-size: 14px;
+      }
+      .placement-data-content__wrapper .delete-modal .btn-group {
+        margin-top: 24px;
+      }
+      .placement-data-content__wrapper .delete-modal .btn-group .delete-btn {
+        float: right;
+      }
+      .placement-data-content__wrapper .inline {
+        display: flex;
+        margin-bottom: 8px;
+      }
+      .placement-data-content__wrapper .inline .datePicker {
+        padding: 16px;
+        display: block;
+        height: 56px;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+      }
+      .placement-data-content__wrapper .inline .disabled {
+        cursor: no-drop;
+        background: #e5e5ea;
+      }
+      .placement-data-content__wrapper .inline .input-box-left {
+        margin-right: 16px;
+      }
+      .placement-data-content__wrapper .inline .select-left {
+        margin-right: 16px;
+      }
+      .placement-data-content__wrapper .button-action {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 48px;
+      }
+      .placement-data-content__wrapper .button-action button {
+        line-height: 1.38;
+        letter-spacing: -0.1px;
+        font-size: 13px;
+        font-weight: bold;
+      }
+      .placement-data-content__wrapper__header {
+        margin-bottom: 24px;
+        display: flex;
+        flex-direction: column;
+      }
+      .placement-data-content__wrapper__header .step {
+        display: flex;
+        flex-direction: row;
+      }
+      .placement-data-content__wrapper__header .number {
+        border-radius: 24px;
+        width: 24px;
+        height: 24px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.16);
+        background-image: linear-gradient(to left, #7ae2bd, #07b48d);
+        text-align: center;
+        color: white;
+        line-height: 24px;
+      }
+      .placement-data-content__wrapper__header .title {
+        align-self: center;
+        margin-left: 16px;
+      }
+      .placement-data-content__wrapper__content {
+        border-bottom: 1px solid #e5e5ea;
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        display: flex;
+        flex-direction: column;
+      }
+      .placement-data-content__wrapper .button-action {
+        margin-top: 16px;
+      }
+
+      .text-format {
+        line-height: 1.23;
+        letter-spacing: 1px;
+      }
+
+      @media (max-width: 767px) {
+        .placement-data-content__wrapper {
+          margin-top: 52px;
+        }
+        .placement-data-content__wrapper__header {
+          margin-bottom: 24px;
+          display: flex;
+        }
+        .placement-data-content__wrapper__content {
+          border-bottom: 1px solid #e5e5ea;
+        }
+        .placement-data-content__wrapper__content .check-box {
+          display: block;
+          margin-top: 25px;
+          margin-bottom: 25px;
+        }
+      }
+      .image-content {
+        margin-bottom: 24px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(auto, 1fr);
+        grid-auto-flow: row;
+        row-gap: 8px;
+        column-gap: 16px;
+      }
+      .image-content__wrapper {
+        width: 284px;
+        height: 85px;
+        border-radius: 4px;
+        border: solid 1px #e5e5ea;
+        background-color: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        padding: 8px;
+        align-items: center;
+      }
+      .image-content__wrapper .left {
+        display: flex;
+      }
+      .image-content__wrapper .left i {
+        margin-right: 8px;
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .image-content__wrapper .right img {
+        width: 65px;
+        height: 65px;
+        object-fit: cover;
+      }
+      .image-content__wrapper .right-no-content {
+        border-radius: 4px;
+        border: 1px solid #d5d5da;
+        background-color: #fff;
+        margin: 8px 8px 8px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 52px;
+        height: 32px;
+        font-weight: 500;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .image-content__wrapper .right-no-content input {
+        display: none;
+      }
+      .image-content__wrapper .right-no-content label {
+        cursor: pointer;
+      }
+
+      @media (max-width: 767px) {
+        .image-content {
+          display: block;
+        }
+        .image-content__wrapper {
+          min-width: 288px;
+          height: 94px;
+          width: 100%;
+          margin-bottom: 16px;
+          padding: 16px;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: white;
+        color: #262626;
+        font:
+          14px "Core Sans C",
+          system-ui;
+      }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+      button,
+      a {
+        cursor: pointer;
+      }
+      a {
+        color: #ff2d55;
+        text-decoration: none;
+      }
+      button {
+        padding: 12px 18px;
+        border: 1px solid #e5e5ea;
+        border-radius: 6px;
+        background: white;
+        color: #262626;
+      }
+      button:hover {
+        background: #f5f5fa;
+      }
+      button:disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+      .primary {
+        background: #ff2d55;
+        color: white;
+        border-color: #ff2d55;
+      }
+      .primary:hover {
+        background: #d42548;
+      }
+      .danger {
+        color: #be2642;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      textarea:focus-visible {
+        outline: 3px solid #007aff;
+        outline-offset: 2px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .placement-data {
+        width: min(860px, 100%);
+        min-width: 0;
+        margin: 0 auto;
+        padding: 40px 32px;
+      }
+      .placement-data__header h1 {
+        font-size: 19px;
+        margin: 24px 0 0;
+      }
+      .back {
+        display: inline-flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 14px;
+      }
+      .muted {
+        font-size: 12px;
+        color: #68686c;
+        line-height: 1.6;
+      }
+      .record-line {
+        margin: 12px 0;
+      }
+      .placement-data-content__wrapper {
+        margin-top: 24px;
+      }
+      fieldset {
+        border: 0;
+        padding: 0;
+        margin: 0;
+        min-width: 0;
+      }
+      .fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px 16px;
+      }
+      .field {
+        position: relative;
+        min-width: 0;
+      }
+      .field:first-child,
+      .field.note {
+        grid-column: 1/-1;
+      }
+      .field label {
+        position: absolute;
+        top: 7px;
+        left: 14px;
+        font-size: 11px;
+        color: #68686c;
+        z-index: 1;
+      }
+      .field input,
+      .field select,
+      .field textarea {
+        width: 100%;
+        min-width: 0;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        background: white;
+        color: #262626;
+        padding: 25px 14px 10px;
+        min-height: 58px;
+      }
+      .field textarea {
+        resize: vertical;
+        min-height: 115px;
+      }
+      .field input:disabled,
+      .field select:disabled,
+      .field textarea:disabled {
+        background: #f5f5fa;
+        color: #68686c;
+        opacity: 1;
+      }
+      .checks {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin: 24px 0;
+      }
+      .checks label {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font-size: 13px;
+      }
+      .checks input {
+        accent-color: #ff2d55;
+      }
+      .pictures {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .picture {
+        border: 1px solid #e5e5ea;
+        border-radius: 6px;
+        padding: 16px;
+        min-width: 0;
+      }
+      .picture img {
+        width: 100%;
+        height: 130px;
+        object-fit: contain;
+        background: #f5f5fa;
+        margin: 12px 0;
+      }
+      .picture label {
+        display: block;
+        font-size: 13px;
+      }
+      .picture input {
+        width: 100%;
+        font-size: 12px;
+        margin: 12px 0;
+      }
+      .picture button {
+        font-size: 12px;
+        padding: 8px;
+      }
+      .filename {
+        font-size: 12px;
+        overflow-wrap: anywhere;
+      }
+      .button-action {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin: 24px 0;
+      }
+      .right-actions {
+        display: flex;
+        gap: 8px;
+      }
+      .form-error {
+        color: #b6203e;
+        font-size: 13px;
+        line-height: 1.6;
+        margin: 12px 0;
+      }
+      .save-status {
+        font-size: 13px;
+        color: #176b37;
+        line-height: 1.6;
+      }
+      .missing {
+        padding: 24px;
+        background: #fff1f4;
+        margin: 20px 0;
+      }
+      .missing p {
+        line-height: 1.6;
+      }
+      dialog {
+        border: 0;
+        border-radius: 8px;
+        padding: 24px;
+        width: min(440px, calc(100% - 32px));
+        color: #262626;
+      }
+      dialog::backdrop {
+        background: #0005;
+      }
+      dialog h2 {
+        font-size: 20px;
+        margin: 0 0 16px;
+      }
+      dialog p {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      .dialog-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 24px;
+      }
+      @media (max-width: 767px) {
+        .placement-data {
+          padding: 24px 16px !important;
+          min-width: 0;
+        }
+        .placement-data-content__wrapper {
+          margin-top: 24px;
+        }
+        .fields,
+        .pictures {
+          grid-template-columns: 1fr;
+        }
+        .field input,
+        .field select,
+        .field textarea {
+          font-size: 16px;
+        }
+        .button-action {
+          flex-wrap: wrap;
+        }
+        .right-actions {
+          flex: 1;
+          justify-content: flex-end;
+        }
+        .checks {
+          gap: 12px;
+        }
+        .button-action button {
+          padding: 12px;
+          font-size: 13px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="placement-data">
+      <div class="placement-data__header">
+        <a class="back" href="PlacementList.html" id="back">← Back</a>
+        <h1>Placement Data</h1>
+        <p class="muted record-line" id="record-label"></p>
+      </div>
+      <section class="missing" id="missing" hidden>
+        <h2>Placement not found</h2>
+        <p>
+          The requested sample placement is unavailable.
+          <a href="PlacementList.html">Return to Placement List</a>.
+        </p>
+      </section>
+      <div class="placement-data-content">
+        <form id="placement-form" class="placement-data-content__wrapper">
+          <fieldset id="editable" disabled>
+            <div class="fields" id="fields"></div>
+            <div class="checks" id="checks"></div>
+            <div class="pictures">
+              <div class="picture">
+                <label for="picture">Picture</label
+                ><span class="muted">File JPEG only · Local preview</span
+                ><img
+                  id="picture-preview"
+                  src="../assets/img/bb-na-placeholder.png"
+                  alt="Placement picture preview"
+                /><input id="picture" type="file" accept="image/jpeg" />
+                <p id="picture-name" class="filename">No picture selected</p>
+                <button type="button" id="picture-remove">
+                  Remove Picture
+                </button>
+              </div>
+              <div class="picture">
+                <label for="image">Image</label
+                ><span class="muted">File JPEG only · Local preview</span
+                ><img
+                  id="image-preview"
+                  src="../assets/img/bb-na-placeholder.png"
+                  alt="Placement image preview"
+                /><input id="image" type="file" accept="image/jpeg" />
+                <p id="image-name" class="filename">No image selected</p>
+                <button type="button" id="image-remove">Remove Image</button>
+              </div>
+            </div>
+          </fieldset>
+          <p class="form-error" id="form-error" role="alert"></p>
+          <p
+            class="save-status"
+            id="save-status"
+            role="status"
+            aria-live="polite"
+          ></p>
+          <div class="button-action">
+            <button type="button" id="delete-open" class="danger">
+              Delete Placement
+            </button>
+            <div class="right-actions">
+              <button type="button" id="cancel-edit" hidden>Cancel</button
+              ><button type="button" class="primary" id="edit">
+                Edit Placement</button
+              ><button class="primary" id="save" hidden>Save Placement</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+    <dialog id="delete-dialog">
+      <h2>Delete this Placement?</h2>
+      <p id="delete-description"></p>
+      <p class="muted">
+        This removes only the sample record in this browser tab.
+      </p>
+      <div class="dialog-actions">
+        <button type="button" data-close>Cancel</button
+        ><button type="button" class="primary" id="confirm-delete">
+          Delete
+        </button>
+      </div>
+    </dialog>
+    <dialog id="discard-dialog">
+      <h2>Discard unsaved changes?</h2>
+      <p>Your latest edits will be removed.</p>
+      <div class="dialog-actions">
+        <button type="button" data-close>Keep Editing</button
+        ><button type="button" class="primary" id="discard">Discard</button>
+      </div>
+    </dialog>
+    <script>
+      "use strict";
+      // Migrate legacy preview codes while preserving record IDs and other edits.
+      (() => {
+        const key = "metrics-preview-placement-records-v1";
+        const normalize = (value) =>
+          String(value || "")
+            .toUpperCase()
+            .replace(/^SOV-/, "")
+            .replace(/-/g, "");
+        try {
+          const rows = JSON.parse(sessionStorage.getItem(key) || "null");
+          const aliases = new Map();
+          if (Array.isArray(rows)) {
+            const cities = {
+              Jakarta: "JKT",
+              Tangerang: "TGR",
+              Bekasi: "BKS",
+              Depok: "DPK",
+              Bogor: "BGR",
+              Bandung: "BDG",
+              Surabaya: "SBY",
+              Aceh: "ACH",
+              Ambon: "AMB",
+            };
+            const used = new Set(
+              rows.map((r) => normalize(r["Placement Code"])),
+            );
+            rows.forEach((row) => {
+              const old = row["Placement Code"];
+              if (typeof old !== "string") return;
+              let code = normalize(old);
+              if (/^BULKDEMO/.test(code)) {
+                let number = Number(row.id) || 1;
+                const prefix = cities[row.City] || "JKT";
+                do {
+                  code = prefix + String(number++).padStart(3, "0");
+                } while (used.has(code));
+              }
+              used.add(code);
+              aliases.set(old, code);
+              row["Placement Code"] = code;
+              row["SOV Code"] = code;
+            });
+            sessionStorage.setItem(key, JSON.stringify(rows));
+          }
+          const queueKey = "metrics-preview-photo-queue-v1";
+          const queue = JSON.parse(sessionStorage.getItem(queueKey) || "null");
+          if (Array.isArray(queue)) {
+            queue.forEach((row) => {
+              if (typeof row.code === "string")
+                row.code = aliases.get(row.code) || normalize(row.code);
+            });
+            sessionStorage.setItem(queueKey, JSON.stringify(queue));
+          }
+        } catch {}
+      })();
+
+      const seed = {
+        fields: [
+          {
+            label: "Top Rekomendasi",
+            select: false,
+            id: "field-0",
+            key: "Top Rekomendasi",
+            type: "number",
+          },
+          {
+            label: "Code",
+            select: false,
+            id: "field-1",
+            key: "Placement Code",
+            type: "text",
+          },
+          {
+            label: "Side",
+            select: false,
+            id: "field-2",
+            key: "Side",
+            type: "text",
+          },
+          {
+            label: "City",
+            select: true,
+            id: "field-3",
+            key: "City",
+            type: "text",
+            options: ["Jakarta", "Tangerang", "Bekasi", "Depok", "Bogor"],
+          },
+          {
+            label: "Media Owner",
+            select: false,
+            id: "field-4",
+            key: "Media Owner",
+            type: "text",
+          },
+          {
+            label: "Owner Type",
+            select: true,
+            id: "field-5",
+            key: "Owner Type",
+            type: "text",
+            options: ["Owner", "Agency"],
+          },
+          {
+            label: "Media Type",
+            select: true,
+            id: "field-6",
+            key: "Media Type",
+            type: "text",
+            options: [
+              "Billboard",
+              "Videotron",
+              "Baliho",
+              "Bando",
+              "JPO",
+              "LED Banner",
+              "Static Banner",
+              "Street Furniture Digital",
+              "Street Furniture Static",
+            ],
+          },
+          {
+            label: "Daerah",
+            select: false,
+            id: "field-7",
+            key: "Area",
+            type: "text",
+          },
+          {
+            label: "Address",
+            select: false,
+            id: "field-8",
+            key: "Address",
+            type: "text",
+          },
+          {
+            label: "Direction",
+            select: false,
+            id: "field-9",
+            key: "Direction",
+            type: "text",
+          },
+          {
+            label: "Road Type",
+            select: true,
+            id: "field-10",
+            key: "Road Type",
+            type: "text",
+            options: ["Main Road", "Toll Road", "Secondary Road"],
+          },
+          {
+            label: "Latitude",
+            select: false,
+            id: "field-11",
+            key: "Latitude",
+            type: "number",
+          },
+          {
+            label: "Longitude",
+            select: false,
+            id: "field-12",
+            key: "Longitude",
+            type: "number",
+          },
+          {
+            label: "Profile Audience",
+            select: false,
+            id: "field-13",
+            key: "Profile Audience",
+            type: "text",
+          },
+          {
+            label: "Profile Job",
+            select: false,
+            id: "field-14",
+            key: "Profile Job",
+            type: "text",
+          },
+          {
+            label: "Surrounding",
+            select: false,
+            id: "field-15",
+            key: "Surrounding",
+            type: "text",
+          },
+          {
+            label: "View",
+            select: true,
+            id: "field-16",
+            key: "View",
+            type: "text",
+            options: ["Clear", "Partially Obstructed"],
+          },
+          {
+            label: "Traffic",
+            select: false,
+            id: "field-17",
+            key: "Traffic",
+            type: "number",
+          },
+          {
+            label: "Unit",
+            select: false,
+            id: "field-18",
+            key: "Unit",
+            type: "number",
+          },
+          {
+            label: "Width",
+            select: false,
+            id: "field-19",
+            key: "Width (m)",
+            type: "number",
+          },
+          {
+            label: "Height",
+            select: false,
+            id: "field-20",
+            key: "Height (m)",
+            type: "number",
+          },
+          {
+            label: "Orientation",
+            select: true,
+            id: "field-21",
+            key: "Orientation",
+            type: "text",
+            options: ["Landscape", "Portrait"],
+          },
+          {
+            label: "Lighting",
+            select: true,
+            id: "field-22",
+            key: "Lighting",
+            type: "text",
+            options: ["Frontlit", "Backlit", "LED", "None"],
+          },
+          {
+            label: "Spot Per Day",
+            select: false,
+            id: "field-23",
+            key: "Spot /day",
+            type: "number",
+          },
+          {
+            label: "Slot Per Day",
+            select: false,
+            id: "field-24",
+            key: "Client Slot",
+            type: "number",
+          },
+          {
+            label: "Resolution",
+            select: false,
+            id: "field-25",
+            key: "Resolution",
+            type: "text",
+          },
+          {
+            label: "Duration",
+            select: false,
+            id: "field-26",
+            key: "Duration /slot",
+            type: "number",
+          },
+          {
+            label: "Capital Price Change M2",
+            select: false,
+            id: "field-27",
+            key: "Capital Price Change M2",
+            type: "number",
+          },
+          {
+            label: "Price Change M2",
+            select: false,
+            id: "field-28",
+            key: "Price Change M2",
+            type: "number",
+          },
+          {
+            label: "Price Capital 1",
+            select: false,
+            id: "field-29",
+            key: "Price Capital 1M (IDR)",
+            type: "number",
+          },
+          {
+            label: "Price Capital 3",
+            select: false,
+            id: "field-30",
+            key: "Price Capital 3M (IDR)",
+            type: "number",
+          },
+          {
+            label: "Price Capital 6",
+            select: false,
+            id: "field-31",
+            key: "Price Capital 6M (IDR)",
+            type: "number",
+          },
+          {
+            label: "Price Capital 12",
+            select: false,
+            id: "field-32",
+            key: "Price Capital 12M (IDR)",
+            type: "number",
+          },
+          {
+            label: "Price Upfront 1",
+            select: false,
+            id: "field-33",
+            key: "Price Upfront 1M (IDR)",
+            type: "number",
+          },
+          {
+            label: "Price Upfront 3",
+            select: false,
+            id: "field-34",
+            key: "Price Upfront 3M (IDR)",
+            type: "number",
+          },
+          {
+            label: "Price Upfront 6",
+            select: false,
+            id: "field-35",
+            key: "Price Upfront 6M (IDR)",
+            type: "number",
+          },
+          {
+            label: "Price Upfront 12",
+            select: false,
+            id: "field-36",
+            key: "Price Upfront 12M (IDR)",
+            type: "number",
+          },
+          {
+            label: "Price 1",
+            select: false,
+            id: "field-37",
+            key: "Price 1M (IDR)",
+            type: "number",
+          },
+          {
+            label: "Price 3",
+            select: false,
+            id: "field-38",
+            key: "Price 3M (IDR)",
+            type: "number",
+          },
+          {
+            label: "Price 6",
+            select: false,
+            id: "field-39",
+            key: "Price 6M (IDR)",
+            type: "number",
+          },
+          {
+            label: "Price 12",
+            select: false,
+            id: "field-40",
+            key: "Price 12M (IDR)",
+            type: "number",
+          },
+          {
+            label: "Updated Date (Month)",
+            select: false,
+            id: "field-41",
+            key: "Updated Date",
+            type: "month",
+          },
+          {
+            label: "Price Updated Date",
+            select: false,
+            id: "field-42",
+            key: "Price Updated Date",
+            type: "date",
+          },
+          {
+            label: "Availability Date",
+            select: false,
+            id: "field-43",
+            key: "Availability Date",
+            type: "date",
+          },
+          {
+            label: "Tier",
+            select: false,
+            id: "field-44",
+            key: "Price Tier",
+            type: "text",
+          },
+          {
+            label: "Discount (%)",
+            select: false,
+            id: "field-45",
+            key: "Discount (%)",
+            type: "number",
+          },
+          {
+            label: "Discount IM (%)",
+            select: false,
+            id: "field-46",
+            key: "Discount IM (%)",
+            type: "number",
+          },
+          {
+            label: "Price Update Status",
+            select: true,
+            id: "field-47",
+            key: "Price Update Status",
+            type: "text",
+            options: ["Updated", "Not Updated"],
+          },
+          {
+            label: "Region",
+            select: true,
+            id: "field-48",
+            key: "Region",
+            type: "text",
+            options: ["Jabodetabek", "West Java", "Central Java", "East Java"],
+          },
+          {
+            label: "Bundling",
+            select: false,
+            id: "field-49",
+            key: "Bundling",
+            type: "text",
+          },
+          {
+            label: "Operational Hours",
+            select: false,
+            id: "field-50",
+            key: "Operational Hour",
+            type: "text",
+          },
+          {
+            label: "Note",
+            select: false,
+            id: "field-51",
+            key: "Note",
+            type: "textarea",
+          },
+        ],
+        records: [
+          {
+            "Placement Code": "JKT001",
+            "SOV Code": "JKT001",
+            Side: "A",
+            City: "Jakarta",
+            "Media Owner": "ADX Media",
+            "Owner Type": "Owner",
+            "Media Type": "Billboard",
+            Area: "Sudirman",
+            Address: "Jl. Sudirman, Jakarta",
+            Direction: "North",
+            Coordinate: "-6.208, 106.844",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Office",
+            View: "Clear",
+            Traffic: 125000,
+            "Width (m)": 12,
+            "Height (m)": 6,
+            Unit: 1,
+            Orientation: "Landscape",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 59500000,
+            "Price Capital 3M (IDR)": 178500000,
+            "Price Capital 6M (IDR)": 357000000,
+            "Price Capital 12M (IDR)": 714000000,
+            "Price 1M (IDR)": 85000000,
+            "Price 3M (IDR)": 255000000,
+            "Price 6M (IDR)": 510000000,
+            "Price 12M (IDR)": 1020000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Available",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Jakarta",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 1,
+          },
+          {
+            "Placement Code": "JKT002",
+            "SOV Code": "JKT002",
+            Side: "A",
+            City: "Jakarta",
+            "Media Owner": "Urban Media",
+            "Owner Type": "Owner",
+            "Media Type": "Videotron",
+            Area: "Thamrin",
+            Address: "Jl. Thamrin, Jakarta",
+            Direction: "North",
+            Coordinate: "-6.194, 106.823",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Shopping Mall",
+            View: "Clear",
+            Traffic: 150000,
+            "Width (m)": 8,
+            "Height (m)": 4,
+            Unit: 1,
+            Orientation: "Landscape",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 84000000,
+            "Price Capital 3M (IDR)": 252000000,
+            "Price Capital 6M (IDR)": 504000000,
+            "Price Capital 12M (IDR)": 1008000000,
+            "Price 1M (IDR)": 120000000,
+            "Price 3M (IDR)": 360000000,
+            "Price 6M (IDR)": 720000000,
+            "Price 12M (IDR)": 1440000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Available",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Jakarta",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 2,
+          },
+          {
+            "Placement Code": "JKT003",
+            "SOV Code": "JKT003",
+            Side: "A",
+            City: "Jakarta",
+            "Media Owner": "ADX Media",
+            "Owner Type": "Owner",
+            "Media Type": "Baliho",
+            Area: "Casablanca",
+            Address: "Jl. Casablanca, Jakarta",
+            Direction: "North",
+            Coordinate: "-6.224, 106.843",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Shopping Mall",
+            View: "Clear",
+            Traffic: 80000,
+            "Width (m)": 4,
+            "Height (m)": 8,
+            Unit: 1,
+            Orientation: "Portrait",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 31500000,
+            "Price Capital 3M (IDR)": 94500000,
+            "Price Capital 6M (IDR)": 189000000,
+            "Price Capital 12M (IDR)": 378000000,
+            "Price 1M (IDR)": 45000000,
+            "Price 3M (IDR)": 135000000,
+            "Price 6M (IDR)": 270000000,
+            "Price 12M (IDR)": 540000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Occupied",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Jakarta",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 3,
+          },
+          {
+            "Placement Code": "TGR001",
+            "SOV Code": "TGR001",
+            Side: "A",
+            City: "Tangerang",
+            "Media Owner": "Urban Media",
+            "Owner Type": "Owner",
+            "Media Type": "Billboard",
+            Area: "Alam Sutera",
+            Address: "Jl. Alam Sutera, Tangerang",
+            Direction: "North",
+            Coordinate: "-6.245, 106.653",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Residential",
+            View: "Clear",
+            Traffic: 92000,
+            "Width (m)": 10,
+            "Height (m)": 5,
+            Unit: 1,
+            Orientation: "Landscape",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 42000000,
+            "Price Capital 3M (IDR)": 126000000,
+            "Price Capital 6M (IDR)": 252000000,
+            "Price Capital 12M (IDR)": 504000000,
+            "Price 1M (IDR)": 60000000,
+            "Price 3M (IDR)": 180000000,
+            "Price 6M (IDR)": 360000000,
+            "Price 12M (IDR)": 720000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Available",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Tangerang",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 4,
+          },
+          {
+            "Placement Code": "BKS001",
+            "SOV Code": "BKS001",
+            Side: "A",
+            City: "Bekasi",
+            "Media Owner": "ADX Media",
+            "Owner Type": "Owner",
+            "Media Type": "Videotron",
+            Area: "Summarecon Bekasi",
+            Address: "Jl. Summarecon Bekasi, Bekasi",
+            Direction: "North",
+            Coordinate: "-6.226, 107.001",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Shopping Mall",
+            View: "Clear",
+            Traffic: 98000,
+            "Width (m)": 6,
+            "Height (m)": 3,
+            Unit: 1,
+            Orientation: "Landscape",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 50400000,
+            "Price Capital 3M (IDR)": 151200000,
+            "Price Capital 6M (IDR)": 302400000,
+            "Price Capital 12M (IDR)": 604800000,
+            "Price 1M (IDR)": 72000000,
+            "Price 3M (IDR)": 216000000,
+            "Price 6M (IDR)": 432000000,
+            "Price 12M (IDR)": 864000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Available",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Bekasi",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 5,
+          },
+          {
+            "Placement Code": "DPK001",
+            "SOV Code": "DPK001",
+            Side: "A",
+            City: "Depok",
+            "Media Owner": "City Outdoor",
+            "Owner Type": "Owner",
+            "Media Type": "Baliho",
+            Area: "Margonda",
+            Address: "Jl. Margonda, Depok",
+            Direction: "North",
+            Coordinate: "-6.374, 106.833",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Campus",
+            View: "Clear",
+            Traffic: 75000,
+            "Width (m)": 4,
+            "Height (m)": 8,
+            Unit: 1,
+            Orientation: "Portrait",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 24500000,
+            "Price Capital 3M (IDR)": 73500000,
+            "Price Capital 6M (IDR)": 147000000,
+            "Price Capital 12M (IDR)": 294000000,
+            "Price 1M (IDR)": 35000000,
+            "Price 3M (IDR)": 105000000,
+            "Price 6M (IDR)": 210000000,
+            "Price 12M (IDR)": 420000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Available",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Depok",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 6,
+          },
+          {
+            "Placement Code": "BGR001",
+            "SOV Code": "BGR001",
+            Side: "A",
+            City: "Bogor",
+            "Media Owner": "City Outdoor",
+            "Owner Type": "Owner",
+            "Media Type": "Billboard",
+            Area: "Pajajaran",
+            Address: "Jl. Pajajaran, Bogor",
+            Direction: "North",
+            Coordinate: "-6.595, 106.806",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Residential",
+            View: "Clear",
+            Traffic: 70000,
+            "Width (m)": 12,
+            "Height (m)": 6,
+            Unit: 1,
+            Orientation: "Landscape",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 36400000,
+            "Price Capital 3M (IDR)": 109200000,
+            "Price Capital 6M (IDR)": 218400000,
+            "Price Capital 12M (IDR)": 436800000,
+            "Price 1M (IDR)": 52000000,
+            "Price 3M (IDR)": 156000000,
+            "Price 6M (IDR)": 312000000,
+            "Price 12M (IDR)": 624000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Occupied",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Bogor",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 7,
+          },
+          {
+            "Placement Code": "JKT004",
+            "SOV Code": "JKT004",
+            Side: "A",
+            City: "Jakarta",
+            "Media Owner": "Urban Media",
+            "Owner Type": "Owner",
+            "Media Type": "Billboard",
+            Area: "Kelapa Gading",
+            Address: "Jl. Kelapa Gading, Jakarta",
+            Direction: "North",
+            Coordinate: "-6.158, 106.905",
+            "Is it on Gmaps?": "Yes",
+            "Road Type": "Main Road",
+            "Profile Audience": "Commuter",
+            "Profile Job": "Office Worker",
+            Surrounding: "Residential",
+            View: "Clear",
+            Traffic: 110000,
+            "Width (m)": 10,
+            "Height (m)": 5,
+            Unit: 1,
+            Orientation: "Landscape",
+            Lighting: "Frontlit",
+            "Spot /day": "120",
+            "Client Slot": "6",
+            "Duration /slot": 15,
+            Resolution: "1920 × 1080",
+            "Price Capital 1M (IDR)": 66500000,
+            "Price Capital 3M (IDR)": 199500000,
+            "Price Capital 6M (IDR)": 399000000,
+            "Price Capital 12M (IDR)": 798000000,
+            "Price 1M (IDR)": 95000000,
+            "Price 3M (IDR)": 285000000,
+            "Price 6M (IDR)": 570000000,
+            "Price 12M (IDR)": 1140000000,
+            Note: "Sample placement",
+            "Already Updated?": "Yes",
+            "Updated Date": "2026-09-01",
+            "Price Updated Date": "2026-09-01",
+            "Availability Date": "Available",
+            "Price Update Status": "Updated",
+            Region: "Jabodetabek",
+            "Discount IM (%)": 10,
+            "Price Tier": "Standard",
+            "Operational Hour": "06:00–24:00",
+            "MO Priority": "Normal",
+            "Nielsen City": "Jakarta",
+            "CAP Priority": "Normal",
+            "Last Updated": "2026-09-01 10:00",
+            id: 8,
+          },
+        ],
+      };
+      const $ = (id) => document.getElementById(id),
+        storageKey = "metrics-preview-placement-records-v1";
+      let records = seed.records;
+      try {
+        const stored = JSON.parse(sessionStorage.getItem(storageKey));
+        if (
+          Array.isArray(stored) &&
+          stored.every(
+            (r) =>
+              r &&
+              Number.isInteger(r.id) &&
+              typeof r["Placement Code"] === "string",
+          )
+        )
+          records = stored;
+      } catch {}
+      const params = new URLSearchParams(location.search),
+        rawId = params.get("id"),
+        id = rawId === null ? records[0]?.id : Number(rawId);
+      let record = records.find((r) => r.id === id);
+      const checkDefinitions = [
+        ["Ada di Gmaps?", "Is it on Gmaps?"],
+        ["Traffic Updated?", "Traffic Updated?"],
+        ["Price Updated?", "Already Updated?"],
+        ["MO Priority?", "MO Priority"],
+        ["Nielsen City?", "Nielsen City"],
+        ["CAP Priority?", "CAP Priority"],
+      ];
+      const controls = new Map();
+      let editing = false,
+        busy = false,
+        baseline = "",
+        discardAction = null;
+      const photos = {
+        picture: { url: "", file: null },
+        image: { url: "", file: null },
+      };
+      let photoBaseline = {
+        picture: { url: "", file: null },
+        image: { url: "", file: null },
+      };
+      const urls = new Set();
+      function populate() {
+        if (!record) return;
+        const coords = String(record.Coordinate || "").split(",");
+        for (const field of seed.fields) {
+          const control = controls.get(field.key);
+          let value = record[field.key] ?? "";
+          if (field.label === "Latitude")
+            value = record.Latitude ?? coords[0]?.trim() ?? "";
+          if (field.label === "Longitude")
+            value = record.Longitude ?? coords[1]?.trim() ?? "";
+          if (field.type === "month") value = String(value).slice(0, 7);
+          if (field.type === "date" && !/^\d{4}-\d{2}-\d{2}$/.test(value))
+            value = "";
+          if (
+            field.select &&
+            value &&
+            !Array.from(control.options).some((o) => o.value === String(value))
+          )
+            control.add(new Option(value, value));
+          control.value = value;
+        }
+        checkDefinitions.forEach(([label, key], i) => {
+          $("check-" + i).checked =
+            record[key] === true ||
+            record[key] === "Yes" ||
+            (label === "Nielsen City?" &&
+              !!record[key] &&
+              record[key] !== "No");
+        });
+        $("record-label").textContent =
+          record["Placement Code"] + " · " + record.City;
+        renderPhotos();
+        baseline = snapshot();
+      }
+      function snapshot() {
+        return JSON.stringify(
+          [...controls]
+            .map(([k, c]) => [k, c.value])
+            .concat(
+              checkDefinitions.map((x, i) => [x[1], $("check-" + i).checked]),
+              [
+                ["picture", photos.picture.url],
+                ["image", photos.image.url],
+              ],
+            ),
+        );
+      }
+      function dirty() {
+        return editing && snapshot() !== baseline;
+      }
+      function setEditing(value) {
+        editing = value;
+        $("editable").disabled = !value;
+        $("edit").hidden = value;
+        $("save").hidden = !value;
+        $("cancel-edit").hidden = !value;
+        $("form-error").textContent = "";
+      }
+      seed.fields.forEach((field) => {
+        const wrap = document.createElement("div");
+        wrap.className = "field" + (field.type === "textarea" ? " note" : "");
+        const label = document.createElement("label");
+        label.htmlFor = field.id;
+        label.textContent = field.label;
+        let control;
+        if (field.select) {
+          control = document.createElement("select");
+          control.add(new Option("Select " + field.label, ""));
+          field.options.forEach((value) =>
+            control.add(new Option(value, value)),
+          );
+        } else {
+          control = document.createElement(
+            field.type === "textarea" ? "textarea" : "input",
+          );
+          if (field.type !== "textarea") control.type = field.type;
+        }
+        control.id = field.id;
+        control.name = field.key;
+        if (
+          [
+            "Code",
+            "City",
+            "Media Type",
+            "Width",
+            "Height",
+            "Latitude",
+            "Longitude",
+          ].includes(field.label)
+        )
+          control.required = true;
+        if (field.type === "number") {
+          control.step = "any";
+          control.min = ["Latitude", "Longitude"].includes(field.label)
+            ? field.label === "Latitude"
+              ? -90
+              : -180
+            : 0;
+          if (["Width", "Height"].includes(field.label)) control.min = "0.01";
+          if (field.label === "Latitude") control.max = 90;
+          if (field.label === "Longitude") control.max = 180;
+          if (field.label.includes("Discount")) control.max = 100;
+        }
+        control.addEventListener("input", () => {
+          $("form-error").textContent = "";
+          $("save-status").textContent = "";
+        });
+        controls.set(field.key, control);
+        wrap.append(label, control);
+        $("fields").append(wrap);
+      });
+      checkDefinitions.forEach(([text, key], i) => {
+        const label = document.createElement("label"),
+          check = document.createElement("input");
+        check.type = "checkbox";
+        check.id = "check-" + i;
+        label.append(check, document.createTextNode(text));
+        $("checks").append(label);
+      });
+      if (!record) {
+        $("missing").hidden = false;
+        $("placement-form").hidden = true;
+      } else populate();
+      $("edit").onclick = () => {
+        photoBaseline = {
+          picture: { ...photos.picture },
+          image: { ...photos.image },
+        };
+        baseline = snapshot();
+        setEditing(true);
+        controls.get("Placement Code").focus();
+      };
+      function askDiscard(action) {
+        if (dirty()) {
+          discardAction = action;
+          $("discard-dialog").showModal();
+        } else action();
+      }
+      $("cancel-edit").onclick = () =>
+        askDiscard(() => {
+          photos.picture = { ...photoBaseline.picture };
+          photos.image = { ...photoBaseline.image };
+          populate();
+          setEditing(false);
+          $("edit").focus();
+        });
+      $("back").onclick = (e) => {
+        if (dirty()) {
+          e.preventDefault();
+          askDiscard(() => {
+            editing = false;
+            location.assign("PlacementList.html");
+          });
+        }
+      };
+      $("discard").onclick = () => {
+        $("discard-dialog").close();
+        discardAction?.();
+        discardAction = null;
+      };
+      document
+        .querySelectorAll("[data-close]")
+        .forEach((b) => (b.onclick = () => b.closest("dialog").close()));
+      window.addEventListener("beforeunload", (e) => {
+        if (dirty()) {
+          e.preventDefault();
+          e.returnValue = "";
+        }
+      });
+      function persist() {
+        try {
+          sessionStorage.setItem(storageKey, JSON.stringify(records));
+          return true;
+        } catch {
+          return false;
+        }
+      }
+      $("placement-form").onsubmit = async (e) => {
+        e.preventDefault();
+        if (!editing || busy) return;
+        const code = controls.get("Placement Code").value.trim().toUpperCase();
+        if (
+          !/^[A-Z]{2,4}\d+[A-Z]?$/.test(code) ||
+          records.some(
+            (r) =>
+              r.id !== id &&
+              r["Placement Code"].toLowerCase() === code.toLowerCase(),
+          )
+        ) {
+          $("form-error").textContent =
+            "Enter a unique city code, for example JKT001 or JKT001A.";
+          controls.get("Placement Code").focus();
+          return;
+        }
+        const next = { ...record };
+        seed.fields.forEach((f) => {
+          const v = controls.get(f.key).value;
+          next[f.key] = f.type === "number" && v !== "" ? Number(v) : v.trim();
+        });
+        next["Placement Code"] = code;
+        next["SOV Code"] = code;
+        next.Coordinate = next.Latitude + ", " + next.Longitude;
+        // Availability labels from the list are retained until an actual date is chosen.
+        if (!next["Availability Date"])
+          next["Availability Date"] = record["Availability Date"] || "";
+        checkDefinitions.forEach(
+          ([label, key], i) =>
+            (next[key] = $("check-" + i).checked ? "Yes" : "No"),
+        );
+        next["Last Updated"] = new Date()
+          .toISOString()
+          .slice(0, 16)
+          .replace("T", " ");
+        busy = true;
+        $("save").disabled = true;
+        $("save").textContent = "Saving…";
+        $("editable").disabled = true;
+        $("delete-open").disabled = $("cancel-edit").disabled = true;
+        await new Promise((r) => setTimeout(r, 500));
+        record = next;
+        records = records.map((r) => (r.id === id ? next : r));
+        const stored = persist();
+        busy = false;
+        $("save").disabled = false;
+        $("save").textContent = "Save Placement";
+        $("delete-open").disabled = $("cancel-edit").disabled = false;
+        setEditing(false);
+        populate();
+        $("save-status").textContent = stored
+          ? "Placement saved in this browser tab. No backend data changed."
+          : "Saved on this page only; browser storage is unavailable.";
+        $("edit").focus();
+      };
+      $("delete-open").onclick = () => {
+        if (!record) return;
+        $("delete-description").textContent =
+          "Delete " +
+          record["Placement Code"] +
+          "? This cannot be undone within this preview.";
+        $("delete-dialog").showModal();
+      };
+      $("confirm-delete").onclick = () => {
+        const previous = records;
+        records = records.filter((r) => r.id !== id);
+        if (!persist()) {
+          records = previous;
+          $("delete-dialog").close();
+          $("form-error").textContent =
+            "Browser storage is unavailable. The placement was not deleted.";
+          return;
+        }
+        editing = false;
+        location.assign("PlacementList.html");
+      };
+      function renderPhotos() {
+        Object.keys(photos).forEach((key) => {
+          $(key + "-preview").src =
+            photos[key].url || "../assets/img/bb-na-placeholder.png";
+          $(key + "-name").textContent =
+            photos[key].file?.name || "No " + key + " selected";
+        });
+      }
+      Object.keys(photos).forEach((key) => {
+        $(key).onchange = async () => {
+          const file = $(key).files[0];
+          if (!file) return;
+          if (file.type !== "image/jpeg") {
+            $("form-error").textContent = "Choose a JPEG image.";
+            $(key).value = "";
+            return;
+          }
+          const url = URL.createObjectURL(file),
+            image = new Image();
+          image.src = url;
+          try {
+            await image.decode();
+          } catch {
+            URL.revokeObjectURL(url);
+            $("form-error").textContent =
+              "The selected file is not a readable JPEG image.";
+            $(key).value = "";
+            return;
+          }
+          urls.add(url);
+          photos[key] = { url, file };
+          $("form-error").textContent = "";
+          renderPhotos();
+        };
+        $(key + "-remove").onclick = () => {
+          photos[key] = { url: "", file: null };
+          $(key).value = "";
+          renderPhotos();
+        };
+      });
+      window.addEventListener("pagehide", () => {
+        urls.forEach((url) => URL.revokeObjectURL(url));
+      });
+    </script>
+  </body>
+</html>

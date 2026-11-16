@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Capture Insight — Metrics by ADX</title>
+    <style>
+      @font-face {
+        font-family: Core;
+        src: url("../../assets/fonts/Core/coresansc-45regular-webfont.woff2");
+      }
+      @font-face {
+        font-family: Core;
+        src: url("../../assets/fonts/Core/coresansc-65bold-webfont.woff2");
+        font-weight: 700;
+      }
+      @font-face {
+        font-family: Adxfont;
+        src: url("../../assets/fonts/icons/Adxfont.woff");
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #f5f5fa;
+        color: #262626;
+        font:
+          14px Core,
+          Arial,
+          sans-serif;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+        color: inherit;
+      }
+      button,
+      a,
+      select {
+        cursor: pointer;
+      }
+      button {
+        background: white;
+        border: 1px solid #e5e5ea;
+        border-radius: 6px;
+        padding: 10px 16px;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      :focus-visible {
+        outline: 3px solid #007aff;
+        outline-offset: 2px;
+      }
+      .topbar {
+        height: 62px;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 24px;
+        border-bottom: 1px solid #e5e5ea;
+      }
+      .logo img {
+        height: 40px;
+      }
+      .brand-group,
+      .account {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .account {
+        position: relative;
+      }
+      .account button {
+        border: 0;
+        padding: 4px;
+      }
+      .adx-ic_user_circle {
+        font-family: Adxfont;
+        font-style: normal;
+        font-size: 28px;
+      }
+      .adx-ic_user_circle:before {
+        content: "\e94d";
+      }
+      .account-panel {
+        position: absolute;
+        right: 0;
+        top: 40px;
+        background: white;
+        box-shadow: 0 2px 12px #0002;
+        z-index: 5;
+        min-width: 140px;
+      }
+      .account-panel a {
+        display: block;
+        padding: 16px;
+      }
+      .main {
+        max-width: 1180px;
+        padding: 40px 20px 136px;
+        margin: auto;
+      }
+      h1 {
+        margin: 0;
+        font-size: 24px;
+      }
+      .period {
+        margin: 4px 0 0;
+        color: #85858a;
+        font-size: 13px;
+      }
+      .chart-header {
+        margin-top: 33px;
+        padding-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #d5d5da;
+        gap: 16px;
+      }
+      .chart-header h2 {
+        font-size: 16px;
+        margin: 0;
+      }
+      .performance {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+      }
+      select {
+        width: 250px;
+        background: white;
+        border: 1px solid #e5e5ea;
+        border-radius: 6px;
+        padding: 10px;
+      }
+      .traffic-row {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 24px;
+        margin-top: 24px;
+      }
+      .traffic-col {
+        height: 108px;
+        padding: 20px 16px;
+        text-align: left;
+        box-shadow: 0 4px 8px #00000014;
+        border-radius: 8px;
+      }
+      .traffic-col.active,
+      .traffic-col:hover {
+        border-color: #ff2d55;
+        background: #ffccd5;
+      }
+      .traffic-title {
+        display: block;
+        font-size: 13px;
+      }
+      .traffic-value {
+        display: block;
+        font-size: 18px;
+        font-weight: 700;
+        margin-top: 4px;
+      }
+      .chart-wrapper {
+        position: relative;
+        margin-top: 48px;
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px #00000029;
+      }
+      .legend-header {
+        padding: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .legend {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .legend span {
+        border: 1px solid #e5e5ea;
+        border-radius: 24px;
+        padding: 8px 12px;
+        font-size: 12px;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .legend i {
+        width: 15px;
+        height: 15px;
+        border-radius: 4px;
+      }
+      .controls {
+        display: flex;
+        gap: 0;
+        flex-wrap: wrap;
+      }
+      .controls button[aria-pressed="true"] {
+        background: #d5d5da;
+      }
+      #date-toggle {
+        margin-left: 16px;
+      }
+      #chart {
+        width: 100%;
+        height: 500px;
+        display: block;
+        padding: 12px 16px 48px;
+      }
+      #chart text {
+        font: 12px Core;
+        fill: #85858a;
+      }
+      .calendar {
+        position: absolute;
+        right: 16px;
+        top: 80px;
+        width: min(540px, calc(100% - 32px));
+        padding: 16px;
+        background: white;
+        box-shadow: 0 2px 16px #0003;
+        border-radius: 8px;
+        z-index: 3;
+      }
+      .calendar-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px solid #e5e5ea;
+        padding-bottom: 16px;
+      }
+      .calendar-fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        padding: 24px 0;
+      }
+      .calendar input {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        margin-top: 8px;
+      }
+      .primary {
+        background: #ff2d55;
+        color: white;
+      }
+      .error {
+        color: #d42548;
+      }
+      #chart-status {
+        padding: 0 24px 20px;
+        color: #85858a;
+      }
+      .back {
+        display: inline-block;
+        font-size: 13px;
+        margin-bottom: 20px;
+        color: #666;
+      }
+      @media (max-width: 767px) {
+        .main {
+          padding: 28px 16px;
+        }
+        .email {
+          display: none;
+        }
+        .chart-header {
+          align-items: start;
+          flex-direction: column;
+        }
+        .performance {
+          width: 100%;
+        }
+        select {
+          min-width: 0;
+          flex: 1;
+        }
+        .traffic-row {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+        .traffic-col:first-child {
+          grid-column: 1/-1;
+        }
+        .legend-header {
+          padding: 16px;
+        }
+        .controls {
+          gap: 4px;
+        }
+        #date-toggle {
+          margin-left: 0;
+        }
+        .calendar-fields {
+          grid-template-columns: 1fr;
+        }
+        .calendar-head {
+          flex-wrap: wrap;
+        }
+        #chart {
+          height: 340px;
+        }
+      }
+
+      /* Shared report navigation follows HeaderDashboard and the supplied reference. */
+      .topbar {
+        height: 56px;
+        position: relative;
+        z-index: 10;
+        padding: 0 max(20px, calc((100% - 1140px) / 2));
+        gap: 20px;
+      }
+      .topbar .brand-group {
+        gap: 0;
+        min-width: 0;
+        height: 100%;
+      }
+      .topbar .logo {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+      }
+      .report-nav {
+        position: relative;
+        margin: 0 24px;
+        padding: 8px 24px;
+        border-left: 1px solid #d5d5da;
+        border-right: 1px solid #d5d5da;
+      }
+      .report-nav-toggle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .nav-chevron {
+        display: inline-flex;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #e5e5ea;
+        align-items: center;
+        justify-content: center;
+      }
+      .nav-chevron::before,
+      .discovery-chevron::before {
+        content: "";
+        display: block;
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        transform: translateY(-2px) rotate(45deg);
+      }
+      [aria-expanded="true"] .nav-chevron::before,
+      [aria-expanded="true"] .discovery-chevron::before {
+        transform: translateY(2px) rotate(225deg);
+      }
+      .report-menu {
+        position: absolute;
+        top: calc(100% + 16px);
+        left: 0;
+        width: 280px;
+        padding: 0 20px 20px;
+        border: 1px solid #e5e5ea;
+        border-radius: 4px;
+        background: white;
+        box-shadow: 0 0 8px #0000001a;
+        max-height: calc(100dvh - 80px);
+        overflow: auto;
+        font-size: 18px;
+        font-weight: 400;
+      }
+      .report-menu > a,
+      .discovery-section {
+        display: block;
+        border-bottom: 1px solid #d5d5da;
+      }
+      .report-menu > a {
+        padding: 20px 0;
+      }
+      .discovery-toggle {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        width: 100%;
+        border: 0;
+        padding: 20px 0;
+        border-radius: 0;
+        background: white;
+        text-align: left;
+        font-size: inherit;
+        font-weight: 400;
+      }
+      .discovery-chevron {
+        display: inline-flex;
+      }
+      .discovery-links {
+        padding-bottom: 12px;
+      }
+      .discovery-links a {
+        display: block;
+        padding: 12px 20px;
+      }
+      .report-menu a:hover,
+      .discovery-toggle:hover {
+        color: #ff2d55;
+      }
+      .capture-tab {
+        align-self: stretch;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        border-bottom: 2px solid #ff2d55;
+        font-weight: 700;
+      }
+      .topbar .account {
+        flex-shrink: 0;
+        margin-left: auto;
+      }
+      @media (max-width: 767px) {
+        .topbar {
+          padding: 0 12px;
+          gap: 8px;
+          height: auto;
+          min-height: 56px;
+        }
+        .topbar .logo img {
+          height: 32px;
+        }
+        .report-nav {
+          margin: 0 10px;
+          padding: 8px 10px;
+        }
+        .report-nav-toggle {
+          font-size: 13px;
+        }
+        .report-menu {
+          position: fixed;
+          top: 56px;
+          left: 12px;
+          width: min(280px, calc(100vw - 24px));
+        }
+        .topbar .brand-group {
+          flex-wrap: wrap;
+          padding: 8px 0;
+        }
+        .capture-tab {
+          margin-left: 52px;
+          padding: 10px 0 2px;
+          font-size: 13px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-group">
+        <a class="logo" href="../../Home.html"
+          ><img
+            src="../../assets/img/icons/metrics-ico-color.png"
+            alt="Metrics by ADX — Home"
+        /></a>
+        <nav class="report-nav" aria-label="Report navigation">
+          <button
+            class="report-nav-toggle"
+            id="report-nav-toggle"
+            aria-expanded="false"
+            aria-controls="report-menu"
+          >
+            Measurement Report<span
+              class="nav-chevron"
+              aria-hidden="true"
+            ></span>
+          </button>
+          <div class="report-menu" id="report-menu" hidden>
+            <div class="discovery-section">
+              <button
+                class="discovery-toggle"
+                id="header-discovery-toggle"
+                aria-expanded="false"
+                aria-controls="header-discovery-links"
+              >
+                Discovery Map<span
+                  class="discovery-chevron"
+                  aria-hidden="true"
+                ></span>
+              </button>
+              <div class="discovery-links" id="header-discovery-links" hidden>
+                <a href="../../SovMap/SovMap.html">Share of Voice</a>
+                <a href="../../BillboardMap/BillboardMap.html">Insight Maps</a>
+                <a href="../../Utility/KmlConverter.html">KML Converter</a>
+              </div>
+            </div>
+            <a href="../Monitoring/ReportList.html">Monitoring Report</a>
+            <a href="../MeasurementReport.html">Measurement Report</a>
+            <a href="../../DownloadReport.html">Download Daily Report</a>
+          </div>
+        </nav>
+        <a class="capture-tab" href="CaptureInsight.html" aria-current="page"
+          >Capture Insight</a
+        >
+      </div>
+      <div class="account">
+        <span class="email">demo@metrics.test</span
+        ><button
+          id="account-toggle"
+          aria-label="Account"
+          aria-expanded="false"
+          aria-controls="account-panel"
+        >
+          <i class="adx-ic_user_circle" aria-hidden="true"></i>
+        </button>
+        <div class="account-panel" id="account-panel" hidden>
+          <a href="../../Login.html">Sign Out</a>
+        </div>
+      </div>
+    </header>
+    <main class="main">
+      <h1 id="campaign-name"></h1>
+      <p class="period" id="period"></p>
+      <section id="analytics">
+        <div class="chart-header">
+          <h2>Traffic Analytics</h2>
+          <label class="performance"
+            >View Performance :
+            <select id="placement">
+              <option value="0">All Placement</option>
+              <option value="1">JKT024 — Sudirman</option>
+              <option value="2">JKT108 — Gatot Subroto</option>
+            </select></label
+          >
+        </div>
+        <div class="traffic-row" id="cards"></div>
+        <div class="chart-wrapper">
+          <div class="legend-header">
+            <div class="legend" id="legend"></div>
+            <div class="controls">
+              <button data-group="day" aria-pressed="true">Day</button
+              ><button data-group="week" aria-pressed="false">Week</button
+              ><button data-group="month" aria-pressed="false">Month</button
+              ><button
+                id="date-toggle"
+                aria-expanded="false"
+                aria-controls="calendar"
+              >
+                Date • All Time
+              </button>
+            </div>
+          </div>
+          <svg
+            id="chart"
+            viewBox="0 0 1080 440"
+            role="img"
+            aria-label="Traffic by date"
+          ></svg>
+          <p id="chart-status" role="status"></p>
+          <form class="calendar" id="calendar" hidden>
+            <div class="calendar-head">
+              <strong>Select Date</strong>
+              <div>
+                <button type="button" id="reset-date">Reset</button>
+                <button class="primary" type="submit">Apply</button>
+              </div>
+            </div>
+            <div class="calendar-fields">
+              <label>Start Date<input type="date" id="start" required /></label
+              ><label>End Date<input type="date" id="end" required /></label>
+            </div>
+            <p id="date-error" class="error" role="alert"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+    <script>
+      "use strict";
+      const $ = (id) => document.getElementById(id);
+      const campaigns = [
+        {
+          id: 1,
+          name: "LinkAja — Everyday Payments",
+          brand: "LinkAja",
+          owner: "Nadia Putri",
+          start: "2026-01-01",
+          end: "2026-03-31",
+        },
+        {
+          id: 2,
+          name: "Gojek — City Mobility",
+          brand: "Gojek",
+          owner: "Rizky Pratama",
+          start: "2026-02-01",
+          end: "2026-04-30",
+        },
+        {
+          id: 3,
+          name: "Bhinneka — Business Essentials",
+          brand: "Bhinneka",
+          owner: "demo@metrics.test",
+          start: "2026-03-01",
+          end: "2026-05-31",
+        },
+        {
+          id: 4,
+          name: "Safe Care — Everyday Comfort",
+          brand: "Safe Care",
+          owner: "Nadia Putri",
+          start: "2026-04-01",
+          end: "2026-06-30",
+        },
+        {
+          id: 5,
+          name: "LinkAja — Ramadan Campaign",
+          brand: "LinkAja",
+          owner: "Rizky Pratama",
+          start: "2026-02-15",
+          end: "2026-03-31",
+        },
+        {
+          id: 6,
+          name: "Gojek — Jakarta Commute",
+          brand: "Gojek",
+          owner: "demo@metrics.test",
+          start: "2026-05-01",
+          end: "2026-07-31",
+        },
+        {
+          id: 7,
+          name: "Bhinneka — Office Solutions",
+          brand: "Bhinneka",
+          owner: "Nadia Putri",
+          start: "2026-06-01",
+          end: "2026-08-31",
+        },
+        {
+          id: 8,
+          name: "Safe Care — Healthy Journey",
+          brand: "Safe Care",
+          owner: "Rizky Pratama",
+          start: "2026-07-01",
+          end: "2026-09-30",
+        },
+        {
+          id: 9,
+          name: "LinkAja — Independence Day",
+          brand: "LinkAja",
+          owner: "demo@metrics.test",
+          start: "2026-08-01",
+          end: "2026-08-31",
+        },
+        {
+          id: 10,
+          name: "Gojek — Back to Campus",
+          brand: "Gojek",
+          owner: "Nadia Putri",
+          start: "2026-08-15",
+          end: "2026-10-15",
+        },
+        {
+          id: 11,
+          name: "Bhinneka — Business Growth",
+          brand: "Bhinneka",
+          owner: "Rizky Pratama",
+          start: "2026-09-01",
+          end: "2026-11-30",
+        },
+        {
+          id: 12,
+          name: "Safe Care — Family Weekend",
+          brand: "Safe Care",
+          owner: "demo@metrics.test",
+          start: "2026-09-01",
+          end: "2026-12-31",
+        },
+      ];
+      const campaign = campaigns.find(
+        (c) =>
+          c.id === Number(new URLSearchParams(location.search).get("id") || 1),
+      );
+      const names = ["Total", "Car", "Motorcycle", "Bus", "Truck"],
+        colors = ["#ff2d55", "#F9C0C0", "#F6DBB9", "#D8B7E7", "#9AC2A3"];
+      const state = { vehicle: 0, group: "day", start: "", end: "" };
+      const fmt = (date) =>
+        new Date(date + "T00:00:00").toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+      function series() {
+        const rows = [];
+        if (!campaign) return rows;
+        const first = Date.parse(campaign.start + "T00:00:00Z"),
+          last = Date.parse(campaign.end + "T00:00:00Z");
+        for (let t = first, i = 0; t <= last; t += 86400000, i++) {
+          const date = new Date(t).toISOString().slice(0, 10);
+          if (
+            (state.start && date < state.start) ||
+            (state.end && date > state.end)
+          )
+            continue;
+          const factor =
+            $("placement").value === "0"
+              ? 1
+              : Number($("placement").value) === 1
+                ? 0.58
+                : 0.42;
+          const values = [
+            0,
+            ...[21000, 29000, 1800, 3900].map((n, k) =>
+              Math.round(
+                n *
+                  factor *
+                  (0.8 + ((i * 7 + k * 11 + campaign.id * 3) % 19) / 30),
+              ),
+            ),
+          ];
+          values[0] = values.slice(1).reduce((a, b) => a + b, 0);
+          rows.push({ date, values });
+        }
+        return rows;
+      }
+      function render() {
+        const rows = series(),
+          totals = names.map((_, i) =>
+            rows.reduce((sum, row) => sum + row.values[i], 0),
+          );
+        $("cards").replaceChildren(
+          ...names.map((name, i) => {
+            const b = document.createElement("button");
+            b.className =
+              "traffic-col" + (state.vehicle === i ? " active" : "");
+            b.setAttribute("aria-pressed", String(state.vehicle === i));
+            b.innerHTML =
+              '<span class="traffic-title">' +
+              (i ? name + " (Total)" : "Total Traffic") +
+              '</span><span class="traffic-value">' +
+              totals[i].toLocaleString("en-US") +
+              "</span>";
+            b.onclick = () => {
+              state.vehicle = i;
+              render();
+            };
+            return b;
+          }),
+        );
+        $("legend").innerHTML = names
+          .map((n, i) =>
+            state.vehicle === 0 || state.vehicle === i
+              ? "<span>" +
+                n +
+                '<i style="background:' +
+                colors[i] +
+                '"></i></span>'
+              : "",
+          )
+          .join("");
+        const buckets = new Map();
+        rows.forEach((row, i) => {
+          const key =
+            state.group === "month"
+              ? row.date.slice(0, 7)
+              : state.group === "week"
+                ? Math.floor(
+                    (Date.parse(row.date) - Date.parse(campaign.start)) /
+                      604800000,
+                  )
+                : row.date;
+          if (!buckets.has(key))
+            buckets.set(key, { date: row.date, values: [0, 0, 0, 0, 0] });
+          row.values.forEach((v, j) => (buckets.get(key).values[j] += v));
+        });
+        const points = [...buckets.values()],
+          indices = state.vehicle ? [state.vehicle] : [0, 1, 2, 3, 4],
+          max =
+            Math.max(
+              1,
+              ...points.flatMap((p) => indices.map((i) => p.values[i])),
+            ) * 1.1;
+        let markup = "";
+        for (let n = 0; n <= 4; n++) {
+          const y = 360 - n * 80;
+          markup +=
+            '<path d="M70 ' +
+            y +
+            ' H1040" stroke="#e5e5ea"/><text x="60" y="' +
+            (y + 4) +
+            '" text-anchor="end">' +
+            Math.round((max * n) / 4).toLocaleString("en-US") +
+            "</text>";
+        }
+        indices.forEach((index) => {
+          const coords = points.map((p, i) => [
+            70 + (i * 970) / Math.max(1, points.length - 1),
+            360 - (p.values[index] / max) * 320,
+          ]);
+          if (!coords.length) return;
+          const line = coords
+            .map((p, i) => (i ? "L" : "M") + p.join(" "))
+            .join(" ");
+          markup +=
+            '<path d="' +
+            line +
+            " L" +
+            coords.at(-1)[0] +
+            ' 360 L70 360 Z" fill="' +
+            colors[index] +
+            '" opacity=".15"/><path d="' +
+            line +
+            '" stroke="' +
+            colors[index] +
+            '" fill="none" stroke-width="2"/>';
+          coords.forEach((p, i) => {
+            markup +=
+              '<circle cx="' +
+              p[0] +
+              '" cy="' +
+              p[1] +
+              '" r="4" fill="' +
+              colors[index] +
+              '"><title>' +
+              fmt(points[i].date) +
+              " — " +
+              names[index] +
+              ": " +
+              points[i].values[index].toLocaleString("en-US") +
+              "</title></circle>";
+          });
+        });
+        points.forEach((p, i) => {
+          if (i % Math.max(1, Math.ceil(points.length / 6)) === 0)
+            markup +=
+              '<text x="' +
+              (70 + (i * 970) / Math.max(1, points.length - 1)) +
+              '" y="390" text-anchor="middle">' +
+              fmt(p.date).slice(0, 6) +
+              "</text>";
+        });
+        $("chart").innerHTML = markup;
+        $("chart-status").textContent = rows.length
+          ? ""
+          : "No traffic data for this date range.";
+      }
+      $("account-toggle").onclick = () => {
+        const open = $("account-panel").hidden;
+        $("account-panel").hidden = !open;
+        $("account-toggle").setAttribute("aria-expanded", String(open));
+      };
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".account")) {
+          $("account-panel").hidden = true;
+          $("account-toggle").setAttribute("aria-expanded", "false");
+        }
+      });
+      if (!campaign) {
+        $("campaign-name").textContent = "Campaign not found";
+        $("analytics").hidden = true;
+      } else {
+        $("campaign-name").textContent = campaign.name;
+        $("period").textContent =
+          "Period " + fmt(campaign.start) + " - " + fmt(campaign.end);
+        $("start").value = campaign.start;
+        $("end").value = campaign.end;
+        $("placement").onchange = render;
+        document.querySelectorAll("[data-group]").forEach(
+          (b) =>
+            (b.onclick = () => {
+              state.group = b.dataset.group;
+              document
+                .querySelectorAll("[data-group]")
+                .forEach((x) =>
+                  x.setAttribute("aria-pressed", String(x === b)),
+                );
+              render();
+            }),
+        );
+        $("date-toggle").onclick = () => {
+          const open = $("calendar").hidden;
+          $("calendar").hidden = !open;
+          $("date-toggle").setAttribute("aria-expanded", String(open));
+        };
+        $("calendar").onsubmit = (e) => {
+          e.preventDefault();
+          if ($("start").value > $("end").value) {
+            $("date-error").textContent =
+              "End Date must be on or after Start Date.";
+            return;
+          }
+          state.start = $("start").value;
+          state.end = $("end").value;
+          $("date-error").textContent = "";
+          $("calendar").hidden = true;
+          $("date-toggle").setAttribute("aria-expanded", "false");
+          $("date-toggle").textContent =
+            "Date • " + fmt(state.start) + " – " + fmt(state.end);
+          render();
+        };
+        $("reset-date").onclick = () => {
+          state.start = state.end = "";
+          $("start").value = campaign.start;
+          $("end").value = campaign.end;
+          $("date-error").textContent = "";
+          $("date-toggle").textContent = "Date • All Time";
+          render();
+        };
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") {
+            $("calendar").hidden = true;
+            $("date-toggle").setAttribute("aria-expanded", "false");
+            $("account-panel").hidden = true;
+            $("account-toggle").setAttribute("aria-expanded", "false");
+          }
+        });
+        render();
+      }
+
+      (() => {
+        const nav = document.querySelector(".report-nav");
+        const toggle = document.getElementById("report-nav-toggle");
+        const menu = document.getElementById("report-menu");
+        const discovery = document.getElementById("header-discovery-toggle");
+        const children = document.getElementById("header-discovery-links");
+        function closeMenu(restoreFocus = false) {
+          menu.hidden = true;
+          toggle.setAttribute("aria-expanded", "false");
+          if (restoreFocus) toggle.focus();
+        }
+        toggle.onclick = () => {
+          menu.hidden = !menu.hidden;
+          toggle.setAttribute("aria-expanded", String(!menu.hidden));
+          document.getElementById("account-panel").hidden = true;
+          document
+            .getElementById("account-toggle")
+            .setAttribute("aria-expanded", "false");
+        };
+        discovery.onclick = () => {
+          children.hidden = !children.hidden;
+          discovery.setAttribute("aria-expanded", String(!children.hidden));
+        };
+        document.addEventListener("click", (event) => {
+          if (!nav.contains(event.target)) closeMenu();
+        });
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && !menu.hidden) {
+            closeMenu(true);
+          }
+        });
+        nav.addEventListener("focusout", (event) => {
+          if (event.relatedTarget && !nav.contains(event.relatedTarget))
+            closeMenu();
+        });
+        const tab = document.querySelector(".capture-tab");
+        if (tab) tab.href = "CaptureInsight.html" + location.search;
+      })();
+    </script>
+  </body>
+</html>
