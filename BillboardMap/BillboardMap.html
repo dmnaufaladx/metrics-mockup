@@ -2166,6 +2166,10 @@ html.cap-page-mode #cap-editor.campaign-detail-mode #cap-editor-actions{padding:
 .cap-date-cell textarea{width:100%;min-height:72px;resize:vertical;box-sizing:border-box;border:1px solid #dedee5;border-radius:5px;padding:9px 10px;font:inherit;background:#fafafa;color:inherit}
 #cap-feature-error{white-space:pre-line}
 
+.cap-download-chevron{display:inline-block;width:6px;height:6px;margin-left:8px;border:solid currentColor;border-width:0 1.5px 1.5px 0;transform:translateY(-2px) rotate(45deg)}
+.cap-download-options{position:fixed;inset:auto;margin:0;padding:4px;min-width:148px;border:1px solid #e5e5ea;border-radius:8px;background:white;box-shadow:0 8px 24px #0002}
+.cap-download-options button,#campaign .list-actions .cap-download-options button,#cap-editor .cap-download-options button{display:block;width:100%;padding:8px 10px;min-height:0;border:0;border-radius:4px;background:white;color:#252432;text-align:left;font-size:13px;font-weight:400;white-space:nowrap}
+.cap-download-options button:hover,.cap-download-options button:focus-visible,#campaign .list-actions .cap-download-options button:hover,#campaign .list-actions .cap-download-options button:focus-visible,#cap-editor .cap-download-options button:hover,#cap-editor .cap-download-options button:focus-visible{background:#fff1f4;color:#c51f48}
 .cap-bulk-menu{position:relative}.cap-bulk-menu .cap-batch-controls{position:absolute;right:0;top:100%;z-index:20;background:white;padding:8px;box-shadow:0 8px 24px #0002;border:1px solid #e2e3e8;border-radius:8px;min-width:220px;display:flex;flex-direction:column;align-items:stretch}.cap-bulk-menu .cap-batch-controls[hidden]{display:none}
 .cap-list-filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0}.cap-list-filters small,.cap-close-hint{color:#666}
 .cap-badge.bottom-price-requested,.cap-badge.bottom_price_requested{background:#fef3c7;color:#854d0e}.cap-badge.bottom-price-provided{background:#dbeafe;color:#1e40af}.cap-badge.bottom-price-declined{background:#ffe4e6;color:#9f1239}
@@ -2193,10 +2197,7 @@ html.cap-page-mode #cap-editor.campaign-detail-mode #cap-editor-actions{padding:
 .cap-badge.placement-reverification-requested{background:#ede9fe;color:#6d28d9}
 .cap-badge.bottom-price-declined{background:#ffe4e6;color:#9f1239}
 .cap-badge{white-space:normal;overflow-wrap:break-word;max-width:100%;box-sizing:border-box}
-#cap-feature-dialog:has(#cap-duration-rows){box-sizing:border-box;width:min(480px,calc(100vw - 24px));padding:18px}
-#cap-feature-dialog:has(.cap-change-summary) button:disabled,#cap-feature-dialog:has(#cap-duration-rows) button:disabled{opacity:.5;cursor:not-allowed}
-#cap-feature-dialog .cap-duration-line{display:grid;grid-template-columns:minmax(64px,1fr) minmax(100px,2fr) auto;align-items:end;gap:8px;margin:8px 0}
-#cap-feature-dialog .cap-duration-line label{min-width:0;margin:0}#cap-feature-dialog .cap-duration-line input{width:100%;box-sizing:border-box}
+#cap-feature-dialog:has(.cap-change-summary) button:disabled{opacity:.5;cursor:not-allowed}
 #cap-feature-dialog .cap-change-summary{width:100%;border-collapse:collapse;font-size:13px}
 #cap-feature-dialog .cap-change-summary td,#cap-feature-dialog .cap-change-summary th{text-align:left;padding:7px 10px;border-bottom:1px solid #e4e4e9;overflow-wrap:anywhere}
 .cap-change-summary th{background:#faf3f5}.cap-change-summary td:last-child{color:#22693a;background:#effaf2}.cap-change-summary del{color:#737580}
@@ -2560,7 +2561,7 @@ html.cap-page-mode #cap-editor.campaign-detail-mode #cap-editor-actions{padding:
       <div class="list-actions">
         <button id="clear-campaign">Reset</button
         ><button id="save-campaign">Update</button
-        ><button data-export="csv">Download</button>
+        ><button id="campaign-download" type="button">Download</button>
       </div>
     </aside>
     <aside class="drawer" id="saved" hidden aria-label="Saved campaigns">
@@ -2868,7 +2869,7 @@ html.cap-page-mode #cap-editor.campaign-detail-mode #cap-editor-actions{padding:
       </button>
       <h2>PPT Generator</h2>
       <p class="ppt-subtitle">
-        Generate PowerPoint presentation from Excel file
+        Generate a .pptx presentation from a campaign Excel file
       </p>
       <div class="ppt-box">
         <input type="file" id="ppt-file" accept=".xlsx" hidden /><label
@@ -2894,7 +2895,9 @@ html.cap-page-mode #cap-editor.campaign-detail-mode #cap-editor-actions{padding:
     </dialog>
 <div class="cap-preview"><strong>Mode Preview</strong><select id="cap-role" aria-label="Peran preview"><option value="manager">CS</option><option value="cap">CAP</option><option value="commercial">Commercial</option></select><button id="cap-examples">Muat contoh</button><label><input id="cap-fail" type="checkbox"> Simulasi gagal</label></div><dialog id="cap-editor" aria-labelledby="cap-editor-title"><div class="cap-editor-header"><div><h2 id="cap-editor-title">Campaign CAP Verification</h2><p id="cap-editor-name"></p></div><button id="cap-close" aria-label="Tutup editor">×</button></div><div id="cap-editor-body"></div><div id="cap-editor-actions"></div></dialog>
     <dialog id="cap-confirm-dialog" aria-labelledby="cap-confirm-title" aria-describedby="cap-confirm-text"><h2 id="cap-confirm-title"></h2><p id="cap-confirm-text"></p><div class="confirm-actions"><button id="cap-confirm-cancel" autofocus>Batal</button><button id="cap-confirm-yes" class="primary">Konfirmasi</button></div></dialog>
-<script>
+<script src="../assets/js/placement-ppt-queue.js"></script>
+    <script src="../assets/js/placement-ppt-demo-photo.js"></script>
+    <script>
       "use strict";
       const $ = (id) => document.getElementById(id),
         NS = "http://www.w3.org/2000/svg";
@@ -4419,7 +4422,11 @@ html.cap-page-mode #cap-editor.campaign-detail-mode #cap-editor-actions{padding:
       document.querySelector('[data-pending="PowerPoint Generator"]').onclick =
         () => $("ppt-panel").showModal();
       let pptFile = null;
+      function resetPptResult() {
+        $("ppt-status").textContent = "";
+      }
       function choosePptFile(files) {
+        if ($("ppt-generate").disabled) return;
         if (
           files.length !== 1 ||
           !files[0].name.toLowerCase().endsWith(".xlsx")
@@ -4427,10 +4434,10 @@ html.cap-page-mode #cap-editor.campaign-detail-mode #cap-editor-actions{padding:
           $("ppt-status").textContent = "Choose one .xlsx file.";
           return;
         }
+        resetPptResult();
         pptFile = files[0];
         $("ppt-name").textContent = pptFile.name;
         $("ppt-picked").hidden = false;
-        $("ppt-status").textContent = "";
       }
       $("ppt-file").onchange = (e) => choosePptFile(e.target.files);
       $("ppt-drop").ondragover = (e) => e.preventDefault();
@@ -4448,12 +4455,7 @@ html.cap-page-mode #cap-editor.campaign-detail-mode #cap-editor-actions{padding:
         pptFile = null;
         $("ppt-file").value = "";
         $("ppt-picked").hidden = true;
-        $("ppt-status").textContent = "";
-      };
-      $("ppt-generate").onclick = () => {
-        if (pptFile)
-          $("ppt-status").textContent =
-            "Preview complete. Excel contents were not processed; no PowerPoint was generated.";
+        resetPptResult();
       };
 // Campaign prices are snapshots scoped to a campaign-placement pair; master rows are never mutated.
 const capPageParams=new URLSearchParams(location.search);
@@ -4499,18 +4501,12 @@ function capNormalize(c) {
  // Keep legacy fields for audit; offers becomes the source of campaign pricing.
  c.offers??={};c.itemDetails??={};c.capSentIds??=c.sharedAt?[...c.ids]:[];c.owner??="cs.preview@example.test";if(["CS Preview","Pengelola Preview"].includes(c.owner))c.owner="cs.preview@example.test";
  for(const id of c.ids){
-  if(!Object.hasOwn(c.offers,id))c.offers[id]=capDurationList(c).map((amount,i)=>{const row=capNewOffer(id,amount.amount,amount.unit);if(c.capPrices?.[id]&&Object.hasOwn(c.capPrices[id],i)){row.price=c.capPrices[id][i];row.imAuto.price=false;}return row;});
+  if(!Object.hasOwn(c.offers,id))c.offers[id]=(c.offerDurations||(c.durations||[1]).map(amount=>({amount,unit:'bulan'}))).map((duration,i)=>{const row=capNewOffer(id,duration.amount,duration.unit);if(c.capPrices?.[id]&&Object.hasOwn(c.capPrices[id],i)){row.price=c.capPrices[id][i];row.imAuto.price=false;}return row;});
   c.itemDetails[id]??={status:c.status==='updated_by_cap'?'Updated':'Pending',occupiedStart:'',occupiedEnd:''};
   c.itemDetails[id]=capDetail(c.itemDetails[id],id);if(['Pending','Addition','Need Update'].includes(c.itemDetails[id].status))c.itemDetails[id].status=c.itemDetails[id].updatedAt?'Reverification Requested':'Added to Campaign';if(c.itemDetails[id].status==='Updated')c.itemDetails[id].status='Price & Availability Verified';c.itemDetails[id].addedAt??=null;
   c.offers[id].forEach(row=>{row.spotPerDay??=String(capMaster(id).spot_per_day??'');row.capital??=null;row.capitalUpdate??=null;row.bottomPrice??=null;row.priceManual??=true;});
  }
- if(!c.offerDurations){
-  const durations=capDurationList(c);
-  if(durations.length<=4&&c.ids.every(id=>new Set(c.offers[id].map(capDurationKey)).size===c.offers[id].length)){
-   c.offerDurations=durations;
-   for(const id of c.ids)c.offers[id]=durations.map(d=>c.offers[id].find(r=>capDurationKey(r)===capDurationKey(d))||capEmptyDuration(id,d));
-  }
- }
+ delete c.offerDurations;
  capSyncNegotiationStage(c);return c;
 }
 capLabel.bottom_price_requested='Bottom Price Requested';
@@ -4580,7 +4576,7 @@ function capCleanOffers(rows){
  });
 }
 function capOfferErrors(rows,checkFloor=true){
- const keys=new Map();rows.forEach(row=>{const key=capOfferKey(row);keys.set(key,(keys.get(key)||0)+1)});
+ const keys=new Map();rows.forEach(row=>{const key=capDurationKey(row);keys.set(key,(keys.get(key)||0)+1)});
  return rows.map(row=>{
   const messages=[];if(row.capitalUpdate!=null&&(!Number.isSafeInteger(row.capitalUpdate)||row.capitalUpdate<0))messages.push('Harga Modal (Best Price) harus rupiah bulat nol atau lebih.');
   if(typeof row.amount!=='number'||!Number.isFinite(row.amount)||row.amount<=0||row.amount>Number.MAX_SAFE_INTEGER)messages.push('Waktu harus berupa angka positif.');
@@ -4588,7 +4584,7 @@ function capOfferErrors(rows,checkFloor=true){
   if(row.bottomPrice!=null&&(!Number.isSafeInteger(row.bottomPrice)||row.bottomPrice<0))messages.push('Bottom Price harus rupiah bulat nol atau lebih.');if(checkFloor&&capRole!=='commercial'&&row.bottomPrice!=null&&row.price!=null&&row.price<row.bottomPrice)messages.push('Harga Jual tidak boleh di bawah Bottom Price.');
   if(row.price!==null&&(!Number.isSafeInteger(row.price)||row.price<0))messages.push('Harga harus rupiah bulat nol atau lebih.');
   if(row.capital!=null&&(!Number.isSafeInteger(row.capital)||row.capital<0))messages.push('Harga modal harus rupiah bulat nol atau lebih.');if(rows.length>4)messages.push('Maksimal 4 alternatif per placement.');
-  if(keys.get(capOfferKey(row))>1)messages.push('Waktu, unit, dan Spot per Day yang sama sudah ada pada placement ini.');
+  if(keys.get(capDurationKey(row))>1)messages.push('Durasi yang sama sudah ada pada placement ini. Gunakan satu harga per durasi.');
   return messages.join(' ');
  });
 }
@@ -4677,7 +4673,7 @@ function capRenderEditor(){
   body.innerHTML=`<p>Placement dari semua kota</p><p>Placement awal tetap berada dalam campaign. Placement baru berstatus ${capAdditionStatus(c)}.</p><label class="cap-picker-search">Cari kode placement atau kota<input id="cap-placement-search" type="search" placeholder="Contoh: JKT001 atau Jakarta" value="${capEsc(e.placementSearch||'')}" autocomplete="off"></label><div class="cap-placement-picker"></div>`;
   const draw=()=>{const q=$('cap-placement-search').value.trim().toLowerCase();e.placementSearch=q;const rows=placements.filter(p=>(p.code+' '+p.city).toLowerCase().includes(q)).sort((a,b)=>a.code.localeCompare(b.code,'en',{numeric:true,sensitivity:'base'}));
    const root=body.querySelector('.cap-placement-picker');root.innerHTML=rows.map(p=>`<button data-pick-placement="${p.id}" ${e.draft[p.id]?'disabled':''}><strong>${capEsc(p.code)} · ${capEsc(p.type)}</strong><small>Kota: ${capEsc(p.city)} · Alamat: ${capEsc(p.address||p.name||'')} · Owner: ${capEsc(p.owner||'')}</small>${e.draft[p.id]?'<small>Sudah dalam campaign</small>':''}</button>`).join('')||`<p>Tidak ada placement yang cocok dengan pencarian.</p>`;
-   root.querySelectorAll('[data-pick-placement]').forEach(button=>button.onclick=()=>{const id=Number(button.dataset.pickPlacement);if(e.draft[id])return;e.order.push(id);e.draft[id]=capDurationList(c).map(d=>capNewOffer(id,d.amount,d.unit));e.notes[id]='';e.details[id]=capDetail({addedAt:new Date().toISOString(),status:capAdditionStatus(c),occupiedStart:'',occupiedEnd:''},id);e.detailId=id;e.editing=true;e.view='table';capRenderEditor();});
+   root.querySelectorAll('[data-pick-placement]').forEach(button=>button.onclick=()=>{const id=Number(button.dataset.pickPlacement);if(e.draft[id])return;e.order.push(id);e.draft[id]=[capNewOffer(id)];e.notes[id]='';e.details[id]=capDetail({addedAt:new Date().toISOString(),status:capAdditionStatus(c),occupiedStart:'',occupiedEnd:''},id);e.detailId=id;e.editing=true;e.view='table';capRenderEditor();});
   };$('cap-placement-search').oninput=draw;draw();return;
  }
  if(e.view==='conflicts'){
@@ -4693,7 +4689,7 @@ function capRenderEditor(){
   if(capCanEdit(c))btn(e.file?'Proses Unggahan':'Save Changes',()=>{if(e.file){e.view='bulk';capRenderEditor();capProcessBulk();}else{if(!capValid())return capSaveWarning('Periksa waktu, unit, dan harga terlebih dahulu.');capSavePrices()}}).className='primary';return;
  }
  if(e.view==='bulk'){
-  body.innerHTML=`<button id="cap-bulk-back" class="editor-back">← Back</button><h3 class="editor-bulk-title">Billboard Bulk Edit</h3><p>Bulk edit durasi dan harga campaign, drag file atau klik tombol di bawah.</p><details class="editor-simulation"><summary>Catatan format unggahan</summary><p>Gunakan satu baris per kode placement dan maksimal empat kolom harga, misalnya Price 2 Weeks. Harga kosong menghapus nilai. Header durasi berlaku untuk seluruh campaign, termasuk placement di luar file. Tinjau dampaknya sebelum menyimpan.</p></details><input id="cap-bulk-file" type="file" accept=".xlsx" hidden><button id="cap-drop" class="editor-drop" type="button"><svg viewBox="0 0 64 64" aria-hidden="true"><path fill="currentColor" d="M18 49C0 49 0 24 14 22 17 3 44 3 49 23 65 23 68 49 51 49H38V34l5 5 5-5-16-16-16 16 5 5 5-5v15Z"/></svg><strong>Drag &amp; drop or click to Upload File</strong><span>Allowed file: .xlsx · One file per upload</span></button><div class="editor-file-row" id="cap-file-row" hidden><span id="cap-bulk-name"></span><button id="cap-remove-file">Hapus file</button></div><p id="cap-bulk-error" role="alert"></p>`;
+  body.innerHTML=`<button id="cap-bulk-back" class="editor-back">← Back</button><h3 class="editor-bulk-title">Billboard Bulk Edit</h3><p>Bulk edit durasi dan harga campaign, drag file atau klik tombol di bawah.</p><details class="editor-simulation"><summary>Catatan format unggahan</summary><p>Gunakan satu baris per kode placement dan maksimal empat kolom harga, misalnya Price 2 Weeks. Di setiap sheet, header menentukan durasi yang bisa diperbarui. Sel kosong menghapus harga untuk durasi yang sudah tersimpan pada placement di baris tersebut. Tinjau perubahan sebelum menyimpan.</p></details><input id="cap-bulk-file" type="file" accept=".xlsx" hidden><button id="cap-drop" class="editor-drop" type="button"><svg viewBox="0 0 64 64" aria-hidden="true"><path fill="currentColor" d="M18 49C0 49 0 24 14 22 17 3 44 3 49 23 65 23 68 49 51 49H38V34l5 5 5-5-16-16-16 16 5 5 5-5v15Z"/></svg><strong>Drag &amp; drop or click to Upload File</strong><span>Allowed file: .xlsx · One file per upload</span></button><div class="editor-file-row" id="cap-file-row" hidden><span id="cap-bulk-name"></span><button id="cap-remove-file">Hapus file</button></div><p id="cap-bulk-error" role="alert"></p>`;
   $('cap-bulk-back').onclick=()=>capGo('table');
   $('cap-bulk-error').textContent=e.bulkError||'';
   const updateFile=()=>{$('cap-file-row').hidden=!e.file;$('cap-bulk-name').textContent=e.file?.name||'';$('cap-process').disabled=!e.file;};
@@ -4727,9 +4723,11 @@ function capRenderEditor(){
  <td data-label="Status"><span class="cap-badge ${capPlacementStatus(c,id).replaceAll(' ','-').toLowerCase()}">${capEsc(capPlacementStatus(c,id))}</span>${capPlacementStatusInput(c,e,id,code)}</td>
  <td class="cap-offers-cell" data-label="Durasi & Harga" data-placement="${id}"><div class="cap-offers-list">${rows.map((row,i)=>{
  const suffix=`${id}-${i}`,label=`${code}, alternatif ${i+1}`;
+ const canEditDuration=e.editing&&capRole!=='commercial'&&d.offerOutcome==='In Discussion';
+ const requestActive=(c.negotiations||[]).some(request=>request.placementId===Number(id)&&request.status==='Requested'&&request.items.some(item=>item.offerId===row.id));
  const input=(field,title,type='text',editable=true)=>`<label class="cap-offer-field"><span>${title}</span><input aria-label="${title} ${capEsc(label)}" data-offer-field="${field}" data-offer-index="${i}" type="${type}" ${type==='number'?'min="0" step="any"':''} ${field==='unit'?'list="cap-unit-options"':''} ${['price','capital','capitalUpdate','bottomPrice'].includes(field)?'inputmode="numeric"':''} value="${capEsc(['price','capital','capitalUpdate','bottomPrice'].includes(field)?capPriceText(row[field]):row[field]??'')}" placeholder="—" ${!editable?'disabled':e.editing?'':'readonly'}></label>`;
- return `<div class="cap-offer-row" data-offer-row="${i}"><div class="cap-offer-caption"><strong>Harga ${capEsc(capOfferLabel(row))}</strong><label class="cap-offer-date"><span>Price Updated Date</span><input type="date" data-detail="priceUpdatedDate" data-item="${id}" aria-label="Price Updated Date ${capEsc(label)}" value="${capEsc(d.priceUpdatedDate)}" ${capRole!=='cap'?'disabled':e.editing?'':'readonly'}></label></div><div class="cap-offer-fields">${String(p?.type||master.media_type||'').toLowerCase().includes('videotron')?input('spotPerDay','Spot per Day','number',capRole==='manager'):''}${capRole==='manager'?'':input('capital','Harga Modal (IM)','text',capRole==='cap')}${input('capitalUpdate','Harga Modal (Best Price)','text',capRole==='cap')}${input('bottomPrice','Bottom Price (IDR)','text',capRole==='commercial')}${row.bottomReference!=null?`<small class="cap-price-alert">Bottom Price referensi: ${capEsc(capMoney(row.bottomReference))} · Belum dikonfirmasi untuk campaign ini.</small>`:''}${input('price','Harga Jual (IDR)','text',capRole==='manager')}${row.bottomChanged?'<small class="cap-price-alert">Bottom Price berubah. Tinjau kembali Harga Jual.</small>':''}${row.spotNeedsReview?'<small class="cap-price-alert">Spot per Day berubah. Tinjau kembali Harga Jual dan kebutuhan verifikasi.</small>':''}${row.bottomNeedsReview?'<small class="cap-price-alert">Bottom Price perlu ditinjau karena kebutuhan berubah.</small>':''}<label class="cap-offer-field"><span>Revisual (IDR / unit)</span><input type="text" inputmode="numeric" data-detail="revisual" data-item="${id}" aria-label="Revisual ${capEsc(label)}" value="${capEsc(capPriceText(d.revisual))}" placeholder="—" ${capRole!=='cap'?'disabled':e.editing?'':'readonly'}></label>${d.revisual!=null&&(!Number.isSafeInteger(d.revisual)||d.revisual<0)?'<small class="cap-date-error">Gunakan rupiah bulat nol atau lebih.</small>':''}</div><p class="cap-offer-error" id="cap-offer-error-${suffix}" hidden></p></div>`;
- }).join('')}</div><p class="cap-ppt-warning" hidden></p></td>
+ return `<div class="cap-offer-row" data-offer-row="${i}"><div class="cap-offer-caption"><strong>Harga ${capEsc(capOfferLabel(row))}</strong><label class="cap-offer-date"><span>Price Updated Date</span><input type="date" data-detail="priceUpdatedDate" data-item="${id}" aria-label="Price Updated Date ${capEsc(label)}" value="${capEsc(d.priceUpdatedDate)}" ${capRole!=='cap'?'disabled':e.editing?'':'readonly'}></label>${canEditDuration?`<button type="button" class="cap-remove-offer" data-remove-offer="${i}" ${rows.length<=1||requestActive?'disabled':''} aria-label="Hapus alternatif ${i+1}">×</button>`:''}</div><div class="cap-offer-fields">${canEditDuration?input('amount','Waktu','number',!requestActive)+input('unit','Unit','text',!requestActive):''}${String(p?.type||master.media_type||'').toLowerCase().includes('videotron')?input('spotPerDay','Spot per Day','number',capRole==='manager'):''}${capRole==='manager'?'':input('capital','Harga Modal (IM)','text',capRole==='cap')}${input('capitalUpdate','Harga Modal (Best Price)','text',capRole==='cap')}${input('bottomPrice','Bottom Price (IDR)','text',capRole==='commercial')}${row.bottomReference!=null?`<small class="cap-price-alert">Bottom Price referensi: ${capEsc(capMoney(row.bottomReference))} · Belum dikonfirmasi untuk campaign ini.</small>`:''}${input('price','Harga Jual (IDR)','text',capRole==='manager')}${row.bottomChanged?'<small class="cap-price-alert">Bottom Price berubah. Tinjau kembali Harga Jual.</small>':''}${row.spotNeedsReview?'<small class="cap-price-alert">Spot per Day berubah. Tinjau kembali Harga Jual dan kebutuhan verifikasi.</small>':''}${row.bottomNeedsReview?'<small class="cap-price-alert">Bottom Price perlu ditinjau karena kebutuhan berubah.</small>':''}<label class="cap-offer-field"><span>Revisual (IDR / unit)</span><input type="text" inputmode="numeric" data-detail="revisual" data-item="${id}" aria-label="Revisual ${capEsc(label)}" value="${capEsc(capPriceText(d.revisual))}" placeholder="—" ${capRole!=='cap'?'disabled':e.editing?'':'readonly'}></label>${d.revisual!=null&&(!Number.isSafeInteger(d.revisual)||d.revisual<0)?'<small class="cap-date-error">Gunakan rupiah bulat nol atau lebih.</small>':''}</div><p class="cap-offer-error" id="cap-offer-error-${suffix}" hidden></p></div>`;
+ }).join('')}</div>${e.editing&&capRole!=='commercial'&&d.offerOutcome==='In Discussion'?`<div class="cap-offers-bottom"><button type="button" class="cap-add-offer" data-add-offer="${id}" ${rows.length>=4?'disabled':''}>+ Tambah Durasi</button><span class="cap-ppt-count">${rows.length}/4 alternatif</span></div>`:''}<p class="cap-ppt-warning" hidden></p></td>
  <td data-label="Availability" class="cap-availability-cell"><label>Status Availability<select data-detail="availability" data-item="${id}" aria-label="Availability ${code}" ${e.editing&&capRole==='cap'?'':'disabled'}>${[['pending','Belum Dikonfirmasi'],['yes','Yes'],['no','No']].map(([value,label])=>`<option value="${value}" ${d.availability===value?'selected':''}>${label}</option>`).join('')}</select></label><label>Availability Date<input type="date" data-detail="availableDate" data-item="${id}" aria-label="Availability Date ${code}" value="${capEsc(d.availableDate)}" ${capRole!=='cap'?'disabled':e.editing?'':'readonly'}></label></td>
  <td data-label="Occupied Month" class="cap-date-cell">${['occupiedStart','occupiedEnd'].map((field,i)=>`<label>${i?'Sampai':'Dari'}<input type="month" aria-label="${i?'Akhir':'Awal'} occupied ${code}" data-detail="${field}" data-item="${id}" value="${capEsc(d[field])}" ${capRole!=='cap'?'disabled':e.editing?'':'readonly'}></label>`).join('')}<label>Current Brand<textarea data-detail="currentBrand" data-item="${id}" rows="2" placeholder="Current Brand" aria-label="Current Brand ${capEsc(code)}" ${capRole!=='cap'?'disabled':e.editing?'':'readonly'}>${capEsc(d.currentBrand||'')}</textarea></label><small class="cap-date-error" role="alert">${d.occupiedStart&&d.occupiedEnd&&d.occupiedStart>d.occupiedEnd?'Bulan akhir harus setelah atau sama dengan bulan awal.':''}</small></td>
  <td class="cap-notes-cell" data-label="Notes"><textarea data-note="${id}" rows="4" placeholder="Notes" aria-label="Catatan ${capEsc(code)}" ${e.editing?'':'readonly'}>${capEsc(e.notes[id])}</textarea></td><td data-label="Diperbarui Oleh">${capEsc(d.updatedBy||'-')}</td><td data-label="Latest Changes"><ul class="cap-latest-changes">${(d.latestChanges||[]).map(field=>`<li>${capEsc(field)}</li>`).join('')||'<li>-</li>'}</ul></td><td data-label="Waktu Pembaruan">${d.updatedAt?capEsc(new Date(d.updatedAt).toLocaleString('id-ID')):'-'}</td></tr>`;
@@ -4754,6 +4752,7 @@ function capRenderEditor(){
    cell.querySelectorAll('[data-offer-row]').forEach(element=>{
     const i=Number(element.dataset.offerRow),row=rows[i],old=(e.original[id]||[]).find(x=>x.id===row.id);
     element.classList.toggle('cap-offer-changed',!old||JSON.stringify(capCleanOffers([old]))!==JSON.stringify(capCleanOffers([row])));
+    element.querySelector('.cap-offer-caption strong').textContent='Harga '+capOfferLabel(row);
     const error=element.querySelector('.cap-offer-error');error.hidden=!errors[i];error.textContent=errors[i];
     element.querySelectorAll('[data-offer-field]:not([type="checkbox"])').forEach(input=>input.setAttribute('aria-invalid',String(!!errors[i])));
    });
@@ -4771,7 +4770,21 @@ function capRenderEditor(){
    if(field==='unit'){e.draft[id][i].unit=capUnit(input.value);input.value=e.draft[id][i].unit;input.title=input.value;update();}
   });
  });
+ body.querySelectorAll('[data-add-offer]').forEach(button=>button.onclick=()=>{
+  const id=button.dataset.addOffer;
+  if(e.draft[id].length>=4)return toast('Maksimal 4 alternatif per placement.');e.draft[id].push(capNewOffer(id,null));
+  capRefreshOfferTable(id,e.draft[id].length-1);
+ });
+ body.querySelectorAll('[data-remove-offer]').forEach(button=>button.onclick=()=>{
+  const id=button.closest('[data-placement]').dataset.placement,i=Number(button.dataset.removeOffer);
+  if(e.draft[id].length<=1)return;const offer=e.draft[id][i];if((capRecord().negotiations||[]).some(request=>request.placementId===Number(id)&&request.status==='Requested'&&request.items.some(item=>item.offerId===offer.id)))return toast('Batalkan permintaan Bottom Price terkait sebelum menghapus alternatif.');e.draft[id].splice(i,1);capRefreshOfferTable(id,Math.min(i,e.draft[id].length-1));
+ });
  body.querySelectorAll('[data-note]').forEach(input=>input.oninput=()=>{e.notes[input.dataset.note]=input.value;update()});update();capDetailLayout(c,e,body);
+}
+function capRefreshOfferTable(id,index){
+ const wrap=$('cap-editor-body').querySelector('.cap-table-wrap'),position={top:wrap.scrollTop,left:wrap.scrollLeft};
+ capRenderEditor();const next=$('cap-editor-body').querySelector('.cap-table-wrap');next.scrollTop=position.top;next.scrollLeft=position.left;
+ const cell=next.querySelector(`[data-placement="${id}"]`),focus=cell.querySelector(`[data-offer-index="${index}"]`)||cell.querySelector('[data-add-offer]');focus?.focus({preventScroll:true});focus?.scrollIntoView({block:'nearest',inline:'nearest'});
 }
 function capActor(){return capRole==='cap'?'cap.preview@example.test':capRole==='commercial'?'commercial.preview@example.test':'cs.preview@example.test'}
 function capStamp(item){item.updatedBy=capActor();item.updatedAt=new Date().toISOString()}
@@ -4798,14 +4811,13 @@ function capSavePrices(options={}){
  capLoading=true;selected.clear();capRecord().ids.forEach(id=>selected.add(id));capLoading=false;render();if(e.detailId&&!options.stay){e.detailId=null;e.target=null;if(capPageMode)capGo('list');else capRenderEditor();}else if(target)capGo(target);else capRenderEditor();toast('Durasi, harga, dan Notes campaign tersimpan.');return true;
 }
 function capFinish(){return capComplete('CAP');}
-function capDurationKey(row){
- return Number(row.amount)+' '+String(row.unit).trim().replace(/\s+/g,' ').toLowerCase();
+function capDurationUnit(value){
+ const unit=String(value??'').trim().replace(/\s+/g,' ').toLowerCase();
+ const aliases={hari:'day',days:'day',minggu:'week',weeks:'week',bulan:'month',months:'month',tahun:'year',years:'year'};
+ return Object.hasOwn(aliases,unit)?aliases[unit]:unit;
 }
-function capDurationList(c){
- if(c.offerDurations)return c.offerDurations;
- const unique=new Map();
- for(const id of c.ids)for(const row of c.offers?.[id]||[])unique.set(capDurationKey(row),{amount:row.amount,unit:row.unit});
- return unique.size?[...unique.values()]:(c.durations||[1]).map(amount=>({amount,unit:'bulan'}));
+function capDurationKey(row){
+ return Number(row.amount)+' '+capDurationUnit(row.unit);
 }
 function capEmptyDuration(id,d){
  return {...capNewOffer(id,d.amount,d.unit),price:null,capital:null,imAuto:{capital:false,price:false}};
@@ -4815,14 +4827,37 @@ function capExcelColumn(index){
  for(let n=index+1;n;n=Math.floor((n-1)/26))name=String.fromCharCode(65+(n-1)%26)+name;
  return name;
 }
-function capPriceHeader(d){return 'Price '+d.amount+' '+d.unit;}
-function capWorkbookRows(c){
- const durations=capDurationList(c);
- if(!c.offerDurations||durations.length>4)throw Error('Sesuaikan durasi campaign menjadi maksimal empat sebelum download.');
- const headers=['Code','City','Media Owner','Ownership','Media Type','Area','Address','Direction(from x to y)','Coordinate','Street Type','Profile Audiance','Job','Surrounding','View','Est.Traffic/Day (Vehicles)','Long (m)','Height (m)','Unit','Position','Lighting','Spot/Day (videotron only)','Client Slot (videotron only)','Duration / slot (videotron only)','Resolution (videotron only)','Selling Price for Material Replacement(/m2)',...Array.from({length:4},(_,i)=>durations[i]?capPriceHeader(durations[i]):''),'Discount','Operational Hours','Notes'];
+function capPriceHeader(duration){
+ const unit=capDurationUnit(duration.unit);
+ const label=['day','week','month','year'].includes(unit)
+  ? unit[0].toUpperCase()+unit.slice(1)+(duration.amount===1?'':'s')
+  : duration.unit;
+ return 'Price '+duration.amount+' '+label;
+}
+function capWorkbookGroups(c){
+ const groups=[];
+ let group={ids:[],durations:new Map()};
+ for(const id of c.ids){
+  const offers=c.offers[id];
+  const durations=new Map(offers.map(offer=>[capDurationKey(offer),offer]));
+  const combined=new Map([...group.durations,...durations]);
+  if(combined.size>4){
+   groups.push(group);
+   group={ids:[],durations};
+  }else{
+   group.durations=combined;
+  }
+  group.ids.push(id);
+ }
+ if(group.ids.length)groups.push(group);
+ return groups;
+}
+function capWorkbookRows(c,group){
+ const durations=[...group.durations.values()];
+ const headers=['Code','City','Media Owner','Ownership','Media Type','Area','Address','Direction(from x to y)','Coordinate','Street Type','Profile Audiance','Job','Surrounding','View','Est.Traffic/Day (Vehicles)','Long (m)','Height (m)','Unit','Position','Lighting','Spot/Day (videotron only)','Client Slot (videotron only)','Duration / slot (videotron only)','Resolution (videotron only)','Selling Price for Material Replacement(/m2)',...Array.from({length:4},(_,i)=>durations[i]?capPriceHeader(durations[i]):null),'Discount','Operational Hours','Notes'];
  const extras=['Price Updated Date','Availability','Availability Date','Occupied Start Month','Occupied End Month','Current Brand','Revisual (IDR / unit)'];
  for(const d of durations){const label=capDurationKey(d);extras.push('Spot per Day · '+label);if(capRole!=='manager')extras.push('Harga Modal (IM) · '+label,'Harga Modal (Best Price) · '+label);}
- return [[...headers,...extras],...c.ids.map(id=>{
+ return [[...headers,...extras],...group.ids.map(id=>{
   const p=placements.find(x=>x.id===id)||{},master=capMaster(id),detail=c.itemDetails[id];
   const rows=durations.map(d=>c.offers[id].find(r=>capDurationKey(r)===capDurationKey(d)));
   const values=headers.map(h=>h?master[h]??null:null);
@@ -4839,8 +4874,8 @@ function capParseWide(rows,start){
  const durations=[],indexes=[],codeIndex=header.indexOf('Code');
  for(const [i,h] of header.entries()){
   if(!/^Price(?:\s|$)/i.test(h)||['Price Updated Date','Price Update Status'].includes(h))continue;
-  const parts=/^Price\s+([1-9]\d*)\s+(.+)$/i.exec(h);
-  if(!parts||!Number.isSafeInteger(Number(parts[1])))throw Error('Periksa header durasi: '+h);
+  const parts=/^Price\s+(\d+(?:\.\d+)?(?:e[+-]?\d+)?)\s+(.+)$/i.exec(h);
+  if(!parts||Number(parts[1])<=0||Number(parts[1])>Number.MAX_SAFE_INTEGER)throw Error('Periksa header durasi: '+h);
   durations.push({amount:Number(parts[1]),unit:parts[2].trim()});indexes.push(i);
  }
  if(codeIndex<0||!durations.length||durations.length>4||new Set(durations.map(capDurationKey)).size!==durations.length)throw Error('Gunakan Code dan 1–4 header Price dengan durasi unik, misalnya Price 2 Weeks.');
@@ -4855,7 +4890,7 @@ function capParseWide(rows,start){
   if(unlabelled)throw Error('Ada harga tanpa header durasi di baris '+(start+i+2)+'. Lengkapi header terlebih dahulu.');
   return [{number:start+i+2,code:String(cell(codeIndex).value).trim().toUpperCase(),codeFormula:cell(codeIndex).formula,prices:indexes.map(cell),fields:new Map(header.map((h,index)=>[h,cell(index)]))}];
  });
- return {durations,records};
+ return {durations,indexes,records};
 }
 function capBulkNumber(cell,field){
  if(cell.formula)throw Error(field+' berisi formula. Gunakan nilai.');
@@ -4863,29 +4898,35 @@ function capBulkNumber(cell,field){
  if(!/^\d+$/.test(text)||!Number.isSafeInteger(Number(text)))throw Error(field+' harus berupa rupiah bulat nol atau lebih.');
  return Number(text);
 }
-function capReadBulkRow(c,id,record,durations){
+function capReadBulkRow(c,id,record){
+ const {durations}=record;
  const detail={...c.itemDetails[id]},fields=record.fields;
  function read(name){const cell=fields.get(name);if(cell.formula)throw Error(name+' berisi formula.');return String(cell.value).trim();}
- const offers=durations.map((d,i)=>{
-  const old=c.offers[id].find(r=>capDurationKey(r)===capDurationKey(d));
-  const row=old?capClone(old):capEmptyDuration(id,d);
+ const offers=capClone(c.offers[id]);
+ for(const [i,d] of durations.entries()){
+  const index=offers.findIndex(row=>capDurationKey(row)===capDurationKey(d));
+  const row=index<0?capEmptyDuration(id,d):offers[index];
   const duration=capDurationKey(d);
+  const column=label=>[label+duration,label+(Number(d.amount)+' '+capUnit(d.unit))].find(name=>fields.has(name));
   if(capRole==='manager'){
    const price=capBulkNumber(record.prices[i],capPriceHeader(d));
+   if(index<0&&price==null)continue;
    if(row.price!==price){row.price=price;row.priceManual=true;row.imAuto={...row.imAuto,price:false};}
    if(price!=null)delete row.bulkPriceCleared;
-   const spot=fields.has('Spot per Day · '+duration)?'Spot per Day · '+duration:durations.length===1?'Spot/Day (videotron only)':'';
+   const spot=column('Spot per Day · ')||(durations.length===1?'Spot/Day (videotron only)':'');
    if(fields.has(spot)&&placements.find(p=>p.id===id)?.type.toLowerCase().includes('videotron')){
     const value=read(spot);if(value&&(!/^\d+$/.test(value)||Number(value)<=0))throw Error(spot+' harus berupa bilangan bulat positif.');
     if(value!==row.spotPerDay){row.spotPerDay=value;row.spotNeedsReview=true;}
    }
   }else{
+   if(index<0)continue;
    for(const [label,key] of [['Harga Modal (IM) · ','capital'],['Harga Modal (Best Price) · ','capitalUpdate']]){
-    if(fields.has(label+duration)){const value=capBulkNumber(fields.get(label+duration),label+duration);if(value!==row[key]){row[key]=value;if(key==='capital')row.imAuto={...row.imAuto,capital:false};}}
+    const name=column(label);
+    if(name){const value=capBulkNumber(fields.get(name),name);if(value!==row[key]){row[key]=value;if(key==='capital')row.imAuto={...row.imAuto,capital:false};}}
    }
   }
-  return row;
- });
+  if(index<0)offers.push(row);
+ }
  if(capRole==='cap'){
   for(const [label,key] of [['Availability','availability'],['Availability Date','availableDate'],['Occupied Start Month','occupiedStart'],['Occupied End Month','occupiedEnd'],['Current Brand','currentBrand'],['Price Updated Date','priceUpdatedDate']]){
    if(!fields.has(label))continue;
@@ -4906,17 +4947,9 @@ function capReadBulkRow(c,id,record,durations){
  return {offers,detail,note:fields.has('Notes')?read('Notes'):(c.notes?.[id]||'')};
 }
 function capDurationDiff(c,input){
- const {durations,records}=input,ui=records===null;
- const oldDurations=capDurationList(c),signature=ds=>ds.map(capDurationKey).join('|');
- const layoutChanged=!c.offerDurations||signature(oldDurations)!==signature(durations);
+ const {records}=input;
  const changes=[],skipped=[],updates=[],included=new Map(),counts=new Map();
- const describe=ds=>ds.map(capOfferLabel).join(' · ');
  if(!capCanEdit(c)||capRole==='commercial')throw Error('Campaign hanya dapat dilihat.');
- if(layoutChanged){
-  if(capRole!=='manager')throw Error('Hanya CS dapat mengubah durasi campaign. Gunakan header durasi campaign terkini.');
-  if(c.ids.some(id=>c.itemDetails[id].offerOutcome!=='In Discussion'))throw Error('Durasi campaign terkunci selama ada placement Deal atau Not Deal.');
-  changes.push(['Campaign','Durasi Penawaran',describe(oldDurations),describe(durations)]);
- }
  const ids=new Map(c.ids.map(id=>[placements.find(p=>p.id===id)?.code,id]));
  for(const r of records||[])counts.set(r.code,(counts.get(r.code)||0)+1);
  for(const r of records||[]){
@@ -4924,36 +4957,28 @@ function capDurationDiff(c,input){
    if(!ids.has(r.code)||r.codeFormula)throw Error('Kode di luar campaign atau tidak valid. Gunakan Tambah Placement untuk menambahkan placement.');
    if(counts.get(r.code)>1)throw Error('Kode duplikat.');
    const id=ids.get(r.code);if(c.itemDetails[id].offerOutcome!=='In Discussion')throw Error('Placement sudah final.');
-   included.set(id,capReadBulkRow(c,id,r,durations));
-  }catch(err){skipped.push(['Baris '+r.number+' · '+(r.code||'—'),err.message]);}
+   included.set(id,capReadBulkRow(c,id,r));
+  }catch(err){skipped.push([r.sheet+' · Baris '+r.number+' · '+(r.code||'—'),err.message]);}
  }
  const labels={capital:'Harga Modal (IM)',capitalUpdate:'Best Price',bottomPrice:'Bottom Price',price:'Harga Jual',spotPerDay:'Spot per Day',availability:'Availability',availableDate:'Availability Date',currentBrand:'Current Brand',occupiedStart:'Occupied Month · Dari',occupiedEnd:'Occupied Month · Sampai',revisual:'Revisual',priceUpdatedDate:'Price Updated Date'};
  for(const [code,id] of ids){
-  const submitted=included.get(id),before=c.offers[id];
-  if(!submitted&&!layoutChanged)continue;
-  const next=submitted||{offers:durations.map(d=>{
-   const match=before.find(r=>capDurationKey(r)===capDurationKey(d));
-   return match?capClone(match):{...capEmptyDuration(id,d),bulkPriceCleared:!ui};
-  }),detail:{...c.itemDetails[id]},note:c.notes?.[id]||''};
+  const next=included.get(id),before=c.offers[id];
+  if(!next)continue;
   const fields=[];
   function diff(label,old,value){if((old??'')===(value??''))return;fields.push(label);changes.push([code,label,old,value]);}
   for(const row of next.offers){
    const old=before.find(r=>r.id===row.id);
-   if(!old){fields.push('Durasi '+capOfferLabel(row));changes.push([code,capOfferLabel(row),null,row.bulkPriceCleared?'Harga dikosongkan · di luar unggahan':'Durasi baru']);}
+   if(!old){fields.push('Durasi '+capOfferLabel(row));changes.push([code,capOfferLabel(row),null,'Durasi baru']);}
    for(const key of ['price','capital','capitalUpdate','bottomPrice','spotPerDay']){
     if(key==='capital'&&capRole==='manager')continue;
     diff(labels[key]+' · '+capOfferLabel(row),old?.[key],row[key]);
    }
   }
-  for(const old of before.filter(r=>!next.offers.some(n=>n.id===r.id))){
-   diff('Durasi '+capOfferLabel(old),capOfferSummary(old),null);
-   if((c.negotiations||[]).some(r=>r.placementId===id&&r.status==='Requested'&&r.items?.some(i=>i.offerId===old.id)))throw Error(code+' memiliki permintaan Bottom Price aktif untuk durasi yang akan dihapus.');
-  }
   for(const key of Object.keys(labels))if(key in next.detail)diff(labels[key],c.itemDetails[id][key],next.detail[key]);
   diff('Notes',c.notes?.[id],next.note);
-  if(fields.length||layoutChanged)updates.push({id,...next,fields:fields.length?fields:['Urutan durasi']});
+  if(fields.length)updates.push({id,...next,fields});
  }
- return {changes,skipped,updates,layoutChanged,canSave:(ui||included.size>0)&&(layoutChanged||updates.length>0)};
+ return {changes,skipped,updates,canSave:updates.length>0};
 }
 function capReviewDurationInput(input){
  const latest=JSON.parse(localStorage.getItem(capKey)||'[]').find(c=>c.id===capId);
@@ -4970,40 +4995,21 @@ function capReviewDurationInput(input){
   saved=saved.map(item=>item.id===c.id?c:item);
   const at=new Date().toISOString(),by=capActor();
   if(!capChange(item=>{
-   if(plan.layoutChanged)item.history.push({action:'offer-durations',at,by,before:capClone(capDurationList(item)),after:capClone(input.durations)});
-   item.offerDurations=capClone(input.durations);
    for(const update of plan.updates){
     const {id,offers,detail,note,fields}=update;
-    item.history.push({action:input.records===null?'campaign-durations':'bulk-edit',placementId:id,at,by,fields,before:{offers:item.offers[id],detail:item.itemDetails[id],note:item.notes?.[id]},after:{offers:capClone(offers),detail:capClone(detail),note}});
+    item.history.push({action:'bulk-edit',placementId:id,at,by,fields,before:{offers:item.offers[id],detail:item.itemDetails[id],note:item.notes?.[id]},after:{offers:capClone(offers),detail:capClone(detail),note}});
     item.offers[id]=offers;item.notes??={};item.notes[id]=note;
-    item.itemDetails[id]={...detail,latestChanges:[input.records===null?'Campaign Durations':'Bulk Edit',...fields],updatedBy:by,updatedAt:at};
+    item.itemDetails[id]={...detail,latestChanges:['Bulk Edit',...fields],updatedBy:by,updatedAt:at};
     if(['Price & Availability Verified','Bottom Price Reviewed','Not Available'].includes(detail.status)&&fields.some(f=>!['Notes','Urutan durasi'].includes(f)))item.itemDetails[id].needsReverification=true;
    }
   }))return 'Perubahan belum tersimpan. Silakan coba kembali.';
   capEditor.file=null;capReloadEditor();toast('Perubahan campaign tersimpan.');
  });
  dialog.classList.add('cap-commercial-dialog');dialog.querySelector('footer button').textContent='Discard';
- if(input.records!==null)dialog.querySelector('footer button').onclick=()=>{
+ dialog.querySelector('footer button').onclick=()=>{
   capEditor.file=null;capEditor.bulkError='';capRenderEditor();
  };
  $('cap-feature-confirm').disabled=!plan.canSave;
-}
-function capManageDurations(c){
- const durations=capClone(capDurationList(c));
- capFeatureDialog('Durasi Penawaran','<p>Durasi berlaku untuk seluruh placement dalam campaign.</p><div id="cap-duration-rows"></div><button type="button" id="cap-duration-add">+ Tambah Durasi</button>','Review Changes',()=>{
-  if(!durations.length||durations.length>4||durations.some(d=>!Number.isSafeInteger(d.amount)||d.amount<1||!d.unit.trim()))return 'Isi waktu dan unit untuk 1–4 durasi.';
-  if(new Set(durations.map(capDurationKey)).size!==durations.length)return 'Gunakan durasi yang berbeda.';
-  try{capDurationDiff(c,{durations,records:null});}catch(err){return err.message;}
-  setTimeout(()=>{try{capReviewDurationInput({durations,records:null});}catch(err){toast(err.message);}},0);
- });
- function draw(){
-  $('cap-duration-rows').innerHTML=durations.map((d,i)=>'<div class="cap-duration-line"><label>Waktu<input type="number" min="1" step="1" value="'+capEsc(d.amount??'')+'"></label><label>Unit<input value="'+capEsc(d.unit)+'"></label><button type="button" aria-label="Hapus durasi '+(i+1)+'" '+(durations.length===1?'disabled':'')+'>×</button></div>').join('');
-  [...$('cap-duration-rows').children].forEach((line,i)=>{
-   const [amount,unit]=line.querySelectorAll('input');amount.oninput=()=>durations[i].amount=Number(amount.value);unit.oninput=()=>durations[i].unit=unit.value.trim();
-   line.querySelector('button').onclick=()=>{durations.splice(i,1);draw();};
-  });$('cap-duration-add').disabled=durations.length>=4;
- }
- $('cap-duration-add').onclick=()=>{durations.push({amount:1,unit:''});draw();};draw();
 }
 async function capProcessBulk(){
  const editor=capEditor;if(editor.busy||!editor.file)return;
@@ -5016,19 +5022,133 @@ async function capProcessBulk(){
 }
 
 // Minimal OOXML workbook support for offline preview; production uses the existing server exporter.
-function capZip(files){const enc=new TextEncoder(),parts=[],central=[];let offset=0;const crc=bytes=>{let c=0xffffffff;for(const b of bytes){c^=b;for(let j=0;j<8;j++)c=(c>>>1)^((c&1)?0xedb88320:0)}return (c^0xffffffff)>>>0;};
- for(const [name,text]of Object.entries(files)){const n=enc.encode(name),data=enc.encode(text),sum=crc(data),local=new Uint8Array(30+n.length),v=new DataView(local.buffer);v.setUint32(0,0x04034b50,true);v.setUint16(4,20,true);v.setUint32(14,sum,true);v.setUint32(18,data.length,true);v.setUint32(22,data.length,true);v.setUint16(26,n.length,true);local.set(n,30);parts.push(local,data);const c=new Uint8Array(46+n.length),d=new DataView(c.buffer);d.setUint32(0,0x02014b50,true);d.setUint16(4,20,true);d.setUint16(6,20,true);d.setUint32(16,sum,true);d.setUint32(20,data.length,true);d.setUint32(24,data.length,true);d.setUint16(28,n.length,true);d.setUint32(42,offset,true);c.set(n,46);central.push(c);offset+=local.length+data.length;}
- const end=new Uint8Array(22),v=new DataView(end.buffer);v.setUint32(0,0x06054b50,true);v.setUint16(8,central.length,true);v.setUint16(10,central.length,true);v.setUint32(12,central.reduce((n,c)=>n+c.length,0),true);v.setUint32(16,offset,true);return new Blob([...parts,...central,end],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+function capZip(files,type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){const enc=new TextEncoder(),parts=[],central=[];let offset=0;const crc=bytes=>{let c=0xffffffff;for(const b of bytes){c^=b;for(let j=0;j<8;j++)c=(c>>>1)^((c&1)?0xedb88320:0)}return (c^0xffffffff)>>>0;};
+ for(const [name,text]of Object.entries(files)){const n=enc.encode(name),data=typeof text==='string'?enc.encode(text):text,sum=crc(data),local=new Uint8Array(30+n.length),v=new DataView(local.buffer);v.setUint32(0,0x04034b50,true);v.setUint16(4,20,true);v.setUint32(14,sum,true);v.setUint32(18,data.length,true);v.setUint32(22,data.length,true);v.setUint16(26,n.length,true);local.set(n,30);parts.push(local,data);const c=new Uint8Array(46+n.length),d=new DataView(c.buffer);d.setUint32(0,0x02014b50,true);d.setUint16(4,20,true);d.setUint16(6,20,true);d.setUint32(16,sum,true);d.setUint32(20,data.length,true);d.setUint32(24,data.length,true);d.setUint16(28,n.length,true);d.setUint32(42,offset,true);c.set(n,46);central.push(c);offset+=local.length+data.length;}
+ const end=new Uint8Array(22),v=new DataView(end.buffer);v.setUint32(0,0x06054b50,true);v.setUint16(8,central.length,true);v.setUint16(10,central.length,true);v.setUint32(12,central.reduce((n,c)=>n+c.length,0),true);v.setUint32(16,offset,true);return new Blob([...parts,...central,end],{type});
 }
 function capCampaignHeaders(){return ['Code','Waktu','Unit','Harga Modal (IM)','Harga Jual (IDR)'];}
-function capWorkbook(c){
- const rows=capWorkbookRows(c);const sheet=rows.map((row,r)=>'<row r="'+(r+1)+'">'+row.map((value,i)=>{const ref=capExcelColumn(i)+(r+1);return value==null?`<c r="${ref}"/>`:typeof value==='boolean'?`<c r="${ref}" t="b"><v>${value?1:0}</v></c>`:typeof value==='number'?`<c r="${ref}"><v>${value}</v></c>`:`<c r="${ref}" t="inlineStr"><is><t>${xml(value)}</t></is></c>`}).join('')+'</row>').join('');return capZip({
- '[Content_Types].xml':'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>',
- '_rels/.rels':'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>',
- 'xl/workbook.xml':'<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Campaign" sheetId="1" r:id="rId1"/></sheets></workbook>',
- 'xl/_rels/workbook.xml.rels':'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/></Relationships>',
- 'xl/worksheets/sheet1.xml':'<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>'+sheet+'</sheetData></worksheet>'});}
-function capExport(c){try{c=capNormalize(JSON.parse(localStorage.getItem(capKey)||'[]').find(x=>x.id===c.id));}catch{return toast('Campaign tersimpan tidak ditemukan.');}if(!c.offerDurations)return toast('Sesuaikan durasi lama melalui Durasi Penawaran sebelum download.');if(c.ids.some(id=>!placements.some(p=>p.id===id)))return toast('Ada placement yang tidak ditemukan.');const overflow=capPptOverflow(capEditorValues(c));if(overflow.length)return toast('Sesuaikan maksimal 4 alternatif pada: '+overflow.map(id=>placements.find(p=>p.id===Number(id))?.code||id).join(', '));if(Object.values(capEditorValues(c)).some(rows=>capOfferErrors(rows,false).some(Boolean)))return toast('Periksa data durasi sebelum download.');const a=document.createElement('a'),url=URL.createObjectURL(capWorkbook(c));a.href=url;a.download=c.name.replace(/[^a-zA-Z0-9_-]/g,'_')+'.xlsx';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('Excel berisi durasi dan harga campaign terakhir yang tersimpan.');}
+function capWorkbookDrawing(files,group,photos,number,column,relationships,packageRelationships){
+ const anchors=[],links=[];
+ group.ids.forEach((id,index)=>{
+  const photo=photos.get(id);
+  if(!photo)return;
+  const imageNumber=anchors.length+1;
+  const name=`photo${number}-${imageNumber}.png`;
+  files['xl/media/'+name]=photo.data;
+  links.push(`<Relationship Id="rId${imageNumber}" Type="${relationships}/image" Target="../media/${name}"/>`);
+  const scale=Math.min(144/photo.width,76/photo.height);
+  const width=Math.round(photo.width*scale*9525),height=Math.round(photo.height*scale*9525);
+  anchors.push(`<xdr:oneCellAnchor><xdr:from><xdr:col>${column}</xdr:col><xdr:colOff>38100</xdr:colOff><xdr:row>${index+1}</xdr:row><xdr:rowOff>38100</xdr:rowOff></xdr:from><xdr:ext cx="${width}" cy="${height}"/><xdr:pic><xdr:nvPicPr><xdr:cNvPr id="${imageNumber}" name="Photo ${imageNumber}"/><xdr:cNvPicPr><a:picLocks noChangeAspect="1"/></xdr:cNvPicPr></xdr:nvPicPr><xdr:blipFill><a:blip r:embed="rId${imageNumber}"/><a:stretch><a:fillRect/></a:stretch></xdr:blipFill><xdr:spPr><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></xdr:spPr></xdr:pic><xdr:clientData/></xdr:oneCellAnchor>`);
+ });
+ if(!anchors.length)return false;
+ files[`xl/drawings/drawing${number}.xml`]=`<xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="${relationships}">${anchors.join('')}</xdr:wsDr>`;
+ files[`xl/drawings/_rels/drawing${number}.xml.rels`]=`<Relationships xmlns="${packageRelationships}">${links.join('')}</Relationships>`;
+ files[`xl/worksheets/_rels/sheet${number}.xml.rels`]=`<Relationships xmlns="${packageRelationships}"><Relationship Id="rId1" Type="${relationships}/drawing" Target="../drawings/drawing${number}.xml"/></Relationships>`;
+ return true;
+}
+
+function capWorkbook(c,photos=new Map()){
+ const spreadsheet='http://schemas.openxmlformats.org/spreadsheetml/2006/main';
+ const relationships='http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+ const packageRelationships='http://schemas.openxmlformats.org/package/2006/relationships';
+ const files={},sheetList=[],links=[],contentTypes=[];
+ capWorkbookGroups(c).forEach((group,index)=>{
+  const number=index+1;
+  const path=`worksheets/sheet${number}.xml`;
+  const rows=capWorkbookRows(c,group);
+  const photoColumn=rows[0].length;
+  const hasDrawing=capWorkbookDrawing(files,group,photos,number,photoColumn,relationships,packageRelationships);
+  if(hasDrawing){
+   rows[0].push('Photo');
+   contentTypes.push(`<Override PartName="/xl/drawings/drawing${number}.xml" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/>`);
+  }
+  const data=rows.map((row,r)=>{
+   const cells=row.map((value,i)=>{
+    const ref=capExcelColumn(i)+(r+1);
+    if(value==null)return `<c r="${ref}"/>`;
+    if(typeof value==='boolean')return `<c r="${ref}" t="b"><v>${value?1:0}</v></c>`;
+    if(typeof value==='number')return `<c r="${ref}"><v>${value}</v></c>`;
+    return `<c r="${ref}" t="inlineStr"><is><t xml:space="preserve">${xml(value)}</t></is></c>`;
+   }).join('');
+   const height=photos.has(group.ids[r-1])?' ht="64" customHeight="1"':'';
+   return `<row r="${r+1}"${height}>${cells}</row>`;
+  }).join('');
+  const columns=hasDrawing?`<cols><col min="${photoColumn+1}" max="${photoColumn+1}" width="23" customWidth="1"/></cols>`:'';
+  const drawing=hasDrawing?'<drawing r:id="rId1"/>':'';
+  files[`xl/${path}`]=`<worksheet xmlns="${spreadsheet}" xmlns:r="${relationships}">${columns}<sheetData>${data}</sheetData>${drawing}</worksheet>`;
+  sheetList.push(`<sheet name="Penawaran ${number}" sheetId="${number}" r:id="rId${number}"/>`);
+  links.push(`<Relationship Id="rId${number}" Type="${relationships}/worksheet" Target="${path}"/>`);
+  contentTypes.push(`<Override PartName="/xl/${path}" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`);
+ });
+ files['xl/workbook.xml']=`<workbook xmlns="${spreadsheet}" xmlns:r="${relationships}"><sheets>${sheetList.join('')}</sheets></workbook>`;
+ files['xl/_rels/workbook.xml.rels']=`<Relationships xmlns="${packageRelationships}">${links.join('')}</Relationships>`;
+ files['_rels/.rels']=`<Relationships xmlns="${packageRelationships}"><Relationship Id="rId1" Type="${relationships}/officeDocument" Target="xl/workbook.xml"/></Relationships>`;
+ files['[Content_Types].xml']=`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>${photos.size?'<Default Extension="png" ContentType="image/png"/>':''}${contentTypes.join('')}</Types>`;
+ return capZip(files);
+}
+function capSavedExportCampaign(c){
+ if(!c)throw Error('Simpan campaign terlebih dahulu sebelum Download.');
+ const stored=JSON.parse(localStorage.getItem(capKey)||'[]').find(item=>item.id===c.id);
+ if(!stored)throw Error('Campaign tersimpan tidak ditemukan.');
+ const campaign=capNormalize(stored);
+ if(!campaign.ids.length)throw Error('Campaign belum memiliki placement.');
+ if(campaign.ids.some(id=>!placements.some(p=>p.id===id)))throw Error('Ada placement yang tidak ditemukan.');
+ const offers=capEditorValues(campaign),overflow=capPptOverflow(offers);
+ if(overflow.length)throw Error('Sesuaikan maksimal 4 alternatif pada: '+overflow.map(id=>placements.find(p=>p.id===Number(id))?.code||id).join(', '));
+ if(Object.values(offers).some(rows=>capOfferErrors(rows,false).some(Boolean)))throw Error('Periksa data durasi sebelum download.');
+ return campaign;
+}
+function capExport(c){
+ try{
+  const campaign=capSavedExportCampaign(c);
+  const dialog=capFeatureDialog('Download Campaign',
+   `<p>Unduh data tersimpan untuk <strong>${capEsc(campaign.name)}</strong> (${campaign.ids.length} placement).</p><label><input type="checkbox" id="cap-xlsx-photos"> Include images</label>`);
+  const form=dialog.querySelector('form'),confirm=document.createElement('button');
+  confirm.type='button';
+  confirm.className='primary';
+  confirm.textContent='Download';
+  form.querySelector('footer').append(confirm);
+  confirm.onclick=async()=>{
+   const checkbox=$('cap-xlsx-photos'),includeImages=checkbox.checked;
+   const buttons=[...form.querySelectorAll('button')];
+   const preventClose=event=>event.preventDefault();
+   dialog.addEventListener('cancel',preventClose);
+   buttons.forEach(button=>button.disabled=true);
+   checkbox.disabled=true;
+   const status=$('cap-feature-error');
+   status.textContent='';
+   confirm.textContent='Preparing…';
+   try{
+    if(capDirty()||(capEditor&&capChanges().length))throw Error('Simpan perubahan campaign sebelum melanjutkan.');
+    const latest=capSavedExportCampaign(c);
+    const photos=new Map();
+    if(includeImages){
+     let demo;
+     for(const id of latest.ids){
+      const source=capIMImage(capMaster(id));
+      const photo=source.endsWith('/map-controls/sample-billboard.jpg')?null:await capSlideImage(source,280);
+      if(!photo&&!demo)demo=await capSlideImage(placementPptDemoPhoto,280);
+      if(photo||demo)photos.set(id,photo||demo);
+     }
+    }
+    const id=crypto.randomUUID(),now=new Date();
+    const cities=[...new Set(latest.ids.map(id=>placements.find(placement=>placement.id===id)?.city).filter(Boolean))];
+    await placementPptQueue.add({id,campaign:latest.name,download_type:'Campaign XLSX',city:cities.join(', ')||'-',
+     year:now.getFullYear(),month:now.getMonth()+1,status:'Completed',created_at:now.toLocaleString('id-ID'),
+     timestamp:now.getTime(),filename:latest.name.replace(/[^a-zA-Z0-9_-]/g,'_')+'.xlsx',blob:capWorkbook(latest,photos)});
+    const destination=new URL('../DownloadPlacement.html',location.href);
+    destination.search=new URLSearchParams({job:id,campaign:latest.id,role:capRole,from:capPageMode?'verification':'billboard'});
+    window.top.location.href=destination.href;
+   }catch(error){status.textContent=error.message;}
+   finally{
+    dialog.removeEventListener('cancel',preventClose);
+    buttons.forEach(button=>button.disabled=false);
+    checkbox.disabled=false;
+    confirm.textContent='Download';
+   }
+  };
+ }catch(error){toast(error.message);}
+}
 async function capReadWorkbook(file,forBulk=false){if(file.size>5*1024*1024)throw Error('Batas preview XLSX 5 MB.');if(!file.name.toLowerCase().endsWith('.xlsx'))throw Error('Gunakan file .xlsx.');const buffer=await file.arrayBuffer();if(buffer.byteLength<22)throw Error('File XLSX tidak valid.');const bytes=new Uint8Array(buffer),view=new DataView(buffer),decoder=new TextDecoder(),entries={};let end=bytes.length-22;while(end>=Math.max(0,bytes.length-65557)&&view.getUint32(end,true)!==0x06054b50)end--;if(end<Math.max(0,bytes.length-65557))throw Error('File XLSX tidak valid.');const count=view.getUint16(end+10,true);let pos=view.getUint32(end+16,true),total=0;if(count>1000)throw Error('Workbook terlalu besar.');for(let i=0;i<count;i++){if(view.getUint32(pos,true)!==0x02014b50)throw Error('Arsip XLSX rusak.');const size=view.getUint32(pos+20,true),length=view.getUint32(pos+24,true),n=view.getUint16(pos+28,true),extra=view.getUint16(pos+30,true),comment=view.getUint16(pos+32,true),local=view.getUint32(pos+42,true),method=view.getUint16(pos+10,true);total+=length;if(total>20*1024*1024)throw Error('Workbook terlalu besar setelah dibuka.');const name=decoder.decode(bytes.slice(pos+46,pos+46+n)),start=local+30+view.getUint16(local+26,true)+view.getUint16(local+28,true);entries[name]={data:bytes.slice(start,start+size),method};pos+=46+n+extra+comment;}
  const read=async name=>{const e=entries[name];if(!e)return '';if(e.method===0)return decoder.decode(e.data);if(e.method!==8)throw Error('Kompresi workbook tidak didukung.');return new Response(new Blob([e.data]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text();};
  const parse=text=>{const doc=new DOMParser().parseFromString(text,'application/xml');if(doc.querySelector('parsererror'))throw Error('XML workbook tidak valid.');return doc;};
@@ -5036,8 +5156,19 @@ async function capReadWorkbook(file,forBulk=false){if(file.size>5*1024*1024)thro
  const numeric=(value,label,allowEmpty=false)=>{if(value===''){if(allowEmpty)return null;throw Error(label+' wajib diisi.');}const n=Number(value);if(!Number.isFinite(n))throw Error(label+' harus berupa angka.');return n;};
  const getGroup=code=>{if(!groups.has(code))groups.set(code,{code,offers:[],empty:false});return groups.get(code);};
  const add=(code,offer)=>{const group=getGroup(code);if(group.empty)throw Error('Baris kosong dan durasi tidak boleh digabung untuk '+code);group.offers.push(offer);};
- for(const name of Object.keys(entries).filter(n=>/^xl\/worksheets\/sheet\d+\.xml$/.test(n))){
-  const doc=parse(await read(name));
+ const bulkRecords=[];
+ const workbook=parse(await read('xl/workbook.xml'));
+ const rels=parse(await read('xl/_rels/workbook.xml.rels'));
+ const targets=new Map([...rels.getElementsByTagNameNS('*','Relationship')]
+  .filter(rel=>rel.getAttribute('Type')?.endsWith('/worksheet')&&rel.getAttribute('TargetMode')!=='External')
+  .map(rel=>[rel.getAttribute('Id'),new URL(rel.getAttribute('Target'),'https://workbook.invalid/xl/workbook.xml').pathname.slice(1)]));
+ const sheets=[...workbook.getElementsByTagNameNS('*','sheet')].flatMap(sheet=>{
+  const id=[...sheet.attributes].find(attr=>attr.localName==='id')?.value;
+  const path=targets.get(id);
+  return path&&Object.hasOwn(entries,path)?[{path,label:sheet.getAttribute('name')}]:[];
+ });
+ for(const {path,label} of sheets){
+  const doc=parse(await read(path));
   const rows=[...doc.getElementsByTagName('row')].map(row=>{const values=[];for(const cell of row.getElementsByTagName('c')){
    const letters=cell.getAttribute('r')?.match(/^[A-Z]+/)?.[0];if(!letters)throw Error('Alamat cell XLSX tidak valid.');
    let col=0;for(const char of letters)col=col*26+char.charCodeAt(0)-64;
@@ -5047,8 +5178,22 @@ async function capReadWorkbook(file,forBulk=false){if(file.size>5*1024*1024)thro
   const wide=rows.findIndex(row=>row.some(cell=>cell?.value==='Code')&&!row.some(cell=>cell?.value==='Waktu'));
   if(wide>=0){
    const input=capParseWide(rows,wide);
-   if(forBulk)return input;
-   return input.records.map(record=>({code:record.code,offers:input.durations.map((d,i)=>({...d,price:capBulkNumber(record.prices[i],capPriceHeader(d))}))}));
+   found=true;
+   if(forBulk){
+    bulkRecords.push(...input.records.map(record=>({...record,durations:input.durations,sheet:label})));
+    continue;
+   }
+   for(const record of input.records){
+    if(!record.code||record.codeFormula)throw Error(label+' · Baris '+record.number+': Code harus diisi dengan nilai placement.');
+    if(groups.has(record.code))throw Error('Kode placement duplikat: '+record.code);
+    const offers=input.durations.map((duration,i)=>({...duration,price:capBulkNumber(record.prices[i],capPriceHeader(duration))}));
+    const slots=Array(4).fill(null);
+    const fixed=input.indexes.every(i=>i>=25&&i<=28);
+    offers.forEach((offer,i)=>slots[fixed?input.indexes[i]-25:i]=offer);
+    const fields=Object.fromEntries([...record.fields].map(([header,cell])=>[header,cell.value]));
+    groups.set(record.code,{code:record.code,offers,slots,fields,empty:false});
+   }
+   continue;
   }
   if(forBulk)continue;
   for(const row of rows)for(const cell of row)if(cell){if(cell.value==='Harga Modal (IDR)')cell.value='Harga Modal (IM)';if(cell.value==='Harga Modal (Update)')cell.value='Harga Modal (Best Price)';}
@@ -5065,6 +5210,8 @@ async function capReadWorkbook(file,forBulk=false){if(file.size>5*1024*1024)thro
    if(values.some(cell=>cell.formula))throw Error('Formula tidak didukung. Gunakan nilai pada kolom kode, waktu, unit, dan harga.');
    const updateColumn=rows[header].findIndex(cell=>cell?.value==='Harga Modal (Best Price)');if(updateColumn>=0&&row[updateColumn]?.formula)throw Error('Gunakan nilai, bukan formula, untuk Harga Modal (Best Price).');const importedUpdate=updateColumn>=0?numeric(row[updateColumn]?.value||'','Harga Modal (Best Price)',true):null;const data=values.map(cell=>cell.value),code=String(data[0]).trim();if(!code)throw Error('Code wajib diisi.');
    if(flexible){
+    const group=getGroup(code);
+    group.fields??=Object.fromEntries(rows[header].flatMap((cell,i)=>cell?.value?[[cell.value,row[i]?.value??'']]:[]));
     if(data[1]===''&&data[2]===''){const group=getGroup(code);if(group.empty||group.offers.length)throw Error('Baris kosong duplikat untuk '+code);group.empty=true;continue;}
     add(code,{id:crypto.randomUUID(),amount:numeric(data[1],'Waktu'),unit:capUnit(data[2]),capitalUpdate:importedUpdate,capital:legacyFlexible||noCapital?null:numeric(data[3],'Harga Modal',true),price:numeric(data[legacyFlexible||noCapital?3:4],'Harga Jual',true)});
    }else{
@@ -5073,25 +5220,252 @@ async function capReadWorkbook(file,forBulk=false){if(file.size>5*1024*1024)thro
    }
   }
  }
- if(forBulk)throw Error('Gunakan file Excel campaign dengan kolom Code dan harga per durasi.');
+ if(forBulk){
+  if(!bulkRecords.length)throw Error('File Excel tidak berisi baris placement dengan header Code dan harga per durasi.');
+  return {records:bulkRecords};
+ }
  if(!found)throw Error('Kolom wajib tidak ditemukan: '+capCampaignHeaders().join(', '));
  if(!groups.size)throw Error('Workbook tidak berisi placement.');
  for(const record of groups.values()){
   if(!record.offers.length)throw Error(record.code+': minimal satu alternatif diperlukan.');const errors=capOfferErrors(record.offers).filter(Boolean);if(errors.length)throw Error(record.code+': '+errors[0]);
  }
- return [...groups.values()].map(({code,offers})=>({code,offers}));
+ return [...groups.values()];
 }
 const capOldDownload=download;download=function(format,fromCampaign){if(!fromCampaign)return capOldDownload(format,false);const c=capRecord();if(!c)return toast('Simpan campaign terlebih dahulu sebelum Download.');capExport(c);};
-$('ppt-generate').onclick=async()=>{
- if(!pptFile)return;$('ppt-generate').disabled=true;
+async function capSlideImage(source,maxSize=720){
+ if(!source)return null;
  try{
-  const records=await capReadWorkbook(pptFile),excess=records.filter(record=>record.offers.length>4);
-  if(excess.length)throw Error('Maksimal 4 alternatif per placement. Periksa: '+excess.map(record=>record.code).join(', '));
-  $('ppt-status').innerHTML='<strong>Simulasi isi slide dari Excel yang diunggah</strong><p>PPT hanya menggunakan harga jual; harga modal dan diskon tidak ditampilkan. Preview tidak menghasilkan file PPTX.</p><div class="cap-table-wrap"><table><thead><tr><th>Placement</th><th>Penawaran 1</th><th>Penawaran 2</th><th>Penawaran 3</th><th>Penawaran 4</th></tr></thead><tbody>'+records.map(record=>{
-   const selected=record.offers;
-   return '<tr><td>'+capEsc(record.code)+'</td>'+[0,1,2,3].map(i=>selected[i]?'<td><strong>'+capEsc(capOfferLabel(selected[i]))+'</strong><br>'+capMoney(selected[i].price)+'</td>':'<td>—</td>').join('')+'</tr>';
-  }).join('')+'</tbody></table></div>';
- }catch(error){$('ppt-status').textContent=error.message;}finally{$('ppt-generate').disabled=false;}
+  const url=new URL(source,location.href);
+  if(url.protocol!=='data:'&&(!['http:','https:'].includes(url.protocol)||url.origin!==location.origin))return null;
+  const image=new Image();
+  image.src=url.href;
+  await image.decode();
+  const scale=Math.min(1,maxSize/Math.max(image.naturalWidth,image.naturalHeight));
+  const canvas=document.createElement('canvas');
+  canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));
+  canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));
+  canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
+  return capSlideCanvas(canvas);
+ }catch{return null;}
+}
+function capSlideCanvas(canvas){
+ const pixels=atob(canvas.toDataURL('image/png').split(',')[1]);
+ return {data:Uint8Array.from(pixels,char=>char.charCodeAt(0)),width:canvas.width,height:canvas.height};
+}
+function capSlideMap(code,coordinates){
+ const canvas=document.createElement('canvas');
+ canvas.width=640;canvas.height=290;
+ const ctx=canvas.getContext('2d');
+ ctx.fillStyle='#e8eee9';ctx.fillRect(0,0,640,290);
+ ctx.strokeStyle='#fff';ctx.lineWidth=10;
+ for(let x=24;x<640;x+=65){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+110,290);ctx.stroke();}
+ for(let y=12;y<290;y+=57){ctx.beginPath();ctx.moveTo(0,y+52);ctx.lineTo(640,y);ctx.stroke();}
+ ctx.beginPath();ctx.ellipse(320,128,19,19,0,0,2*Math.PI);ctx.fillStyle='#ff2d55';ctx.fill();
+ ctx.beginPath();ctx.moveTo(305,139);ctx.lineTo(320,166);ctx.lineTo(335,139);ctx.fill();
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(320,128,6,0,2*Math.PI);ctx.fill();
+ ctx.fillStyle='#fff';ctx.fillRect(8,226,624,56);
+ ctx.fillStyle='#252432';ctx.font='bold 19px Arial';ctx.fillText(code+' · Ilustrasi lokasi',20,249,600);
+ ctx.font='16px Arial';ctx.fillText(coordinates||'Koordinat tidak tersedia',20,271,600);
+ return capSlideCanvas(canvas);
+}
+async function capSlideRecords(records){
+ let demo;
+ const slides=[];
+ for(const record of records){
+  const placement=placements.find(item=>item.code===record.code);
+  const master=placement?capMaster(placement.id):{};
+  const fields=record.fields||{};
+  const coordinate=fields.Coordinate||(placement?`${placement.lat}, ${placement.lng}`:'');
+  const source=capIMImage(master);
+  const isSample=source.endsWith('/map-controls/sample-billboard.jpg');
+  const [photo,map]=await Promise.all([
+   isSample?null:capSlideImage(source),
+   capSlideImage(master.photo?.image_map??master.image_map??master['Image Map']),
+  ]);
+  if(!photo&&placement&&!demo)demo=await capSlideImage(placementPptDemoPhoto);
+  slides.push({...record,coordinate,photo:photo||(placement?demo:null),samplePhoto:!photo&&!!placement,
+   map:map||capSlideMap(record.code,coordinate)});
+ }
+ return slides;
+}
+
+function capPresentation(records){
+ const presentation='http://schemas.openxmlformats.org/presentationml/2006/main';
+ const drawing='http://schemas.openxmlformats.org/drawingml/2006/main';
+ const office='http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+ const packageNS='http://schemas.openxmlformats.org/package/2006/relationships';
+ const namespaces=`xmlns:p="${presentation}" xmlns:a="${drawing}" xmlns:r="${office}"`;
+ const relationships=links=>`<Relationships xmlns="${packageNS}">${links.map(([id,type,target])=>`<Relationship Id="rId${id}" Type="${office}/${type}" Target="${target}"/>`).join('')}</Relationships>`;
+ const group='<p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvPr/></p:nvGrpSpPr><p:grpSpPr/>';
+ const colorMap='<p:clrMap bg1="lt1" tx1="dk1" bg2="lt2" tx2="dk2" accent1="accent1" accent2="accent2" accent3="accent3" accent4="accent4" accent5="accent5" accent6="accent6" hlink="hlink" folHlink="folHlink"/>';
+ const inheritColors='<p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr>';
+ const background='<p:bg><p:bgPr><a:solidFill><a:srgbClr val="FFFFFF"/></a:solidFill><a:effectLst/></p:bgPr></p:bg>';
+ const content=(shapes='')=>`<p:cSld>${background}<p:spTree>${group}${shapes}</p:spTree></p:cSld>`;
+ const files={},types=[];
+ function part(path,type,data){
+  files[path]=data;
+  types.push(`<Override PartName="/${path}" ContentType="application/vnd.openxmlformats-officedocument.${type}+xml"/>`);
+ }
+ const font='<a:latin typeface="Arial"/><a:ea typeface=""/><a:cs typeface=""/>';
+ const fill='<a:solidFill><a:schemeClr val="phClr"/></a:solidFill>';
+ const colors={dk1:'252432',lt1:'FFFFFF',dk2:'58586B',lt2:'F8F7FA',accent1:'FF2D55',accent2:'434159',accent3:'E9E7EE',accent4:'F4CBD5',accent5:'7B395D',accent6:'BBB8C7',hlink:'C51F48',folHlink:'7B395D'};
+ part('ppt/theme/theme1.xml','theme',`<a:theme xmlns:a="${drawing}" name="Metrics"><a:themeElements><a:clrScheme name="Metrics">${Object.entries(colors).map(([key,color])=>`<a:${key}><a:srgbClr val="${color}"/></a:${key}>`).join('')}</a:clrScheme><a:fontScheme name="Arial"><a:majorFont>${font}</a:majorFont><a:minorFont>${font}</a:minorFont></a:fontScheme><a:fmtScheme name="Metrics"><a:fillStyleLst>${fill.repeat(3)}</a:fillStyleLst><a:lnStyleLst>${`<a:ln w="12700">${fill}</a:ln>`.repeat(3)}</a:lnStyleLst><a:effectStyleLst>${'<a:effectStyle><a:effectLst/></a:effectStyle>'.repeat(3)}</a:effectStyleLst><a:bgFillStyleLst>${fill.repeat(3)}</a:bgFillStyleLst></a:fmtScheme></a:themeElements></a:theme>`);
+ part('ppt/slideMasters/slideMaster1.xml','presentationml.slideMaster',`<p:sldMaster ${namespaces}>${content()}${colorMap}<p:sldLayoutIdLst><p:sldLayoutId id="2147483649" r:id="rId1"/></p:sldLayoutIdLst></p:sldMaster>`);
+ part('ppt/slideLayouts/slideLayout1.xml','presentationml.slideLayout',`<p:sldLayout ${namespaces} type="blank" preserve="1">${content()}${inheritColors}</p:sldLayout>`);
+ files['ppt/slideMasters/_rels/slideMaster1.xml.rels']=relationships([[1,'slideLayout','../slideLayouts/slideLayout1.xml'],[2,'theme','../theme/theme1.xml']]);
+ files['ppt/slideLayouts/_rels/slideLayout1.xml.rels']=relationships([[1,'slideMaster','../slideMasters/slideMaster1.xml']]);
+
+ const mediaFiles=new Map();
+ const slideIds=[],slideLinks=[[1,'slideMaster','slideMasters/slideMaster1.xml']];
+ records.forEach(({code,offers},index)=>{
+  let shapeId=1;
+  const position=value=>Math.round(value*914400);
+  const shape=(name,x,y,w,h,{background,text,size=16,color='252432',bold=false,wrap='square'}={})=>{
+   const paint=background?`<a:solidFill><a:srgbClr val="${background}"/></a:solidFill>`:'<a:noFill/>';
+   const textBox=text==null?'':`<p:txBody><a:bodyPr wrap="${wrap}" lIns="0" rIns="0" tIns="0" bIns="0"><a:normAutofit/></a:bodyPr><a:lstStyle/><a:p><a:r><a:rPr lang="id-ID" sz="${size*100}" b="${Number(bold)}"><a:solidFill><a:srgbClr val="${color}"/></a:solidFill>${font}</a:rPr><a:t>${xml(text)}</a:t></a:r></a:p></p:txBody>`;
+   return `<p:sp><p:nvSpPr><p:cNvPr id="${++shapeId}" name="${name}"/><p:cNvSpPr${textBox?' txBox="1"':''}/><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x="${position(x)}" y="${position(y)}"/><a:ext cx="${position(w)}" cy="${position(h)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom>${paint}<a:ln><a:noFill/></a:ln></p:spPr>${textBox}</p:sp>`;
+  };
+  const {fields={},coordinate,photo,map,samplePhoto,slots=offers}=records[index];
+  const number=index+1;
+  const slideRelationships=[[1,'slideLayout','../slideLayouts/slideLayout1.xml']];
+  function picture(name,image,x,y,w,h){
+   const scale=Math.min(w/image.width,h/image.height);
+   const width=image.width*scale,height=image.height*scale;
+   if(!mediaFiles.has(image)){
+    const file=`picture${mediaFiles.size+1}.png`;
+    mediaFiles.set(image,file);
+    files['ppt/media/'+file]=image.data;
+   }
+   const file=mediaFiles.get(image),id=slideRelationships.length+1;
+   slideRelationships.push([id,'image','../media/'+file]);
+   return `<p:pic><p:nvPicPr><p:cNvPr id="${++shapeId}" name="${name}"/><p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr><p:blipFill><a:blip r:embed="rId${id}"/><a:stretch><a:fillRect/></a:stretch></p:blipFill><p:spPr><a:xfrm><a:off x="${position(x+(w-width)/2)}" y="${position(y+(h-height)/2)}"/><a:ext cx="${position(width)}" cy="${position(height)}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr></p:pic>`;
+  }
+  const placementType=[fields['Media Type'],fields.City].filter(Boolean).join(' · ');
+  const dimensions=[fields['Long (m)'],fields['Height (m)']].filter(Boolean).join(' × ');
+  const spot=[fields['Spot/Day (videotron only)'],fields['Duration / slot (videotron only)'],fields['Client Slot (videotron only)']].filter(Boolean).join(' / ');
+  const metadata=[
+   ['Jenis / Kota',placementType],['Alamat',fields.Address],['Koordinat',coordinate],
+   ['Arah / View',fields['Direction(from x to y)']||fields.View],['Tipe Jalan',fields['Street Type']],
+   ['Ukuran',dimensions?dimensions+' m':''],['Posisi / Pencahayaan',[fields.Position,fields.Lighting].filter(Boolean).join(' · ')],
+   ['Spot / Durasi / Slot',spot],['Traffic / Hari',fields['Est.Traffic/Day (Vehicles)']],['Sekitar',fields.Surrounding],
+   ['Harga Ganti Materi',fields['Selling Price for Material Replacement(/m2)']],['Jam Operasional',fields['Operational Hours']],
+  ];
+  const shapes=[
+   shape('Accent',0,0,13.333,0.1,{background:'FF2D55'}),
+   shape('Metrics',0.5,0.28,1.6,0.28,{text:'Metrics',size:16,bold:true,color:'C51F48'}),
+   shape('Placement',0.5,0.64,12.33,0.6,{text:code,size:32,bold:true}),
+   shape('Image Media label',0.5,1.35,5.98,0.24,{text:samplePhoto?'Image Media · Foto contoh':'Image Media',size:12,bold:true}),
+   shape('Image Map label',6.83,1.35,6,0.24,{text:'Image Map',size:12,bold:true}),
+   shape('Media panel',0.5,1.65,5.98,2.18,{background:'F8F7FA'}),
+   shape('Map panel',6.83,1.65,6,2.18,{background:'F8F7FA'}),
+   photo?picture('Image Media',photo,0.5,1.65,5.98,2.18):shape('Image unavailable',0.72,2.55,5.5,0.3,{text:'Foto belum tersedia',size:12}),
+   picture('Image Map',map,6.83,1.65,6,2.18),
+  ];
+  metadata.forEach(([heading,value],i)=>{
+   const x=0.5+(i%3)*4.16,y=4+Math.floor(i/3)*0.28;
+   shapes.push(shape(heading,x,y,4.03,0.26,{text:`${heading}: ${value||'—'}`,size:10}));
+  });
+  shapes.push(shape('Notes',0.5,5.19,12.33,0.68,{text:'Notes: '+(fields.Notes||'—'),size:12}));
+  for(let i=0;i<4;i++){
+   const offer=slots[i],x=0.5+i*3.13;
+   shapes.push(
+    shape('Price card',x,6.04,2.94,0.98,{background:'F8F7FA'}),
+    shape('Duration',x+0.13,6.15,2.68,0.26,{text:offer?(offer.label||`${offer.amount} ${offer.unit}`):'—',size:12,color:'58586B'}),
+    shape('Selling price',x+0.13,6.48,2.68,0.36,{text:offer?.price!=null?capMoney(offer.price):'—',size:17,bold:true}),
+   );
+  }
+  shapes.push(shape('Page',0.5,7.15,12.33,0.19,{text:`${index+1} / ${records.length}`,size:9,color:'58586B'}));
+  part(`ppt/slides/slide${number}.xml`,'presentationml.slide',`<p:sld ${namespaces}>${content(shapes.join(''))}${inheritColors}</p:sld>`);
+  files[`ppt/slides/_rels/slide${number}.xml.rels`]=relationships(slideRelationships);
+  slideIds.push(`<p:sldId id="${256+index}" r:id="rId${number+1}"/>`);
+  slideLinks.push([number+1,'slide',`slides/slide${number}.xml`]);
+ });
+ part('ppt/presentation.xml','presentationml.presentation.main',`<p:presentation ${namespaces}><p:sldMasterIdLst><p:sldMasterId id="2147483648" r:id="rId1"/></p:sldMasterIdLst><p:sldIdLst>${slideIds.join('')}</p:sldIdLst><p:sldSz cx="12192000" cy="6858000" type="screen16x9"/><p:notesSz cx="6858000" cy="9144000"/></p:presentation>`);
+ files['ppt/_rels/presentation.xml.rels']=relationships(slideLinks);
+ files['_rels/.rels']=relationships([[1,'officeDocument','ppt/presentation.xml']]);
+ files['[Content_Types].xml']=`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/>${types.join('')}</Types>`;
+ return capZip(files,'application/vnd.openxmlformats-officedocument.presentationml.presentation');
+}
+
+async function capQueuePresentation(records,title){
+ const slides=await capSlideRecords(records);
+ const blob=capPresentation(slides),now=new Date(),id=crypto.randomUUID();
+ const cities=[...new Set(records.map(record=>record.fields?.City).filter(Boolean))];
+ await placementPptQueue.add({id,campaign:title,download_type:'PPT',city:cities.join(', ')||'-',
+  year:now.getFullYear(),month:now.getMonth()+1,status:'Completed',created_at:now.toLocaleString('id-ID'),
+  timestamp:now.getTime(),filename:title.replace(/[\\/:*?"<>|]/g,'_')+'.pptx',blob});
+ const destination=new URL('../DownloadPlacement.html',location.href);
+ destination.search=new URLSearchParams({from:'billboard',job:id});
+ window.top.location.href=destination.href;
+}
+async function capExportCampaignPpt(c){
+ const campaign=capSavedExportCampaign(c);
+ if(capDirty()||(capEditor&&capChanges().length))throw Error('Simpan perubahan campaign sebelum mengunduh PPTX.');
+ const records=capWorkbookGroups(campaign).flatMap(group=>{
+  const [headers,...rows]=capWorkbookRows(campaign,group);
+  return rows.map(row=>({
+   code:row[0],
+   fields:Object.fromEntries(headers.flatMap((header,i)=>header?[[header,row[i]]]:[])),
+   slots:headers.slice(25,29).map((header,i)=>header?{label:header.slice('Price '.length),price:row[25+i]}:null),
+  }));
+ });
+ await capQueuePresentation(records,campaign.name);
+}
+function capBindDownload(button,getCampaign){
+ const chevron=document.createElement('span');
+ chevron.className='cap-download-chevron';
+ chevron.setAttribute('aria-hidden','true');
+ button.append(chevron);
+ const options=document.createElement('div');
+ options.className='cap-download-options';
+ options.id=button.id+'-options';
+ options.popover='auto';
+ options.setAttribute('aria-label','Format download');
+ button.setAttribute('aria-controls',options.id);
+ button.setAttribute('aria-expanded','false');
+ button.after(options);
+ const addOption=(label,action)=>{
+  const choice=document.createElement('button');
+  choice.type='button';
+  choice.textContent=label;
+  choice.onclick=async()=>{
+   options.hidePopover();
+   button.focus();
+   button.disabled=true;
+   try{await action(getCampaign());}catch(error){toast(error.message);}
+   finally{button.disabled=false;}
+  };
+  options.append(choice);
+ };
+ addOption('Download as xlsx',capExport);
+ addOption('Download as pptx',capExportCampaignPpt);
+ options.addEventListener('toggle',()=>button.setAttribute('aria-expanded',String(options.matches(':popover-open'))));
+ button.onclick=()=>{
+  if(options.matches(':popover-open')){options.hidePopover();return;}
+  options.showPopover({source:button});
+  const bounds=button.getBoundingClientRect(),width=options.offsetWidth,height=options.offsetHeight;
+  options.style.left=Math.max(8,Math.min(bounds.right-width,innerWidth-width-8))+'px';
+  options.style.top=(bounds.bottom+height+12<=innerHeight?bounds.bottom+4:Math.max(8,bounds.top-height-4))+'px';
+  options.firstElementChild.focus();
+ };
+}
+capBindDownload($('campaign-download'),capRecord);
+
+$('ppt-generate').onclick=async()=>{
+ const file=pptFile;
+ if(!file)return;
+ resetPptResult();
+ const generate=$('ppt-generate'),remove=$('ppt-remove'),input=$('ppt-file'),status=$('ppt-status');
+ generate.disabled=remove.disabled=input.disabled=true;
+ status.textContent='Membuat presentasi…';
+ try{
+  const records=await capReadWorkbook(file);
+  await capQueuePresentation(records,file.name.replace(/\.xlsx$/i,''));
+ }catch(error){
+  status.textContent=error instanceof RangeError?'File Excel tidak valid atau rusak.':error.message;
+ }finally{
+  generate.disabled=remove.disabled=input.disabled=false;
+ }
 };
 
 function capPlacementAttention(c,id){
@@ -5106,7 +5480,7 @@ function capAttentionMarkup(c,id){const items=capPlacementAttention(c,id);return
 function capRenderList(c,e,body,actions){
  body.classList.add('campaign-list-page');
  $('cap-editor-title').textContent='Placement Campaign';
- body.innerHTML=`<div class="campaign-summary"><div><small>STATUS CAMPAIGN</small><p><span class="cap-badge ${c.status}">${capEsc(capLabel[c.status])}</span></p></div>${c.status==='not_deal'?`<div class="cap-closure-reason"><small>NOT DEAL REASON</small><p tabindex="0" aria-label="Not Deal Reason">${capEsc(c.not_deal_reason||'Not provided')}</p></div>`:''}<div><small>PERIODE CAMPAIGN</small><p>${capEsc(c.periodStart?capDateLabel(c.periodStart)+' - '+capDateLabel(c.periodEnd):'Belum ditentukan')}</p><small>Durasi Campaign: ${capDays(c.periodStart,c.periodEnd)||'—'} Hari</small></div><div class="campaign-update-meta"><small>DIPERBARUI OLEH</small><p>${capEsc(c.updatedBy||c.capUpdatedBy||'—')}</p><small>Waktu Pembaruan: ${capEsc(c.updatedAt?new Date(c.updatedAt).toLocaleString('id-ID'):c.verifiedAt?new Date(c.verifiedAt).toLocaleString('id-ID'):'—')}</small></div><label>Peran<select id="page-role"><option value="manager">CS</option><option value="cap">CAP</option><option value="commercial">Commercial</option></select></label></div><div class="editor-toolbar"><div class="cap-placement-count"><h3>${c.ids.length} Placement</h3></div><div class="cap-table-tools"><button id="page-add">+ Tambah Placement</button><button id="cap-batch-verify" disabled>Bulk Verify</button><button id="cap-bulk-bottom-review" disabled>Bulk Review Bottom Price</button><button id="page-bulk">Bulk Edit</button><button id="page-download">Download</button><button id="page-refresh">↻ Refresh</button></div></div><div class="cap-table-wrap"><table class="campaign-list"><thead><tr><th><input type="checkbox" id="cap-select-all" aria-label="Pilih seluruh placement"></th><th>Placement</th><th>Status</th><th>Informasi</th><th>Tanggal Ditambahkan</th><th>Diperbarui Oleh</th><th>Waktu Pembaruan</th></tr></thead><tbody>${capOrderedIds(e).map(id=>{const p=placements.find(p=>p.id===id),d=e.details[id];return `<tr data-placement-row="${id}"><td><input type="checkbox" data-select-placement="${id}" aria-label="Pilih ${capEsc(p?.code||id)}"></td><td><button class="placement-link" data-detail-page="${id}">${capEsc(p?.code||id)} →</button><small>${capEsc(p?.type||'')}</small></td><td><span class="cap-badge ${capPlacementStatus(c,id).replaceAll(' ','-').toLowerCase()}">${capEsc(capPlacementStatus(c,id))}</span></td><td>${capAttentionMarkup(c,id)}</td><td>${capEsc(d.addedAt?new Date(d.addedAt).toLocaleString('id-ID'):'Tidak tercatat')}</td><td>${capEsc(d.updatedBy||'—')}</td><td>${capEsc(d.updatedAt?new Date(d.updatedAt).toLocaleString('id-ID'):'—')}</td></tr>`}).join('')}</tbody></table></div>`;
+ body.innerHTML=`<div class="campaign-summary"><div><small>STATUS CAMPAIGN</small><p><span class="cap-badge ${c.status}">${capEsc(capLabel[c.status])}</span></p></div>${c.status==='not_deal'?`<div class="cap-closure-reason"><small>NOT DEAL REASON</small><p tabindex="0" aria-label="Not Deal Reason">${capEsc(c.not_deal_reason||'Not provided')}</p></div>`:''}<div><small>PERIODE CAMPAIGN</small><p>${capEsc(c.periodStart?capDateLabel(c.periodStart)+' - '+capDateLabel(c.periodEnd):'Belum ditentukan')}</p><small>Durasi Campaign: ${capDays(c.periodStart,c.periodEnd)||'—'} Hari</small></div><div class="campaign-update-meta"><small>DIPERBARUI OLEH</small><p>${capEsc(c.updatedBy||c.capUpdatedBy||'—')}</p><small>Waktu Pembaruan: ${capEsc(c.updatedAt?new Date(c.updatedAt).toLocaleString('id-ID'):c.verifiedAt?new Date(c.verifiedAt).toLocaleString('id-ID'):'—')}</small></div><label>Peran<select id="page-role"><option value="manager">CS</option><option value="cap">CAP</option><option value="commercial">Commercial</option></select></label></div><div class="editor-toolbar"><div class="cap-placement-count"><h3>${c.ids.length} Placement</h3></div><div class="cap-table-tools"><button id="page-add">+ Tambah Placement</button><button id="cap-batch-verify" disabled>Bulk Verify</button><button id="cap-bulk-bottom-review" disabled>Bulk Review Bottom Price</button><button id="page-bulk">Bulk Edit</button><button type="button" id="page-download" class="primary">Download</button><button id="page-refresh">↻ Refresh</button></div></div><div class="cap-table-wrap"><table class="campaign-list"><thead><tr><th><input type="checkbox" id="cap-select-all" aria-label="Pilih seluruh placement"></th><th>Placement</th><th>Status</th><th>Informasi</th><th>Tanggal Ditambahkan</th><th>Diperbarui Oleh</th><th>Waktu Pembaruan</th></tr></thead><tbody>${capOrderedIds(e).map(id=>{const p=placements.find(p=>p.id===id),d=e.details[id];return `<tr data-placement-row="${id}"><td><input type="checkbox" data-select-placement="${id}" aria-label="Pilih ${capEsc(p?.code||id)}"></td><td><button class="placement-link" data-detail-page="${id}">${capEsc(p?.code||id)} →</button><small>${capEsc(p?.type||'')}</small></td><td><span class="cap-badge ${capPlacementStatus(c,id).replaceAll(' ','-').toLowerCase()}">${capEsc(capPlacementStatus(c,id))}</span></td><td>${capAttentionMarkup(c,id)}</td><td>${capEsc(d.addedAt?new Date(d.addedAt).toLocaleString('id-ID'):'Tidak tercatat')}</td><td>${capEsc(d.updatedBy||'—')}</td><td>${capEsc(d.updatedAt?new Date(d.updatedAt).toLocaleString('id-ID'):'—')}</td></tr>`}).join('')}</tbody></table></div>`;
 
  const selectedForAction=new Set((e.selectedForAction||[]).filter(id=>c.ids.includes(id)));const controls=document.createElement('div');controls.className='cap-table-tools cap-batch-controls';controls.innerHTML='<button type="button" id="cap-batch-deal" disabled title="Aksi sedang disiapkan">Mark as Deal</button><button type="button" id="cap-batch-not-deal" disabled title="Aksi sedang disiapkan">Mark as Not Deal</button><button type="button" id="cap-batch-discussion" disabled title="Aksi sedang disiapkan">Reopen Placement</button><button type="button" id="cap-batch-bottom" disabled title="Aksi sedang disiapkan">Request Bottom Price</button><button type="button" id="cap-batch-reverify" disabled>Request Reverification</button>';body.querySelector('.cap-table-wrap').before(controls);const selectionCount=document.createElement('small');selectionCount.id='cap-batch-count';selectionCount.className='cap-selection-count';selectionCount.setAttribute('aria-live','polite');selectionCount.textContent='0 placement dipilih';const selectionToolbar=document.createElement('div');selectionToolbar.className='cap-selection-toolbar';body.querySelector('.cap-table-wrap').before(selectionToolbar);selectionToolbar.append(selectionCount);const menu=document.createElement('div');menu.className='cap-bulk-menu';menu.innerHTML='<button type="button" id="cap-bulk-actions" disabled aria-expanded="false">Bulk Actions ▾</button>';controls.hidden=true;menu.append(controls);$('page-bulk').before(menu);$('cap-bulk-actions').onclick=()=>{controls.hidden=!controls.hidden;$('cap-bulk-actions').setAttribute('aria-expanded',String(!controls.hidden));};controls.addEventListener('click',()=>{controls.hidden=true;$('cap-bulk-actions').setAttribute('aria-expanded','false');});
  const updateSelection=()=>{e.selectedForAction=[...selectedForAction];body.querySelectorAll('[data-select-placement]').forEach(input=>{input.checked=selectedForAction.has(Number(input.dataset.selectPlacement));});const count=selectedForAction.size;$('cap-bulk-bottom-review').hidden=capRole!=='commercial';$('cap-bulk-bottom-review').disabled=!count||!capCanEdit(c);$('cap-bulk-bottom-review').title=!count?'Pilih placement terlebih dahulu.':'';$('cap-bulk-actions').disabled=!count||!capCanEdit(c);$('cap-bulk-actions').parentElement.hidden=capRole!=='manager';$('cap-batch-count').textContent=count+' placement dipilih';$('cap-batch-reverify').disabled=!count||capRole!=='manager'||!capCanEdit(c);$('cap-batch-reverify').title=capRole!=='manager'?'Hanya CS dapat meminta pemeriksaan ulang.':!count?'Pilih placement terlebih dahulu.':'';for(const id of ['cap-batch-deal','cap-batch-not-deal','cap-batch-discussion','cap-batch-bottom'])$(id).hidden=capRole!=='manager';for(const id of ['cap-batch-deal','cap-batch-not-deal','cap-batch-discussion']){$(id).disabled=!count||capRole!=='manager'||!capCanEdit(c);$(id).title=$(id).disabled?'Pilih placement pada campaign aktif.':'';}$('cap-batch-bottom').disabled=!count||capRole!=='manager'||!capCanEdit(c);$('cap-batch-bottom').title=$('cap-batch-bottom').disabled?'Pilih placement pada campaign aktif.':'';$('cap-batch-reverify').hidden=capRole!=='manager';$('cap-batch-verify').hidden=capRole!=='cap';$('cap-batch-verify').disabled=!count||capRole!=='cap'||!capCanEdit(c);$('cap-batch-verify').title=!count?'Pilih placement terlebih dahulu.':'';$('cap-select-all').checked=count===c.ids.length&&count>0;$('cap-select-all').indeterminate=count>0&&count<c.ids.length;};
@@ -5117,12 +5491,7 @@ function capRenderList(c,e,body,actions){
  body.querySelectorAll('[data-placement-row]').forEach(row=>{row.onclick=event=>{if(event.target.closest('button,a,input,select,details,summary')||window.getSelection()?.toString())return;row.querySelector('[data-detail-page]').click();};});
  $('page-add').disabled=!capCanEdit(c)||capRole==='commercial';$('page-add').onclick=capChoosePlacement;
  $('page-refresh').onclick=capRefreshCampaign;capListFilters(body,e);
- if(capRole==='manager'){
-  const button=document.createElement('button');button.type='button';button.textContent='Durasi Penawaran';
-  button.disabled=!capCanEdit(c)||!!capChanges().length||c.ids.some(id=>c.itemDetails[id].offerOutcome!=='In Discussion');button.title=button.disabled?'Durasi hanya dapat diubah ketika campaign dan seluruh placement masih aktif.':'';button.onclick=()=>capManageDurations(c);
-  $('page-bulk').before(button);
- }
- $('page-bulk').disabled=!capCanEdit(c)||capRole==='commercial';$('page-bulk').onclick=()=>capGo('bulk');$('page-download').onclick=()=>capExport(c);
+ $('page-bulk').disabled=!capCanEdit(c)||capRole==='commercial';$('page-bulk').onclick=()=>capGo('bulk');capBindDownload($('page-download'),()=>c);
  const action=(label,fn,id)=>{const b=document.createElement('button');b.textContent=label;b.id=id;b.onclick=fn;b.disabled=!capCanEdit(c);actions.append(b);return b;};
  if(capChanges().length)action('Save Changes',capSavePrices,'cap-review');
  if(capRole==='manager'){action('Share to CAP',capShare,'cap-editor-share').disabled=!capCanEdit(c)||(capCAPStage(c)&&!c.pendingCapShare);const close=action('Close Campaign',capCloseCampaign,'cap-close-campaign');const issue=capCloseCampaignIssue(c);close.disabled=false;close.setAttribute('aria-disabled',String(!!issue));close.classList.toggle('cap-unavailable',!!issue);close.onclick=()=>{if(issue)capFeatureDialog('Close Campaign',`<p>${capEsc(issue)}</p>`);else capCloseCampaign();};}

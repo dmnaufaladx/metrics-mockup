@@ -223,6 +223,7 @@
       </div>
     </main>
     <p id="notice" role="status" hidden></p>
+    <script src="assets/js/placement-ppt-queue.js"></script>
     <script>
       "use strict";
       const $ = (id) => document.getElementById(id),
@@ -243,11 +244,18 @@
           ":00:00",
       }));
       let page = 1;
-      const from = new URLSearchParams(location.search).get("from");
-      $("back").href =
-        from === "billboard"
-          ? "BillboardMap/BillboardMap.html"
-          : "SovMap/SovMap.html";
+      const params = new URLSearchParams(location.search);
+      const from = params.get("from");
+      const downloadURLs = new Map();
+      const backPage = {
+        billboard: "BillboardMap/BillboardMap.html",
+        verification: "BillboardMap/CampaignCAPVerification.html",
+      };
+      const back = new URL(backPage[from] || "SovMap/SovMap.html", location.href);
+      for (const key of ["campaign", "role"]) {
+        if (params.has(key)) back.searchParams.set(key, params.get(key));
+      }
+      $("back").href = back.href;
       function notify(message) {
         $("notice").textContent = message;
         $("notice").hidden = false;
@@ -264,33 +272,41 @@
               item.id.slice(0, 8),
               item.campaign || "-",
               item.download_type,
-              item.city,
-              item.year,
-              item.month,
-              item.status,
-              item.created_at,
+              item.city ?? "-",
+              item.year ?? "-",
+              item.month ?? "-",
+              item.status ?? (item.blob ? "Completed" : "-"),
+              item.created_at ?? "-",
             ]) {
               const td = document.createElement("td");
               td.textContent = value;
               tr.append(td);
             }
             const download = document.createElement("td");
-            if (item.status === "Completed") {
+            if ((item.status ?? (item.blob ? "Completed" : "")) === "Completed") {
               const a = document.createElement("a");
               a.className = "row-action";
               a.style.color = "inherit";
-              a.href =
-                item.download_type === "Export CPG"
-                  ? "assets/data/placement-demo.zip"
-                  : "assets/data/placement-demo.xlsx";
-              const date = item.created_at.slice(8, 10) + " Sep 2026";
-              a.download =
-                item.download_type.replaceAll(" ", "_") +
-                "_placement_" +
-                item.city +
-                "_" +
-                date +
-                (item.download_type === "Export CPG" ? ".zip" : ".xlsx");
+              if (item.blob) {
+                if (!downloadURLs.has(item.id)) {
+                  downloadURLs.set(item.id, URL.createObjectURL(item.blob));
+                }
+                a.href = downloadURLs.get(item.id);
+                a.download = item.filename;
+              } else {
+                a.href =
+                  item.download_type === "Export CPG"
+                    ? "assets/data/placement-demo.zip"
+                    : "assets/data/placement-demo.xlsx";
+                const date = item.created_at.slice(8, 10) + " Sep 2026";
+                a.download =
+                  item.download_type.replaceAll(" ", "_") +
+                  "_placement_" +
+                  item.city +
+                  "_" +
+                  date +
+                  (item.download_type === "Export CPG" ? ".zip" : ".xlsx");
+              }
               a.setAttribute("aria-label", "Download " + item.id);
               a.innerHTML = '<i class="icon download" aria-hidden="true"></i>';
               download.append(a);
@@ -300,7 +316,19 @@
             button.className = "row-action";
             button.setAttribute("aria-label", "Remove " + item.id);
             button.innerHTML = '<i class="icon remove" aria-hidden="true"></i>';
-            button.onclick = () => {
+            button.onclick = async () => {
+              if (item.blob) {
+                button.disabled = true;
+                try {
+                  await placementPptQueue.remove(item.id);
+                } catch {
+                  button.disabled = false;
+                  notify("Could not remove the export from the queue.");
+                  return;
+                }
+                URL.revokeObjectURL(downloadURLs.get(item.id));
+                downloadURLs.delete(item.id);
+              }
               queue = queue.filter((q) => q.id !== item.id);
               render();
               notify("Queue item removed.");
@@ -344,11 +372,23 @@
           $("pagination").append(b);
         }
       }
-      setTimeout(() => {
+      async function loadQueue() {
+        try {
+          const job = params.get("job");
+          const generated = (await placementPptQueue.list()).filter(item => ["PPT", "Campaign XLSX"].includes(item.download_type));
+          generated.sort((a, b) => Number(b.id === job) - Number(a.id === job) || (b.timestamp ?? 0) - (a.timestamp ?? 0));
+          queue = [...generated, ...queue];
+          if (job && !generated.some(item => item.id === job)) {
+            notify("Export file not found in this browser.");
+          }
+        } catch {
+          if (params.has("job")) notify("Could not load the export from browser storage.");
+        }
         render();
         $("loading").hidden = true;
         $("content").hidden = false;
-      }, 200);
+      }
+      loadQueue();
     </script>
   </body>
 </html>
